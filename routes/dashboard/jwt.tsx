@@ -9,10 +9,6 @@ export const handler: Handlers<JWTPageData | null, Record<string, unknown>> = {
   async GET(_, ctx) {
     const jwt = await jwtConfig.Create({ foo: "bar" });
 
-    const [alg, decoded] = await jwtConfig.Decode(jwt);
-
-    console.log(decoded);
-
     const data: JWTPageData = { jwt };
 
     return ctx.render(data);
