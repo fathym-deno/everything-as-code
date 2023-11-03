@@ -1,16 +1,32 @@
-# Fresh project
+# Everything as Code
 
-Your new Fresh project is ready to go. You can follow the Fresh "Getting
-Started" guide here: https://fresh.deno.dev/docs/getting-started
+Everything as Code is an API to use to manage an enterprise's products and code in a future-proof, cloud and code agnostic way. It allows for managing all aspects of DevOps as config with the ability to customize.
 
-### Usage
+## Usage
 
-Make sure to install Deno: https://deno.land/manual/getting_started/installation
+This API provides a comprehensive solution for managing your enterprise's products and code. It is designed to be future-proof and cloud and code agnostic, meaning it can adapt to any changes in your tech stack or cloud provider.
 
-Then start the project:
+## Features
 
-```
-deno task start
-```
+- **Future-Proof:** The API is designed to adapt to changes in technology, ensuring your enterprise is always ready for the future.
+- **Cloud and Code Agnostic:** It works with any tech stack or cloud provider, giving you the flexibility to choose the best options for your enterprise.
+- **DevOps as Config:** Manage all aspects of DevOps as config, making it easier to maintain and update your systems.
+- **Customizable:** The API can be customized to suit your enterprise's specific needs.
 
-This will watch the project directory and restart as necessary.
+## Getting Started
+
+To start using Everything as Code, follow the steps below:
+
+1. Install the API.
+2. Configure the API to suit your enterprise's needs.
+3. Start managing your products and code.
+
+For more detailed instructions, refer to the official documentation.
+
+## Support
+
+If you encounter any issues or have any questions, please contact our support team.
+
+## License
+
+Everything as Code is licensed under [INSERT LICENSE HERE].
