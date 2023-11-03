@@ -6,7 +6,9 @@ const denoKvPath = Deno.env.get("DENO_KV_PATH") || undefined;
 if (denoKvPath && !existsSync(denoKvPath)) {
   const path = dirname(denoKvPath);
 
-  Deno.mkdirSync(path);
+  if (path && !existsSync(path)) {
+    Deno.mkdirSync(path);
+  }
 }
 
 export const denoKv = await Deno.openKv(denoKvPath);
