@@ -16,7 +16,7 @@ export const jwtConfig = {
 
     return decoded;
   },
-  ExpirationTime: 60 * 60, // 60 minutes
+  ExpirationTime: 60 * 60 * 24 * 365, // 1 year
   Header: "Authorization",
   JWK: JSON.parse(Deno.env.get("SECURE_API_SECRET") || "") as JsonWebKey,
   KeyUsages: ["sign", "verify"] as KeyUsage[],

@@ -21,10 +21,12 @@ export default function JWT({
   return (
     <div>
       <form>
-        <button type="submit">Create JWT</button>
+        <button type="submit">Create New JWT</button>
       </form>
 
       <div>{data!.jwt}</div>
+
+      <p>The token is good for 1 year.</p>
     </div>
   );
 }
