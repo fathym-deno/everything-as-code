@@ -20,6 +20,8 @@ To start using Everything as Code, follow the steps below:
 1. Install the API.
 2. Configure the API to suit your enterprise's needs.
 3. Start managing your products and code.
+4. Monitor the performance of your products and code.
+5. Make necessary adjustments based on the performance metrics.
 
 For more detailed instructions, refer to the official documentation.
 
