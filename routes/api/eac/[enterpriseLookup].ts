@@ -33,6 +33,13 @@ export const handler: Handlers = {
 
     eac.EnterpriseLookup = enterpriseLookup;
 
+    const existingEaC = await denoKv.get([
+      "EaC",
+      enterpriseLookup,
+    ]) as EverythingAsCode;
+
+    //  TODO: Differential update
+
     await denoKv.set(["EaC", eac.EnterpriseLookup], eac);
 
     return respond(eac);
