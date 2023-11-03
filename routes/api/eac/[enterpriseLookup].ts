@@ -46,13 +46,19 @@ export const handler: Handlers = {
   },
 
   /**
-   * Use this endpoint to archive an EaC container.
+   * Use this endpoint to execute a set of delete operations or archive an entire EaC container.
    * @param _req
    * @param _ctx
    * @returns
    */
   async DELETE(req, ctx) {
     const enterpriseLookup = ctx.params.enterpriseLookup;
+
+    const url = new URL(req.url);
+
+    const archive = JSON.parse(
+      url.searchParams.get("archive") || "false",
+    ) as boolean;
 
     if (!enterpriseLookup) {
       return respond({
@@ -66,9 +72,13 @@ export const handler: Handlers = {
 
     eac.EnterpriseLookup = enterpriseLookup;
 
-    await denoKv.set(["EaC", "Archive", eac.EnterpriseLookup], eac);
+    if (archive) {
+      await denoKv.set(["EaC", "Archive", eac.EnterpriseLookup], eac);
 
-    await denoKv.delete(["EaC", eac.EnterpriseLookup]);
+      await denoKv.delete(["EaC", eac.EnterpriseLookup]);
+    } else {
+      //  TODO: Execute delete operations
+    }
 
     return respond({
       Message: `The enterprise '${enterpriseLookup} has been archived.`,
