@@ -5,8 +5,8 @@
 import * as $0 from "./routes/_404.tsx";
 import * as $1 from "./routes/_app.tsx";
 import * as $2 from "./routes/api/_middleware.ts";
-import * as $3 from "./routes/api/eac/[enterpriseLookup].ts";
-import * as $4 from "./routes/api/eac/index.ts";
+import * as $3 from "./routes/api/[enterpriseLookup]/index.ts";
+import * as $4 from "./routes/api/index.ts";
 import * as $5 from "./routes/dashboard/jwt.tsx";
 import * as $6 from "./routes/index.tsx";
 

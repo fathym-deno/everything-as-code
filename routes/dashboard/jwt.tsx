@@ -7,7 +7,10 @@ interface JWTPageData {
 
 export const handler: Handlers<JWTPageData | null, Record<string, unknown>> = {
   async GET(_, ctx) {
-    const jwt = await jwtConfig.Create({ foo: "bar" });
+    //  TODO: Get username from oauth provider
+    const jwt = await jwtConfig.Create({
+      Username: "michael.gearhardt@fathym.com",
+    });
 
     const data: JWTPageData = { jwt };
 

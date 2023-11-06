@@ -11,10 +11,12 @@ export const jwtConfig = {
 
     return jwt;
   },
-  async Decode(token: string) {
-    const decoded = await decode(token);
+  async Decode<T>(
+    token: string,
+  ): Promise<[header: unknown, payload: T, signature: Uint8Array]> {
+    const [header, payload, signature] = await decode(token);
 
-    return decoded;
+    return [header, payload as T, signature];
   },
   ExpirationTime: 60 * 60 * 24 * 365, // 1 year
   Header: "Authorization",

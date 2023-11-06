@@ -6,6 +6,7 @@
 /// <reference lib="deno.unstable" />
 
 import "$std/dotenv/load.ts";
+import "./src/eac/listeners.ts";
 
 import { start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";

@@ -7,6 +7,11 @@ export type EverythingAsCode = EaCDetails<EaCEnterpriseDetails> & {
   ParentEnterpriseLookup?: string;
 };
 
+export type EaCDiff = Omit<
+  EverythingAsCode,
+  "EnterpriseLookup" | "ParentEnterpriseLookup" | "Details"
+>;
+
 //   AccessRights?: { [key: string]: EaCAccessRightAsCode };
 //   Applications?: { [key: string]: EaCApplicationAsCode };
 //   DataTokens?: { [key: string]: EaCDataTokenAsCode };
