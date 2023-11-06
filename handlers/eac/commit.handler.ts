@@ -2,7 +2,6 @@ import { denoKv } from "../../configs/deno-kv.config.ts";
 import { EaCDiff, EverythingAsCode } from "../../src/EverythingAsCode.ts";
 import { listenQueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
-import { sleep } from "../../src/utils/sleep.ts";
 import {
   markEaCProcessed,
   waitOnEaCProcessing,
