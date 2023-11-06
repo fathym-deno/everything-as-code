@@ -19,7 +19,7 @@ const manifest = {
     "./routes/_app.tsx": $1,
     "./routes/api/[enterpriseLookup]/_middleware.ts": $2,
     "./routes/api/[enterpriseLookup]/index.ts": $3,
-    "./routes/api/[enterpriseLookup]/users copy.ts": $4,
+    "./routes/api/[enterpriseLookup]/status.ts": $4,
     "./routes/api/[enterpriseLookup]/users.ts": $5,
     "./routes/api/_middleware.ts": $6,
     "./routes/api/index.ts": $7,

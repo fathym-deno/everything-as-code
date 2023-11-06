@@ -4,6 +4,9 @@ import { isEaCCommitRequest } from "../api/models/EaCCommitRequest.ts";
 import { handleEaCCommitRequest } from "../../handlers/eac/commit.handler.ts";
 import { handleEaCDeleteRequest } from "../../handlers/eac/delete.handler.ts";
 
+/**
+ * This listener set is responsible for the core EaC actions.
+ */
 denoKv.listenQueue(async (msg: unknown) => {
   if (isEaCCommitRequest(msg)) {
     await handleEaCCommitRequest(msg);
