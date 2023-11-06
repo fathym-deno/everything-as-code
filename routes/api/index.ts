@@ -9,6 +9,7 @@ import { eacExists } from "../../src/utils/eac/helpers.ts";
 import { Status } from "$std/http/http_status.ts";
 import { enqueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
+import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
 
 export const handler: Handlers = {
   /**
@@ -77,7 +78,19 @@ export const handler: Handlers = {
       );
     }
 
-    await enqueueAtomic(denoKv, commitReq);
+    await enqueueAtomic(denoKv, commitReq, (op) => {
+      const createStatus: EaCStatus = {
+        EnterpriseLookup: commitReq.EaC.EnterpriseLookup!,
+        Messages: { Queued: "Creating new EaC container" },
+        Processing: false,
+        Username: username,
+      };
+
+      return op.set(
+        ["EaC", "Status", commitReq.EaC.EnterpriseLookup!],
+        createStatus,
+      );
+    });
 
     return respond({
       Message:

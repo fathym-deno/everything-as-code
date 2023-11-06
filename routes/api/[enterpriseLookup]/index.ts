@@ -8,6 +8,7 @@ import { EaCDeleteRequest } from "../../../src/api/models/EaCDeleteRequest.ts";
 import { EaCCommitRequest } from "../../../src/api/models/EaCCommitRequest.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
+import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
 
 export const handler: Handlers = {
   /**
@@ -34,6 +35,8 @@ export const handler: Handlers = {
    */
   async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
     const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+
+    const username = ctx.state.Username;
 
     const eac = (await req.json()) as EverythingAsCode;
 
@@ -68,7 +71,19 @@ export const handler: Handlers = {
       );
     }
 
-    await enqueueAtomic(denoKv, commitReq);
+    await enqueueAtomic(denoKv, commitReq, (op) => {
+      const commitStatus: EaCStatus = {
+        EnterpriseLookup: commitReq.EaC.EnterpriseLookup!,
+        Messages: { Queued: "Commiting existing EaC container" },
+        Processing: false,
+        Username: username!,
+      };
+
+      return op.set(
+        ["EaC", "Status", commitReq.EaC.EnterpriseLookup!],
+        commitStatus,
+      );
+    });
 
     return respond({
       Message:
