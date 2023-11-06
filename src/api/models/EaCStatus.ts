@@ -1,7 +1,7 @@
 export type EaCStatus = {
   EnterpriseLookup: string;
 
-  Message: string;
+  Messages: Record<string, string>;
 
   Username: string;
 };

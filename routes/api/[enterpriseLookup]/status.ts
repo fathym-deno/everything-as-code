@@ -23,10 +23,14 @@ export const handler: Handlers = {
       enterpriseLookup,
     ]);
 
+    const idleStatus: EaCStatus = {
+      Messages: {},
+      EnterpriseLookup: enterpriseLookup,
+      Username: "system",
+    };
+
     return respond(
-      status?.value! || {
-        Message: "Hello World",
-      },
+      status?.value! || idleStatus,
     );
   },
 };
