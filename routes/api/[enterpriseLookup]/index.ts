@@ -10,6 +10,12 @@ import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
 
 export const handler: Handlers = {
+  /**
+   * Use this endpoint to get a user's EaC.
+   * @param _req
+   * @param ctx
+   * @returns
+   */
   async GET(_req, ctx: HandlerContext<any, EaCAPIUserState>) {
     const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
 

@@ -11,6 +11,12 @@ import { enqueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
 
 export const handler: Handlers = {
+  /**
+   * Use this endpoint to list a user's EaCs they have access to.
+   * @param _req
+   * @param ctx
+   * @returns
+   */
   async GET(_req: Request, ctx: HandlerContext<any, EaCAPIState>) {
     const username = ctx.state.Username!;
 
@@ -36,7 +42,7 @@ export const handler: Handlers = {
   },
 
   /**
-   * Use this endpoint to create a new EaC container.
+   * Use this endpoint to commit a new EaC container.
    * @param _req
    * @param _ctx
    * @returns
