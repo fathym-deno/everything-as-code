@@ -40,9 +40,11 @@ export const handler: Handlers = {
   async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
     const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
-    const eacUser = (await req.json()) as UserEaCRecord;
+    const userEaCRecord = (await req.json()) as UserEaCRecord;
 
-    if (!enterpriseLookup) {
+    userEaCRecord.EnterpriseLookup = enterpriseLookup;
+
+    if (!userEaCRecord.EnterpriseLookup) {
       return respond(
         {
           Message: "The enterprise lookup must be provided.",
@@ -53,7 +55,7 @@ export const handler: Handlers = {
       );
     }
 
-    if (!eacUser.Username) {
+    if (!userEaCRecord.Username) {
       return respond(
         {
           Message: "The username must be provided.",
@@ -78,19 +80,19 @@ export const handler: Handlers = {
 
     await denoKv
       .atomic()
-      .set(["User", eacUser.Username, "EaC", enterpriseLookup], {
-        EnterpriseLookup: enterpriseLookup,
-        Owner: true,
-      } as UserEaCRecord)
-      .set(["EaC", "Users", enterpriseLookup, eacUser.Username], {
-        Username: eacUser.Username,
-        Owner: true,
-      } as UserEaCRecord)
+      .set(
+        ["User", userEaCRecord.Username, "EaC", enterpriseLookup],
+        userEaCRecord,
+      )
+      .set(
+        ["EaC", "Users", enterpriseLookup, userEaCRecord.Username],
+        userEaCRecord,
+      )
       .commit();
 
     return respond({
       Message:
-        `The user '${eacUser.Username}' has been invited to enterprise '${enterpriseLookup}'.`,
+        `The user '${userEaCRecord.Username}' has been invited to enterprise '${userEaCRecord.EnterpriseLookup}'.`,
     });
   },
 };
