@@ -26,6 +26,7 @@ export const handler: Handlers = {
     const idleStatus: EaCStatus = {
       Messages: {},
       EnterpriseLookup: enterpriseLookup,
+      Processing: false,
       Username: "system",
     };
 

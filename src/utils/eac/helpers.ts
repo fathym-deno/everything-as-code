@@ -23,7 +23,9 @@ export function markEaCProcessed(
   enterpriseLookup: string,
   atomicOp: Deno.AtomicOperation,
 ): Deno.AtomicOperation {
-  return atomicOp.delete(["EaC", "Processing", enterpriseLookup]);
+  return atomicOp
+    .delete(["EaC", "Processing", enterpriseLookup])
+    .delete(["EaC", "Status", enterpriseLookup]);
 }
 
 export async function waitOnEaCProcessing<T>(
