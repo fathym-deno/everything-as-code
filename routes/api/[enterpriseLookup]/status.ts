@@ -5,6 +5,7 @@ import { denoKv } from "../../../configs/deno-kv.config.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
+import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
 
 export const handler: Handlers = {
   /**
@@ -14,10 +15,18 @@ export const handler: Handlers = {
    * @returns
    */
   async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
-    // TODO: Track status of EaC
+    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
-    return respond({
-      StatusMessage: "Hello World",
-    });
+    const status = await denoKv.get<EaCStatus>([
+      "EaC",
+      "Status",
+      enterpriseLookup,
+    ]);
+
+    return respond(
+      status?.value! || {
+        Message: "Hello World",
+      },
+    );
   },
 };
