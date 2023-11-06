@@ -42,4 +42,4 @@ team.
 
 ## License
 
-Everything as Code is licensed under [INSERT LICENSE HERE].
+Everything as Code is licensed under MIT.
