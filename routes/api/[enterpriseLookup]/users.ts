@@ -4,10 +4,33 @@ import { respond } from "@fathym/common";
 import { denoKv } from "../../../configs/deno-kv.config.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
-import { EaCUserRecord } from "../../../src/api/EaCUserRecord.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
 
 export const handler: Handlers = {
+  /**
+   * Use this endpoint to list an EaC's users with access.
+   * @param _req
+   * @param ctx
+   * @returns
+   */
+  async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
+    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+
+    const eacUserResults = await denoKv.list<UserEaCRecord>({
+      prefix: ["EaC", "Users", enterpriseLookup],
+    });
+
+    const userEaCRecords: UserEaCRecord[] = [];
+
+    for await (const userEaCRecord of eacUserResults) {
+      userEaCRecords.push(userEaCRecord.value);
+    }
+
+    return respond({
+      Users: userEaCRecords,
+    });
+  },
+
   /**
    * Use this endpoint to invite a user to an EaC container.
    * @param _req
@@ -17,7 +40,7 @@ export const handler: Handlers = {
   async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
     const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
-    const eacUser = (await req.json()) as EaCUserRecord;
+    const eacUser = (await req.json()) as UserEaCRecord;
 
     if (!enterpriseLookup) {
       return respond(
@@ -62,7 +85,7 @@ export const handler: Handlers = {
       .set(["EaC", "Users", enterpriseLookup, eacUser.Username], {
         Username: eacUser.Username,
         Owner: true,
-      } as EaCUserRecord)
+      } as UserEaCRecord)
       .commit();
 
     return respond({

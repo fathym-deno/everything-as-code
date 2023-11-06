@@ -7,7 +7,6 @@ import {
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
-import { EaCUserRecord } from "../../src/api/EaCUserRecord.ts";
 
 export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
   await waitOnEaCProcessing(
@@ -23,29 +22,15 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
   ]);
 
   if (deleteReq.Archive) {
-    const eacUserResults = await denoKv.list<EaCUserRecord>({
+    const userEaCResults = await denoKv.list<UserEaCRecord>({
       prefix: ["EaC", "Users", deleteReq.EnterpriseLookup],
     });
 
-    const eacUserRecords: EaCUserRecord[] = [];
+    const userEaCRecords: UserEaCRecord[] = [];
 
-    for await (const eacUserRecord of eacUserResults) {
-      eacUserRecords.push(eacUserRecord.value);
+    for await (const userEaCRecord of userEaCResults) {
+      userEaCRecords.push(userEaCRecord.value);
     }
-
-    const userEaCKeys = eacUserRecords.map((eur) =>
-      !eur.Owner
-        ? ["User", eur.Username, "EaC", deleteReq.EnterpriseLookup]
-        : undefined
-    );
-
-    const userEaCRemovalKeys: string[][] = userEaCKeys
-      .filter((uek) => uek)
-      .map((uek) => uek!);
-
-    const userEaCRemovals = await denoKv.getMany<UserEaCRecord[]>(
-      userEaCRemovalKeys,
-    );
 
     await listenQueueAtomic(denoKv, deleteReq, (op) => {
       op = markEaCProcessed(deleteReq.EnterpriseLookup, op)
@@ -53,27 +38,21 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
         .set(["EaC", "Archive", deleteReq.EnterpriseLookup], eac.value)
         .delete(["EaC", deleteReq.EnterpriseLookup]);
 
-      for (const eacUserRecord of eacUserRecords) {
-        if (!eacUserRecord.Owner) {
-          op = op.delete([
-            "EaC",
-            "Users",
-            deleteReq.EnterpriseLookup,
-            eacUserRecord.Username,
-          ]);
-        }
-      }
-
-      for (const userEaCRemoval of userEaCRemovals) {
-        if (!userEaCRemoval.value!.Owner) {
-          const username = userEaCRemoval.key[1];
-
-          op = op.delete([
-            "User",
-            username,
-            "EaC",
-            deleteReq.EnterpriseLookup,
-          ]);
+      for (const userEaCRecord of userEaCRecords) {
+        if (!userEaCRecord.Owner) {
+          op = op
+            .delete([
+              "EaC",
+              "Users",
+              deleteReq.EnterpriseLookup,
+              userEaCRecord.Username,
+            ])
+            .delete([
+              "User",
+              userEaCRecord.Username,
+              "EaC",
+              deleteReq.EnterpriseLookup,
+            ]);
         }
       }
 

@@ -8,7 +8,6 @@ import {
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
-import { EaCUserRecord } from "../../src/api/EaCUserRecord.ts";
 
 export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   if (!commitReq.EaC.EnterpriseLookup) {
@@ -41,17 +40,20 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
       .delete(["EaC", "Processing", enterpriseLookup]);
 
     if (commitReq.Username) {
+      const userEaCRecord: UserEaCRecord = {
+        EnterpriseLookup: enterpriseLookup,
+        Owner: true,
+        Username: commitReq.Username,
+      };
+
       op = op
-        .set(["User", commitReq.Username, "EaC", enterpriseLookup], {
-          EnterpriseLookup: enterpriseLookup,
-          Owner: true,
-        } as UserEaCRecord)
+        .set(
+          ["User", commitReq.Username, "EaC", enterpriseLookup],
+          userEaCRecord,
+        )
         .set(
           ["EaC", "Users", enterpriseLookup, commitReq.Username],
-          {
-            Username: commitReq.Username,
-            Owner: true,
-          } as EaCUserRecord,
+          userEaCRecord,
         );
     }
 
