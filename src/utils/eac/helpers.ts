@@ -1,5 +1,3 @@
-import { options } from "preact";
-import { sleep } from "../sleep.ts";
 import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
 
 export async function eacExists(

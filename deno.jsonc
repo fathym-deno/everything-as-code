@@ -1,7 +1,10 @@
 {
   "lock": false,
   "tasks": {
-    "build": "deno run -A --unstable dev.ts build",
+    "build": "deno task build:fmt && deno task build:lint && deno task test",
+    "build:dev": "deno run -A --unstable dev.ts build",
+    "build:fmt": "deno fmt",
+    "build:lint": "deno lint",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "preview": "deno run -A --unstable main.ts",

@@ -31,6 +31,8 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   const diffKeys = Object.keys(eacDiff);
 
+  diffKeys.toString();
+
   //  TODO: Differential update
 
   await listenQueueAtomic(denoKv, commitReq, (op) => {

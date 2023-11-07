@@ -1,10 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { denoKv } from "../../../../configs/deno-kv.config.ts";
-import { eacExists } from "../../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { UserEaCRecord } from "../../../../src/api/UserEaCRecord.ts";
 import { EaCStatus } from "../../../../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../../../../src/api/models/EaCStatusProcessingTypes.ts";
 
