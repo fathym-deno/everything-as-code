@@ -7,11 +7,12 @@ import * as $1 from "./routes/_app.tsx";
 import * as $2 from "./routes/api/[entLookup]/_middleware.ts";
 import * as $3 from "./routes/api/[entLookup]/index.ts";
 import * as $4 from "./routes/api/[entLookup]/status/[commitId]/index.ts";
-import * as $5 from "./routes/api/[entLookup]/users.ts";
-import * as $6 from "./routes/api/_middleware.ts";
-import * as $7 from "./routes/api/index.ts";
-import * as $8 from "./routes/dashboard/jwt.tsx";
-import * as $9 from "./routes/index.tsx";
+import * as $5 from "./routes/api/[entLookup]/status/current.ts";
+import * as $6 from "./routes/api/[entLookup]/users.ts";
+import * as $7 from "./routes/api/_middleware.ts";
+import * as $8 from "./routes/api/index.ts";
+import * as $9 from "./routes/dashboard/jwt.tsx";
+import * as $10 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
@@ -19,12 +20,13 @@ const manifest = {
     "./routes/_app.tsx": $1,
     "./routes/api/[entLookup]/_middleware.ts": $2,
     "./routes/api/[entLookup]/index.ts": $3,
-    "./routes/api/[entLookup]/status.ts": $4,
-    "./routes/api/[entLookup]/users.ts": $5,
-    "./routes/api/_middleware.ts": $6,
-    "./routes/api/index.ts": $7,
-    "./routes/dashboard/jwt.tsx": $8,
-    "./routes/index.tsx": $9,
+    "./routes/api/[entLookup]/status/[commitId]/index.ts": $4,
+    "./routes/api/[entLookup]/status/current.ts": $5,
+    "./routes/api/[entLookup]/users.ts": $6,
+    "./routes/api/_middleware.ts": $7,
+    "./routes/api/index.ts": $8,
+    "./routes/dashboard/jwt.tsx": $9,
+    "./routes/index.tsx": $10,
   },
   islands: {},
   baseUrl: import.meta.url,
