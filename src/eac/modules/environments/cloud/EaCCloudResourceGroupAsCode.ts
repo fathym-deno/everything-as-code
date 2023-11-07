@@ -1,0 +1,9 @@
+import { EaCCloudResourceGroupDetails } from "./EaCCloudResourceGroupDetails.ts";
+import { EaCCloudResourceAsCode } from "./EaCCloudResourceAsCode.ts";
+import { EaCDetails } from "../../../EaCDetails.ts";
+
+export type EaCCloudResourceGroupAsCode =
+  & EaCDetails<EaCCloudResourceGroupDetails>
+  & {
+    Resources?: { [key: string]: EaCCloudResourceAsCode };
+  };
