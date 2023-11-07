@@ -1,4 +1,4 @@
-import { EverythingAsCode } from "../../EverythingAsCode.ts";
+import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { DenoKVNonce } from "../../utils/deno-kv/DenoKVNonce.ts";
 
 export type EaCCommitRequest = DenoKVNonce & {
