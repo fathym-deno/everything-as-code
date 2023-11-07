@@ -1,5 +1,4 @@
 import { denoKv } from "../../configs/deno-kv.config.ts";
-import { EaCDiff, EverythingAsCode } from "../../src/EverythingAsCode.ts";
 import { listenQueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
 import {
@@ -7,6 +6,7 @@ import {
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
+import { EaCDiff, EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 
 export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   if (!commitReq.EaC.EnterpriseLookup) {

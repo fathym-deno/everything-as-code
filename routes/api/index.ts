@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
-import { EverythingAsCode } from "../../src/EverythingAsCode.ts";
+import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 import { denoKv } from "../../configs/deno-kv.config.ts";
 import { EaCAPIState } from "../../src/api/EaCAPIState.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";

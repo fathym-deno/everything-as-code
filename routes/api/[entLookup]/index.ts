@@ -2,7 +2,7 @@
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { denoKv } from "../../../configs/deno-kv.config.ts";
-import { EverythingAsCode } from "../../../src/EverythingAsCode.ts";
+import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 import { enqueueAtomic } from "../../../src/utils/deno-kv/helpers.ts";
 import { EaCDeleteRequest } from "../../../src/api/models/EaCDeleteRequest.ts";
 import { EaCCommitRequest } from "../../../src/api/models/EaCCommitRequest.ts";
