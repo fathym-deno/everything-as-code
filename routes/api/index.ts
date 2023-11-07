@@ -10,6 +10,8 @@ import { Status } from "$std/http/http_status.ts";
 import { enqueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
 import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
+import { EaCCommitResponse } from "../../src/api/models/EaCCommitResponse.ts";
+import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 
 export const handler: Handlers = {
   /**
@@ -51,21 +53,26 @@ export const handler: Handlers = {
   async POST(req, ctx: HandlerContext<any, EaCAPIState>) {
     const username = ctx.state.Username!;
 
-    const commitReq: EaCCommitRequest = {
-      EaC: {
-        ...((await req.json()) || {}),
-      },
+    const createStatus: EaCStatus = {
+      ID: crypto.randomUUID(),
+      EnterpriseLookup: crypto.randomUUID(),
+      Messages: { Queued: "Creating new EaC container" },
+      Processing: EaCStatusProcessingTypes.QUEUED,
       Username: username,
     };
 
-    while (
-      await eacExists(
-        denoKv,
-        commitReq.EaC.EnterpriseLookup || crypto.randomUUID(),
-      )
-    ) {
-      commitReq.EaC.EnterpriseLookup = undefined;
+    while (await eacExists(denoKv, createStatus.EnterpriseLookup)) {
+      createStatus.EnterpriseLookup = crypto.randomUUID();
     }
+
+    const commitReq: EaCCommitRequest = {
+      CommitID: createStatus.ID,
+      EaC: {
+        ...((await req.json()) || {}),
+        EnterpriseLookup: createStatus.EnterpriseLookup,
+      },
+      Username: username,
+    };
 
     if (!commitReq.EaC.EnterpriseLookup) {
       return respond(
@@ -79,22 +86,18 @@ export const handler: Handlers = {
     }
 
     await enqueueAtomic(denoKv, commitReq, (op) => {
-      const createStatus: EaCStatus = {
-        EnterpriseLookup: commitReq.EaC.EnterpriseLookup!,
-        Messages: { Queued: "Creating new EaC container" },
-        Processing: false,
-        Username: username,
-      };
-
-      return op.set(
-        ["EaC", "Status", commitReq.EaC.EnterpriseLookup!],
-        createStatus,
-      );
+      return op
+        .set(["EaC", "Status", "ID", createStatus.ID], createStatus)
+        .set(
+          ["EaC", "Status", "EaC", createStatus.EnterpriseLookup],
+          createStatus,
+        );
     });
 
     return respond({
+      CommitID: createStatus.ID,
       Message:
-        `The enterprise '${commitReq.EaC.EnterpriseLookup}' commit has been queued.`,
-    });
+        `The enterprise '${createStatus.EnterpriseLookup}' commit has been queued.`,
+    } as EaCCommitResponse);
   },
 };

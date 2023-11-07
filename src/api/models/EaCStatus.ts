@@ -1,9 +1,13 @@
+import { EaCStatusProcessingTypes } from "./EaCStatusProcessingTypes.ts";
+
 export type EaCStatus = {
   EnterpriseLookup: string;
 
+  ID: string;
+
   Messages: Record<string, string>;
 
-  Processing: boolean;
+  Processing: EaCStatusProcessingTypes;
 
   Username: string;
 };

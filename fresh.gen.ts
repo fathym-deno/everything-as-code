@@ -4,10 +4,10 @@
 
 import * as $0 from "./routes/_404.tsx";
 import * as $1 from "./routes/_app.tsx";
-import * as $2 from "./routes/api/[enterpriseLookup]/_middleware.ts";
-import * as $3 from "./routes/api/[enterpriseLookup]/index.ts";
-import * as $4 from "./routes/api/[enterpriseLookup]/status.ts";
-import * as $5 from "./routes/api/[enterpriseLookup]/users.ts";
+import * as $2 from "./routes/api/[entLookup]/_middleware.ts";
+import * as $3 from "./routes/api/[entLookup]/index.ts";
+import * as $4 from "./routes/api/[entLookup]/status/[commitId]/index.ts";
+import * as $5 from "./routes/api/[entLookup]/users.ts";
 import * as $6 from "./routes/api/_middleware.ts";
 import * as $7 from "./routes/api/index.ts";
 import * as $8 from "./routes/dashboard/jwt.tsx";
@@ -17,10 +17,10 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $0,
     "./routes/_app.tsx": $1,
-    "./routes/api/[enterpriseLookup]/_middleware.ts": $2,
-    "./routes/api/[enterpriseLookup]/index.ts": $3,
-    "./routes/api/[enterpriseLookup]/status.ts": $4,
-    "./routes/api/[enterpriseLookup]/users.ts": $5,
+    "./routes/api/[entLookup]/_middleware.ts": $2,
+    "./routes/api/[entLookup]/index.ts": $3,
+    "./routes/api/[entLookup]/status.ts": $4,
+    "./routes/api/[entLookup]/users.ts": $5,
     "./routes/api/_middleware.ts": $6,
     "./routes/api/index.ts": $7,
     "./routes/dashboard/jwt.tsx": $8,

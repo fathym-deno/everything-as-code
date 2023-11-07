@@ -11,20 +11,19 @@ export async function handler(
 ) {
   const username = ctx.state.Username!;
 
-  const enterpriseLookup = ctx.params.enterpriseLookup;
+  const entLookup = ctx.params.entLookup;
 
   const userEaC = await denoKv.get<UserEaCRecord>([
     "User",
     username,
     "EaC",
-    enterpriseLookup,
+    entLookup,
   ]);
 
   if (!userEaC?.value) {
     return respond(
       {
-        Message:
-          `You do not have access to the enterprise '${enterpriseLookup}'.`,
+        Message: `You do not have access to the enterprise '${entLookup}'.`,
       },
       {
         status: Status.Unauthorized,

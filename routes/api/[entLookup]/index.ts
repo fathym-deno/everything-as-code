@@ -9,6 +9,8 @@ import { EaCCommitRequest } from "../../../src/api/models/EaCCommitRequest.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
 import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
+import { EaCCommitResponse } from "../../../src/api/models/EaCCommitResponse.ts";
+import { EaCStatusProcessingTypes } from "../../../src/api/models/EaCStatusProcessingTypes.ts";
 
 export const handler: Handlers = {
   /**
@@ -18,9 +20,9 @@ export const handler: Handlers = {
    * @returns
    */
   async GET(_req, ctx: HandlerContext<any, EaCAPIUserState>) {
-    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
-    const eac = await denoKv.get(["EaC", enterpriseLookup]);
+    const eac = await denoKv.get(["EaC", entLookup]);
 
     return respond({
       EaC: eac,
@@ -34,16 +36,25 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
-    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const username = ctx.state.Username;
 
     const eac = (await req.json()) as EverythingAsCode;
 
+    const commitStatus: EaCStatus = {
+      ID: crypto.randomUUID(),
+      EnterpriseLookup: entLookup,
+      Messages: { Queued: "Commiting existing EaC container" },
+      Processing: EaCStatusProcessingTypes.QUEUED,
+      Username: username!,
+    };
+
     const commitReq: EaCCommitRequest = {
+      CommitID: commitStatus.ID,
       EaC: {
         ...(eac || {}),
-        EnterpriseLookup: enterpriseLookup,
+        EnterpriseLookup: commitStatus.EnterpriseLookup,
       },
       Username: "",
     };
@@ -72,23 +83,19 @@ export const handler: Handlers = {
     }
 
     await enqueueAtomic(denoKv, commitReq, (op) => {
-      const commitStatus: EaCStatus = {
-        EnterpriseLookup: commitReq.EaC.EnterpriseLookup!,
-        Messages: { Queued: "Commiting existing EaC container" },
-        Processing: false,
-        Username: username!,
-      };
-
-      return op.set(
-        ["EaC", "Status", commitReq.EaC.EnterpriseLookup!],
-        commitStatus,
-      );
+      return op
+        .set(["EaC", "Status", "ID", commitStatus.ID], commitStatus)
+        .set(
+          ["EaC", "Status", "EaC", commitStatus.EnterpriseLookup],
+          commitStatus,
+        );
     });
 
     return respond({
+      CommitID: commitStatus.ID,
       Message:
         `The enterprise '${commitReq.EaC.EnterpriseLookup}' commit has been queued.`,
-    });
+    } as EaCCommitResponse);
   },
 
   /**
@@ -98,17 +105,26 @@ export const handler: Handlers = {
    * @returns
    */
   async DELETE(req, ctx: HandlerContext<any, EaCAPIUserState>) {
-    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const username = ctx.state.Username!;
 
     const url = new URL(req.url);
 
+    const commitStatus: EaCStatus = {
+      ID: crypto.randomUUID(),
+      EnterpriseLookup: entLookup!,
+      Messages: { Queued: "Commiting existing EaC container" },
+      Processing: EaCStatusProcessingTypes.QUEUED,
+      Username: username!,
+    };
+
     const deleteReq: EaCDeleteRequest = {
       Archive: JSON.parse(
         url.searchParams.get("archive") || "false",
       ) as boolean,
-      EnterpriseLookup: enterpriseLookup,
+      CommitID: commitStatus.ID,
+      EnterpriseLookup: commitStatus.EnterpriseLookup,
       Username: username,
     };
 
@@ -136,12 +152,20 @@ export const handler: Handlers = {
       );
     }
 
-    await enqueueAtomic(denoKv, deleteReq);
+    await enqueueAtomic(denoKv, deleteReq, (op) => {
+      return op
+        .set(["EaC", "Status", "ID", commitStatus.ID], commitStatus)
+        .set(
+          ["EaC", "Status", "EaC", commitStatus.EnterpriseLookup],
+          commitStatus,
+        );
+    });
 
     return respond({
+      CommitID: commitStatus.ID,
       Message: `The enterprise '${deleteReq.EnterpriseLookup}' ${
         deleteReq.Archive ? "archiving" : "delete operations"
       } have been queued.`,
-    });
+    } as EaCCommitResponse);
   },
 };

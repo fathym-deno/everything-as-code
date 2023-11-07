@@ -13,11 +13,11 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     throw new Error("The enterprise lookup must be provided.");
   }
 
-  const enterpriseLookup = commitReq.EaC.EnterpriseLookup;
+  const entLookup = commitReq.EaC.EnterpriseLookup;
 
   await waitOnEaCProcessing(
     denoKv,
-    enterpriseLookup,
+    entLookup,
     commitReq,
     handleEaCCommitRequest,
   );
@@ -26,7 +26,7 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   const existingEaC = await denoKv.get<EverythingAsCode>([
     "EaC",
-    enterpriseLookup,
+    entLookup,
   ]);
 
   const diffKeys = Object.keys(eacDiff);
@@ -34,24 +34,24 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   //  TODO: Differential update
 
   await listenQueueAtomic(denoKv, commitReq, (op) => {
-    op = markEaCProcessed(enterpriseLookup, op)
-      .set(["EaC", enterpriseLookup], existingEaC)
-      .delete(["EaC", "Processing", enterpriseLookup]);
+    op = markEaCProcessed(entLookup, op)
+      .set(["EaC", entLookup], existingEaC)
+      .delete(["EaC", "Processing", entLookup]);
 
     if (commitReq.Username) {
       const userEaCRecord: UserEaCRecord = {
-        EnterpriseLookup: enterpriseLookup,
+        EnterpriseLookup: entLookup,
         Owner: true,
         Username: commitReq.Username,
       };
 
       op = op
         .set(
-          ["User", commitReq.Username, "EaC", enterpriseLookup],
+          ["User", commitReq.Username, "EaC", entLookup],
           userEaCRecord,
         )
         .set(
-          ["EaC", "Users", enterpriseLookup, commitReq.Username],
+          ["EaC", "Users", entLookup, commitReq.Username],
           userEaCRecord,
         );
     }

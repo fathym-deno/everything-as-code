@@ -2,6 +2,8 @@ import { EverythingAsCode } from "../../EverythingAsCode.ts";
 import { DenoKVNonce } from "../../utils/deno-kv/DenoKVNonce.ts";
 
 export type EaCCommitRequest = DenoKVNonce & {
+  CommitID: string;
+
   EaC: EverythingAsCode;
 
   Username: string;
@@ -12,6 +14,8 @@ export function isEaCCommitRequest(req: unknown): req is EaCCommitRequest {
 
   return (
     commitRequest.EaC !== undefined &&
-    typeof commitRequest.EaC.EnterpriseLookup === "string"
+    typeof commitRequest.EaC.EnterpriseLookup === "string" &&
+    commitRequest.CommitID !== undefined &&
+    typeof commitRequest.CommitID === "string"
   );
 }

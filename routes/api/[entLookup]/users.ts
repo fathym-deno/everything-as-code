@@ -14,10 +14,10 @@ export const handler: Handlers = {
    * @returns
    */
   async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
-    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const eacUserResults = await denoKv.list<UserEaCRecord>({
-      prefix: ["EaC", "Users", enterpriseLookup],
+      prefix: ["EaC", "Users", entLookup],
     });
 
     const userEaCRecords: UserEaCRecord[] = [];
@@ -38,11 +38,11 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
-    const enterpriseLookup = ctx.state.UserEaC!.EnterpriseLookup;
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const userEaCRecord = (await req.json()) as UserEaCRecord;
 
-    userEaCRecord.EnterpriseLookup = enterpriseLookup;
+    userEaCRecord.EnterpriseLookup = entLookup;
 
     if (!userEaCRecord.EnterpriseLookup) {
       return respond(
@@ -66,7 +66,7 @@ export const handler: Handlers = {
       );
     }
 
-    if (!(await eacExists(denoKv, enterpriseLookup))) {
+    if (!(await eacExists(denoKv, entLookup))) {
       return respond(
         {
           Message:
@@ -81,11 +81,11 @@ export const handler: Handlers = {
     await denoKv
       .atomic()
       .set(
-        ["User", userEaCRecord.Username, "EaC", enterpriseLookup],
+        ["User", userEaCRecord.Username, "EaC", entLookup],
         userEaCRecord,
       )
       .set(
-        ["EaC", "Users", enterpriseLookup, userEaCRecord.Username],
+        ["EaC", "Users", entLookup, userEaCRecord.Username],
         userEaCRecord,
       )
       .commit();
