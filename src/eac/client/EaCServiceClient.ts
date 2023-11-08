@@ -1,4 +1,4 @@
-import { EverythingAsCode } from "../../EverythingAsCode.ts";
+import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { UserEaCRecord } from "../../api/UserEaCRecord.ts";
 import { EaCCommitResponse } from "../../api/models/EaCCommitResponse.ts";
 import { EaCStatus } from "../../api/models/EaCStatus.ts";
