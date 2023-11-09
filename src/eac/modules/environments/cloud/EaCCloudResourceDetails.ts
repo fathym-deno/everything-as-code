@@ -1,5 +1,5 @@
-import { EaCVertexDetails } from "../../../EaCVertexDetails.ts";
+import { EaCVertexDetails } from '../../../EaCVertexDetails.ts';
 
-export type EaCCloudResourceDetails = EaCVertexDetails & {
+export type EaCCloudResourceDetails = {
   Order: number;
-};
+} & EaCVertexDetails;

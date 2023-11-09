@@ -5,6 +5,7 @@
       "request": "launch",
       "name": "Launch Program",
       "type": "node",
+      // "program": "${workspaceFolder}/tests/tests.ts",
       "program": "${workspaceFolder}/dev.ts",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "C:\\ProgramData\\chocolatey\\lib\\deno\\deno.EXE",

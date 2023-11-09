@@ -9,7 +9,7 @@ export class EaCServiceClient {
 
   //#region API Methods
   public async Commit<T extends EverythingAsCode>(
-    eac: Omit<T, "EnterpriseLookup">,
+    eac: T,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
       this.loadClientUrl(`/${eac.EnterpriseLookup}`),
@@ -24,7 +24,7 @@ export class EaCServiceClient {
   }
 
   public async Create<T extends EverythingAsCode>(
-    eac: Omit<T, "EnterpriseLookup">,
+    eac: T,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(this.loadClientUrl(""), {
       method: "POST",
@@ -65,7 +65,7 @@ export class EaCServiceClient {
 
   public async InviteUser(
     entLookup: string,
-    userEaC: Omit<UserEaCRecord, "EnterpriseLookup">,
+    userEaC: UserEaCRecord,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(this.loadClientUrl(`/${entLookup}/user`), {
       method: "POST",

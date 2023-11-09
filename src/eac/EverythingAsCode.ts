@@ -1,11 +1,11 @@
 import { EaCDetails } from "./EaCDetails.ts";
 import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
 
-export type EverythingAsCode = EaCDetails<EaCEnterpriseDetails> & {
+export type EverythingAsCode = {
   EnterpriseLookup?: string;
 
   ParentEnterpriseLookup?: string;
-};
+} & EaCDetails<EaCEnterpriseDetails>;
 
 export type EaCDiff = Omit<
   EverythingAsCode,

@@ -3,10 +3,10 @@ import { EaCLandingZoneAsCode } from "./EaCLandingZoneAsCode.ts";
 import { EaCCloudResourceGroupAsCode } from "./EaCCloudResourceGroupAsCode.ts";
 import { EaCDetails } from "../../../EaCDetails.ts";
 
-export type EaCCloudAsCode = EaCDetails<EaCCloudDetails> & {
+export type EaCCloudAsCode = {
   LandingZones?: Record<string, EaCLandingZoneAsCode>;
 
   ResourceGroups?: Record<string, EaCCloudResourceGroupAsCode>;
 
   Type?: string;
-};
+} & EaCDetails<EaCCloudDetails>;
