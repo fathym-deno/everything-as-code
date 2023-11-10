@@ -26,7 +26,7 @@ export async function enqueueAtomic(
     .sum(["enqueued_count"], 1n);
 
   if (atomicOpHandler) {
-    atomic = await atomicOpHandler(atomic);
+    atomic = atomicOpHandler(atomic);
   }
 
   return await atomic.commit();
@@ -37,9 +37,9 @@ export async function listenQueueAtomic(
   msg: DenoKVNonce,
   atomicOpHandler: AtomicOperationHandler,
 ) {
-  if (!msg.nonce || !msg.versionstamp) {
+  if (!msg.nonce) {
     throw new Error(
-      `The message is required to have a nonce and versionstamp value.`,
+      `The message is required to have a nonce value.`,
     );
   }
 
@@ -51,7 +51,7 @@ export async function listenQueueAtomic(
     .delete(nonce.key)
     .sum(["processed_count"], 1n);
 
-  atomic = await atomicOpHandler(atomic);
+  atomic = atomicOpHandler(atomic);
 
   return await atomic.commit();
 }
@@ -60,16 +60,17 @@ export async function waitOnProcessing<T>(
   denoKv: Deno.Kv,
   key: Deno.KvKey,
   msg: T,
+  owner: string,
   handler: (msg: T) => Promise<void>,
   sleepFor = 250,
 ) {
-  const processing = await denoKv.get<boolean>(key);
+  const processing = await denoKv.get<string>(key);
 
-  if (processing.value) {
+  if (processing.value && processing.value !== owner) {
     await sleep(sleepFor);
 
     await handler(msg);
   }
 
-  await denoKv.set(key, true);
+  await denoKv.set(key, owner);
 }

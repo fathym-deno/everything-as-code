@@ -23,7 +23,7 @@ export const handler: Handlers = {
     ]);
 
     return respond(
-      status?.value!,
+      status?.value! || {},
     );
   },
 };

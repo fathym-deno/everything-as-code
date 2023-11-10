@@ -1,6 +1,8 @@
 export type EaCCommitResponse = {
   CommitID: string;
 
+  EnterpriseLookup: string;
+
   Message: string;
 };
 

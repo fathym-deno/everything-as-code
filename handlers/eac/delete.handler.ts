@@ -7,11 +7,20 @@ import {
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
+import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
+import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 
 export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
+  const status = await denoKv.get<EaCStatus>([
+    "EaC",
+    "Status",
+    "ID",
+    deleteReq.CommitID,
+  ]);
+
   await waitOnEaCProcessing(
     denoKv,
-    deleteReq.EnterpriseLookup,
+    status.value!,
     deleteReq,
     handleEaCDeleteRequest,
   );
@@ -32,11 +41,16 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
       userEaCRecords.push(userEaCRecord.value);
     }
 
+    status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
+
+    status.value!.EndTime = new Date();
+
     await listenQueueAtomic(denoKv, deleteReq, (op) => {
       op = markEaCProcessed(deleteReq.EnterpriseLookup, op)
         .check(eac)
         .set(["EaC", "Archive", deleteReq.EnterpriseLookup], eac.value)
-        .delete(["EaC", deleteReq.EnterpriseLookup]);
+        .delete(["EaC", deleteReq.EnterpriseLookup])
+        .set(["EaC", "Status", "ID", deleteReq.CommitID], status.value);
 
       for (const userEaCRecord of userEaCRecords) {
         if (!userEaCRecord.Owner) {

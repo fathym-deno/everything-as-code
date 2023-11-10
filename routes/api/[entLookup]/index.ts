@@ -22,11 +22,9 @@ export const handler: Handlers = {
   async GET(_req, ctx: HandlerContext<any, EaCAPIUserState>) {
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
-    const eac = await denoKv.get(["EaC", entLookup]);
+    const eac = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
 
-    return respond({
-      EaC: eac,
-    });
+    return respond(eac.value || {});
   },
 
   /**
@@ -47,6 +45,7 @@ export const handler: Handlers = {
       EnterpriseLookup: entLookup,
       Messages: { Queued: "Commiting existing EaC container" },
       Processing: EaCStatusProcessingTypes.QUEUED,
+      StartTime: new Date(Date.now()),
       Username: username!,
     };
 
@@ -93,6 +92,7 @@ export const handler: Handlers = {
 
     return respond({
       CommitID: commitStatus.ID,
+      EnterpriseLookup: commitStatus.EnterpriseLookup,
       Message:
         `The enterprise '${commitReq.EaC.EnterpriseLookup}' commit has been queued.`,
     } as EaCCommitResponse);
@@ -116,6 +116,7 @@ export const handler: Handlers = {
       EnterpriseLookup: entLookup!,
       Messages: { Queued: "Commiting existing EaC container" },
       Processing: EaCStatusProcessingTypes.QUEUED,
+      StartTime: new Date(Date.now()),
       Username: username!,
     };
 
@@ -163,6 +164,7 @@ export const handler: Handlers = {
 
     return respond({
       CommitID: commitStatus.ID,
+      EnterpriseLookup: commitStatus.EnterpriseLookup,
       Message: `The enterprise '${deleteReq.EnterpriseLookup}' ${
         deleteReq.Archive ? "archiving" : "delete operations"
       } have been queued.`,

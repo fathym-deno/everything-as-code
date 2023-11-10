@@ -1,3 +1,4 @@
+export * from "./EaCAzureCloudDetails.ts";
 export * from "./EaCCloudAsCode.ts";
 export * from "./EaCCloudDetails.ts";
 export * from "./EaCCloudResourceAsCode.ts";

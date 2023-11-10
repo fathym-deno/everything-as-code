@@ -12,7 +12,7 @@ export class EaCServiceClient {
     eac: T,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
-      this.loadClientUrl(`/${eac.EnterpriseLookup}`),
+      this.loadClientUrl(`${eac.EnterpriseLookup}`),
       {
         method: "POST",
         headers: this.loadHeaders(),
@@ -37,7 +37,7 @@ export class EaCServiceClient {
 
   public async CurrentStatus(entLookup: string): Promise<EaCStatus> {
     const response = await fetch(
-      this.loadClientUrl(`/${entLookup}/status/current`),
+      this.loadClientUrl(`${entLookup}/status/current`),
       {
         headers: this.loadHeaders(),
       },
@@ -47,7 +47,7 @@ export class EaCServiceClient {
   }
 
   public async Delete(entLookup: string): Promise<EaCCommitResponse> {
-    const response = await fetch(this.loadClientUrl(`/${entLookup}`), {
+    const response = await fetch(this.loadClientUrl(`${entLookup}`), {
       method: "DELETE",
       headers: this.loadHeaders(),
     });
@@ -56,7 +56,7 @@ export class EaCServiceClient {
   }
 
   public async Get<T extends EverythingAsCode>(entLookup: string): Promise<T> {
-    const response = await fetch(this.loadClientUrl(`/${entLookup}`), {
+    const response = await fetch(this.loadClientUrl(`${entLookup}`), {
       headers: this.loadHeaders(),
     });
 
@@ -67,7 +67,7 @@ export class EaCServiceClient {
     entLookup: string,
     userEaC: UserEaCRecord,
   ): Promise<EaCCommitResponse> {
-    const response = await fetch(this.loadClientUrl(`/${entLookup}/user`), {
+    const response = await fetch(this.loadClientUrl(`${entLookup}/user`), {
       method: "POST",
       headers: this.loadHeaders(),
       body: JSON.stringify(userEaC),
@@ -85,7 +85,7 @@ export class EaCServiceClient {
   }
 
   public async ListUsers(entLookup: string): Promise<UserEaCRecord[]> {
-    const response = await fetch(this.loadClientUrl(`/${entLookup}/users`), {
+    const response = await fetch(this.loadClientUrl(`${entLookup}/users`), {
       headers: this.loadHeaders(),
     });
 
@@ -94,7 +94,7 @@ export class EaCServiceClient {
 
   public async Status(entLookup: string, commitId: string): Promise<EaCStatus> {
     const response = await fetch(
-      this.loadClientUrl(`/${entLookup}/status/${commitId}`),
+      this.loadClientUrl(`${entLookup}/status/${commitId}`),
       {
         headers: this.loadHeaders(),
       },

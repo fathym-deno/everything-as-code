@@ -33,14 +33,14 @@ export const handler: Handlers = {
       userEaCRecords.push(userEaCRecord.value);
     }
 
-    const userEaCs = await denoKv.getMany<EverythingAsCode[]>(
-      userEaCRecords.map((userEaC) => ["EaC", userEaC.EnterpriseLookup]),
-    );
+    // const userEaCs = await denoKv.getMany<EverythingAsCode[]>(
+    //   userEaCRecords.map((userEaC) => ["EaC", userEaC.EnterpriseLookup]),
+    // );
 
-    const eacs = userEaCs.map((eac) => eac.value!);
+    // const eacs = userEaCs.map((eac) => eac.value!);
 
     return respond({
-      EaCs: eacs,
+      UserEaCs: userEaCRecords,
     });
   },
 
@@ -77,7 +77,19 @@ export const handler: Handlers = {
     if (!commitReq.EaC.EnterpriseLookup) {
       return respond(
         {
-          Message: "There was an issue creating a new enterprise lookup.",
+          Message: "There was an issue creating a new EaC container.",
+        },
+        {
+          status: Status.BadRequest,
+        },
+      );
+    }
+
+    if (!commitReq.EaC.Details?.Name) {
+      return respond(
+        {
+          Message:
+            "The name must be provided when creating a new EaC container.",
         },
         {
           status: Status.BadRequest,
@@ -96,6 +108,7 @@ export const handler: Handlers = {
 
     return respond({
       CommitID: createStatus.ID,
+      EnterpriseLookup: createStatus.EnterpriseLookup,
       Message:
         `The enterprise '${createStatus.EnterpriseLookup}' commit has been queued.`,
     } as EaCCommitResponse);

@@ -5,6 +5,7 @@ import { denoKv } from "../../../configs/deno-kv.config.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
+import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 
 export const handler: Handlers = {
   /**
@@ -66,7 +67,9 @@ export const handler: Handlers = {
       );
     }
 
-    if (!(await eacExists(denoKv, entLookup))) {
+    const existingEaC = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
+
+    if (!existingEaC.value) {
       return respond(
         {
           Message:
@@ -78,17 +81,15 @@ export const handler: Handlers = {
       );
     }
 
+    userEaCRecord.EnterpriseName = existingEaC.value.Details!.Name!;
+
     await denoKv
       .atomic()
-      .set(
-        ["User", userEaCRecord.Username, "EaC", entLookup],
-        userEaCRecord,
-      )
-      .set(
-        ["EaC", "Users", entLookup, userEaCRecord.Username],
-        userEaCRecord,
-      )
+      .set(["User", userEaCRecord.Username, "EaC", entLookup], userEaCRecord)
+      .set(["EaC", "Users", entLookup, userEaCRecord.Username], userEaCRecord)
       .commit();
+
+    //  TODO: Send user invite email
 
     return respond({
       Message:
