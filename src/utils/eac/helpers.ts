@@ -19,28 +19,41 @@ export async function eacExists(
   return exists;
 }
 
-export async function invalidateStatus(
+export async function invalidateProcessing(
   denoKv: Deno.Kv,
-  status: EaCStatus,
+  entLookup: string,
   maxRunTimeSeconds = 60,
 ): Promise<void> {
-  const now = new Date(Date.now());
+  const status = await denoKv.get<EaCStatus>([
+    "EaC",
+    "Status",
+    "Eac",
+    entLookup,
+  ]);
 
-  const maxRunTime = new Date(
-    status.StartTime.getSeconds() + maxRunTimeSeconds,
-  );
+  if (status?.value) {
+    const now = new Date(Date.now());
 
-  if (maxRunTime.getTime() < now.getTime()) {
-    status.Processing = EaCStatusProcessingTypes.ERROR;
+    const maxRunTime = new Date(
+      status.value.StartTime.getSeconds() + maxRunTimeSeconds,
+    );
 
-    status.EndTime = new Date(Date.now());
+    if (maxRunTime.getTime() < now.getTime()) {
+      status.value.Processing = EaCStatusProcessingTypes.ERROR;
 
-    await denoKv
-      .atomic()
-      .set(["EaC", "Status", "ID", status.ID], status)
-      .delete(["EaC", "Status", "Eac", status.EnterpriseLookup])
-      .delete(["EaC", "Processing", status.EnterpriseLookup])
-      .commit();
+      status.value.Messages = {
+        Error: "Invalidated",
+      };
+
+      status.value.EndTime = new Date(Date.now());
+
+      await markEaCProcessed(entLookup, denoKv.atomic())
+        .set(["EaC", "Status", "ID", status.value.ID], status)
+        .commit();
+    } else {
+      await markEaCProcessed(entLookup, denoKv.atomic())
+        .commit();
+    }
   }
 }
 
@@ -55,16 +68,16 @@ export function markEaCProcessed(
 
 export async function waitOnEaCProcessing<T>(
   denoKv: Deno.Kv,
-  status: EaCStatus,
+  entLookup: string,
+  commitId: string,
   msg: T,
   handler: (msg: T) => Promise<void>,
   maxRunTimeSeconds = 60,
   sleepFor = 250,
 ): Promise<void> {
-  // TODO: need to handle status invalidation in api calls, not here so that the status can be reset before starting a new one...
-  await invalidateStatus(denoKv, status, maxRunTimeSeconds);
+  await invalidateProcessing(denoKv, entLookup, maxRunTimeSeconds);
 
-  const key = ["EaC", "Processing", status.EnterpriseLookup];
+  const key = ["EaC", "Processing", entLookup];
 
-  await waitOnProcessing(denoKv, key, msg, status.ID, handler, sleepFor);
+  await waitOnProcessing(denoKv, key, msg, commitId, handler, sleepFor);
 }

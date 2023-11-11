@@ -1,3 +1,4 @@
+import { merge } from "@fathym/common";
 import { denoKv } from "../../configs/deno-kv.config.ts";
 import { listenQueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
@@ -6,8 +7,7 @@ import {
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
 import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
-import { EaCDiff, EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
-import { DenoKVNonce } from "../../src/utils/deno-kv/DenoKVNonce.ts";
+import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 
@@ -32,17 +32,18 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   await waitOnEaCProcessing(
     denoKv,
-    status.value!,
+    status.value!.EnterpriseLookup,
+    status.value!.ID,
     commitReq,
     handleEaCCommitRequest,
   );
 
-  const existingEaCResult = await denoKv.get<EverythingAsCode>([
+  const existingEaC = await denoKv.get<EverythingAsCode>([
     "EaC",
     EnterpriseLookup,
   ]);
 
-  const saveEaC: EverythingAsCode = existingEaCResult.value || {
+  const saveEaC: EverythingAsCode = existingEaC.value || {
     EnterpriseLookup,
     ParentEnterpriseLookup,
   };
@@ -57,9 +58,17 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     const diff = eacDiff[key];
 
     if (diff) {
-      const type = typeof diff;
-
-      saveEaC[key] = diff;
+      if (
+        !Array.isArray(diff) &&
+        typeof diff === "object" &&
+        diff !== null &&
+        diff !== undefined
+      ) {
+        // TODO: Call Handler API definition for EaC key
+        saveEaC[key] = merge(existingEaC.value![key] as object, diff);
+      } else if (diff !== undefined && diff !== null) {
+        saveEaC[key] = diff;
+      }
     }
   }
 
@@ -71,6 +80,8 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   await listenQueueAtomic(denoKv, commitReq, (op) => {
     op = markEaCProcessed(EnterpriseLookup, op)
+      .check(existingEaC)
+      .check(status)
       .set(["EaC", EnterpriseLookup], saveEaC)
       .set(["EaC", "Status", "ID", commitReq.CommitID], status.value);
 

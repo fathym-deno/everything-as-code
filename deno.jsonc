@@ -26,7 +26,7 @@
   ],
   "imports": {
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
-    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.108-integration/mod.ts",
+    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.117-integration/mod.ts",
     "$fresh/": "https://deno.land/x/fresh@1.5.2/",
     "$fresh/plugins/twind.ts": "https://deno.land/x/fresh_twindv1_plugin@v1.3.0/twind.ts",
     "preact": "https://esm.sh/preact@10.18.1",

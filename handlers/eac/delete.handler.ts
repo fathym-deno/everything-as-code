@@ -20,7 +20,8 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
 
   await waitOnEaCProcessing(
     denoKv,
-    status.value!,
+    status.value!.EnterpriseLookup,
+    status.value!.ID,
     deleteReq,
     handleEaCDeleteRequest,
   );
@@ -48,6 +49,7 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
     await listenQueueAtomic(denoKv, deleteReq, (op) => {
       op = markEaCProcessed(deleteReq.EnterpriseLookup, op)
         .check(eac)
+        .check(status)
         .set(["EaC", "Archive", deleteReq.EnterpriseLookup], eac.value)
         .delete(["EaC", deleteReq.EnterpriseLookup])
         .set(["EaC", "Status", "ID", deleteReq.CommitID], status.value);
