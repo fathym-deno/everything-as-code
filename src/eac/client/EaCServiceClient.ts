@@ -2,10 +2,13 @@ import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { UserEaCRecord } from "../../api/UserEaCRecord.ts";
 import { EaCCommitResponse } from "../../api/models/EaCCommitResponse.ts";
 import { EaCStatus } from "../../api/models/EaCStatus.ts";
+import { EaCBaseClient } from "./EaCBaseClient.ts";
 
-export class EaCServiceClient {
+export class EaCServiceClient extends EaCBaseClient {
   /** */
-  constructor(protected baseUrl: URL, protected apiToken: string) {}
+  constructor(protected baseUrl: URL, protected apiToken: string) {
+    super(baseUrl, apiToken);
+  }
 
   //#region API Methods
   public async Commit<T extends EverythingAsCode>(
@@ -105,20 +108,5 @@ export class EaCServiceClient {
   //#endregion
 
   //#region Helpers
-  protected loadClientUrl(refPath: string | URL): string | URL {
-    const clientUrl = new URL(refPath, this.baseUrl);
-
-    return clientUrl;
-  }
-
-  protected loadHeaders(
-    headers: HeadersInit | undefined = undefined,
-  ): HeadersInit {
-    return {
-      Authorization: `Bearer ${this.apiToken}`,
-      "Content-Type": "application/json",
-      ...(headers || {}),
-    };
-  }
   //#endregion
 }

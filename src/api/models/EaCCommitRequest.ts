@@ -6,6 +6,8 @@ export type EaCCommitRequest = DenoKVNonce & {
 
   EaC: EverythingAsCode;
 
+  JWT: string;
+
   Username: string;
 };
 

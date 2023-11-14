@@ -50,10 +50,10 @@ export async function invalidateProcessing(
       await markEaCProcessed(entLookup, denoKv.atomic())
         .set(["EaC", "Status", "ID", status.value.ID], status)
         .commit();
-    } else {
-      await markEaCProcessed(entLookup, denoKv.atomic())
-        .commit();
     }
+  } else {
+    await markEaCProcessed(entLookup, denoKv.atomic())
+      .commit();
   }
 }
 

@@ -1,8 +1,8 @@
-import { EaCMetadataBase } from "../../EaCMetadataBase.ts";
-import { EaCEnvironmentAsCode } from "./EaCEnvironmentAsCode.ts";
+// import { EaCMetadataBase } from "../../EaCMetadataBase.ts";
+// import { EaCEnvironmentAsCode } from "./EaCEnvironmentAsCode.ts";
 
-export type EverythingAsCodeEnvironments = {
-  Environments?: { [key: string]: EaCEnvironmentAsCode };
+// export type EverythingAsCodeEnvironments = {
+//   Environments?: { [key: string]: EaCEnvironmentAsCode };
 
-  PrimaryEnvironment?: string;
-} & EaCMetadataBase;
+//   PrimaryEnvironment?: string;
+// } & EaCMetadataBase;

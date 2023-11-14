@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
-import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 import { denoKv } from "../../configs/deno-kv.config.ts";
 import { EaCAPIState } from "../../src/api/EaCAPIState.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
@@ -58,6 +57,7 @@ export const handler: Handlers = {
       EnterpriseLookup: crypto.randomUUID(),
       Messages: { Queued: "Creating new EaC container" },
       Processing: EaCStatusProcessingTypes.QUEUED,
+      StartTime: new Date(Date.now()),
       Username: username,
     };
 
@@ -71,6 +71,7 @@ export const handler: Handlers = {
         ...((await req.json()) || {}),
         EnterpriseLookup: createStatus.EnterpriseLookup,
       },
+      JWT: ctx.state.JWT!,
       Username: username,
     };
 

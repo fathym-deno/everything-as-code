@@ -43,6 +43,7 @@ export async function handler(
   ctx.state = {
     ...(ctx.state || {}),
     ...(payload || {}),
+    JWT: jwtToken,
   };
 
   return ctx.next();

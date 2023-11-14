@@ -55,6 +55,7 @@ export const handler: Handlers = {
         ...(eac || {}),
         EnterpriseLookup: commitStatus.EnterpriseLookup,
       },
+      JWT: ctx.state.JWT!,
       Username: "",
     };
 
@@ -126,6 +127,7 @@ export const handler: Handlers = {
       ) as boolean,
       CommitID: commitStatus.ID,
       EnterpriseLookup: commitStatus.EnterpriseLookup,
+      JWT: ctx.state.JWT!,
       Username: username,
     };
 

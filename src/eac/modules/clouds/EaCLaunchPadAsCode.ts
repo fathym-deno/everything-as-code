@@ -1,4 +1,4 @@
-import { EaCDetails } from "../../../EaCDetails.ts";
+import { EaCDetails } from "../../EaCDetails.ts";
 import { EaCLaunchPadDetails } from "./EaCLaunchPadDetails.ts";
 import { EaCOverhaulAsCode } from "./EaCOverhaulAsCode.ts";
 

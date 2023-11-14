@@ -28,6 +28,7 @@ export const handler: Handlers = {
       Messages: {},
       EnterpriseLookup: entLookup,
       Processing: EaCStatusProcessingTypes.IDLE,
+      StartTime: new Date(Date.now()),
       Username: "system",
     };
 

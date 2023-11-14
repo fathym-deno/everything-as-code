@@ -7,6 +7,8 @@ export type EaCDeleteRequest = DenoKVNonce & {
 
   EnterpriseLookup: string;
 
+  JWT: string;
+
   Username: string;
 };
 
