@@ -43,7 +43,7 @@ export const handler: Handlers = {
       );
 
       const checks: EaCHandlerCheckRequest[] = await beginEaCDeployments(
-        current,
+        cloud?.Details ? cloud : current,
         deployments,
       );
 
