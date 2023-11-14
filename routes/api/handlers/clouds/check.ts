@@ -3,7 +3,7 @@ import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { loadDeployment } from "./helpers.ts";
+import { EaCHandlerCloudCheckRequest, loadDeployment } from "./helpers.ts";
 import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
 import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
@@ -19,7 +19,7 @@ export const handler: Handlers = {
     try {
       // const username = ctx.state.Username;
 
-      const checkRequest: EaCHandlerCheckRequest = await req.json();
+      const checkRequest: EaCHandlerCloudCheckRequest = await req.json();
 
       const eac = checkRequest!.EaC as EverythingAsCodeClouds;
 
@@ -27,12 +27,12 @@ export const handler: Handlers = {
 
       const cloudLookup = checkRequest!.Lookup;
 
-      const cloud = currentClouds[cloudLookup] || {};
+      const cloud = currentClouds[checkRequest.CloudLookup] || {};
 
       const deployment = await loadDeployment(
         cloud,
         checkRequest.ResourceGroupLookup,
-        checkRequest.DeploymentName,
+        checkRequest.Name,
       );
 
       return respond({
