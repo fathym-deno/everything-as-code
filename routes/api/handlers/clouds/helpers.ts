@@ -27,7 +27,7 @@ export async function buildCloudDeployments(
 
   const deployments: EaCCloudDeployment[] = [];
 
-  for (const resGroupLookup in resGroupLookups) {
+  for (const resGroupLookup of resGroupLookups) {
     const resGroup = cloud.ResourceGroups![resGroupLookup];
 
     const deployment = await buildCloudDeployment(
@@ -36,7 +36,9 @@ export async function buildCloudDeployments(
       resGroup,
     );
 
-    deployments.push(deployment);
+    if (deployment) {
+      deployments.push(deployment);
+    }
   }
 
   return deployments;
@@ -46,44 +48,48 @@ export async function buildCloudDeployment(
   cloudLookup: string,
   resGroupLookup: string,
   resGroup: EaCCloudResourceGroupAsCode,
-): Promise<EaCCloudDeployment> {
-  const resGroupTemplateResources: Record<string, unknown>[] = [];
+): Promise<EaCCloudDeployment | undefined> {
+  if (Object.keys(resGroup.Resources || {}).length > 0) {
+    const resGroupTemplateResources: Record<string, unknown>[] = [];
 
-  const armResources = await buildArmResourcesForResourceGroupDeployment(
-    cloudLookup,
-    resGroupLookup,
-    resGroup,
-  );
+    const armResources = await buildArmResourcesForResourceGroupDeployment(
+      cloudLookup,
+      resGroupLookup,
+      resGroup,
+    );
 
-  resGroupTemplateResources.push(...armResources);
+    resGroupTemplateResources.push(...armResources);
 
-  const deploymentName = `resource-group-${resGroupLookup}-${Date.now()}`;
+    const deploymentName = `resource-group-${resGroupLookup}-${Date.now()}`;
 
-  const deployment: Deployment = {
-    location: resGroup.Details!.Location,
-    properties: {
-      mode: "Incremental",
-      expressionEvaluationOptions: {
-        scope: "outer",
-      },
-      template: {
-        type: "Microsoft.Resources/deployments",
-        apiVersion: "2019-10-01",
-        name: deploymentName,
-        resources: resGroupTemplateResources,
-        tags: {
-          Cloud: cloudLookup,
+    const deployment: Deployment = {
+      location: resGroup.Details!.Location,
+      properties: {
+        mode: "Incremental",
+        expressionEvaluationOptions: {
+          scope: "outer",
+        },
+        template: {
+          type: "Microsoft.Resources/deployments",
+          apiVersion: "2019-10-01",
+          name: deploymentName,
+          resources: resGroupTemplateResources,
+          tags: {
+            Cloud: cloudLookup,
+          },
         },
       },
-    },
-  };
+    };
 
-  return {
-    CloudLookup: cloudLookup,
-    Deployment: deployment,
-    Name: deploymentName,
-    ResourceGroupLookup: resGroupLookup,
-  };
+    return {
+      CloudLookup: cloudLookup,
+      Deployment: deployment,
+      Name: deploymentName,
+      ResourceGroupLookup: resGroupLookup,
+    };
+  }
+
+  return undefined;
 }
 
 export async function buildArmResourcesForResourceGroupDeployment(

@@ -33,42 +33,47 @@ export const handler: Handlers = {
 
     const creds = loadAzureCloudCredentials(eac, cloudLookup);
 
-    const cloud = eac.Clouds![cloudLookup!].Details as EaCCloudAzureDetails;
-
-    const resClient = new ResourceManagementClient(creds, cloud.SubscriptionID);
-
-    const svcDefLocationCalls = Object.keys(svcDefs).map(async (sd) => {
-      const svcDef = svcDefs[sd];
-
-      const provider = await resClient.providers.get(sd);
-
-      const providerTypeLocations = provider.resourceTypes
-        ?.filter((rt) => {
-          return svcDef.Types.includes(rt.resourceType!);
-        })
-        .map((rt) => rt.locations!)!;
-
-      return Array.from(new Set(...providerTypeLocations));
-    });
-
-    const svcDefLocations = await Promise.all<string[]>(svcDefLocationCalls);
-
-    const locationNames = Array.from(new Set(...svcDefLocations));
-
-    const subClient = new SubscriptionClient(creds);
-
-    const subLocationsList = subClient.subscriptions.listLocations(
-      cloud.SubscriptionID,
-    );
-
     const locations: Location[] = [];
 
-    for await (const subLocation of subLocationsList) {
-      if (
-        locationNames.length === 0 ||
-        locationNames.includes(subLocation.displayName!)
-      ) {
-        locations.push(subLocation);
+    if (creds) {
+      const cloud = eac.Clouds![cloudLookup!].Details as EaCCloudAzureDetails;
+
+      const resClient = new ResourceManagementClient(
+        creds,
+        cloud.SubscriptionID,
+      );
+
+      const svcDefLocationCalls = Object.keys(svcDefs).map(async (sd) => {
+        const svcDef = svcDefs[sd];
+
+        const provider = await resClient.providers.get(sd);
+
+        const providerTypeLocations = provider.resourceTypes
+          ?.filter((rt) => {
+            return svcDef.Types.includes(rt.resourceType!);
+          })
+          .map((rt) => rt.locations!)!;
+
+        return Array.from(new Set(...providerTypeLocations));
+      });
+
+      const svcDefLocations = await Promise.all<string[]>(svcDefLocationCalls);
+
+      const locationNames = Array.from(new Set(...svcDefLocations));
+
+      const subClient = new SubscriptionClient(creds);
+
+      const subLocationsList = subClient.subscriptions.listLocations(
+        cloud.SubscriptionID,
+      );
+
+      for await (const subLocation of subLocationsList) {
+        if (
+          locationNames.length === 0 ||
+          locationNames.includes(subLocation.displayName!)
+        ) {
+          locations.push(subLocation);
+        }
       }
     }
 

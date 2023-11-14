@@ -15,16 +15,18 @@ export function loadAzureCloudCredentials(
 export function loadAzureCloudCredentials(
   cloud: EverythingAsCodeClouds | EaCCloudAsCode,
   cloudLookup?: string,
-): ClientSecretCredential {
+): ClientSecretCredential | undefined {
   if (cloudLookup) {
     cloud = (cloud as EverythingAsCodeClouds).Clouds![cloudLookup];
   }
 
   const details = cloud.Details as EaCCloudAzureDetails;
 
-  return new ClientSecretCredential(
-    details.TenantID,
-    details.ApplicationID,
-    details.AuthKey,
-  );
+  return details
+    ? new ClientSecretCredential(
+      details.TenantID,
+      details.ApplicationID,
+      details.AuthKey,
+    )
+    : undefined;
 }

@@ -22,6 +22,7 @@ import { DeploymentsCreateOrUpdateResponse } from "npm:@azure/arm-resources";
 import { EaCHandlerErrorResponse } from "../../src/api/models/EaCHandlerErrorResponse.ts";
 import { isEaCHandlerErrorResponse } from "../../src/api/models/EaCHandlerErrorResponse.ts";
 import { EaCCloudDeployment } from "../../src/api/models/EaCCloudDeployment.ts";
+import { EaCHandlerCheckRequest } from "../../src/api/models/EaCHandlerCheckRequest.ts";
 
 export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   if (!commitReq.EaC.EnterpriseLookup) {
@@ -85,10 +86,9 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
           diff as EaCMetadataBase,
         );
 
-        for (const deployment of handled.Deployments) {
+        for (const check of handled.Checks) {
           //  TODO: Process deployments until all complete, calling handler checks
         }
-        handled.Deployments.toString();
 
         saveEaC[key] = handled.Result;
 
@@ -153,7 +153,7 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
   currentEaC: EverythingAsCode,
   diff: T,
 ): Promise<{
-  Deployments: EaCCloudDeployment[];
+  Checks: EaCHandlerCheckRequest[];
 
   Errors: EaCHandlerErrorResponse[];
 
@@ -192,14 +192,14 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
   const errors: EaCHandlerErrorResponse[] = [];
 
-  const deployments: EaCCloudDeployment[] = [];
+  const checks: EaCHandlerCheckRequest[] = [];
 
   if (current) {
     for (const handledResponse of handledResponses) {
       if (isEaCHandlerResponse(handledResponse)) {
         current[handledResponse.Lookup] = handledResponse.Model;
 
-        deployments.push(...handledResponse.Deployments);
+        checks.push(...(handledResponse.Checks || []));
       } else if (isEaCHandlerErrorResponse(handledResponse)) {
         errors.push(handledResponse);
       }
@@ -207,7 +207,7 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
   }
 
   return {
-    Deployments: deployments,
+    Checks: checks,
     Result: current,
     Errors: errors,
   };

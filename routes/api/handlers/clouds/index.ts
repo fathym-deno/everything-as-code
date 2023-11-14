@@ -43,11 +43,11 @@ export const handler: Handlers = {
       );
 
       const checks: EaCHandlerCheckRequest[] = await beginEaCDeployments(
-        cloud,
+        current,
         deployments,
       );
 
-      const merged = merge(current as object);
+      const merged = merge(current, cloud);
 
       return respond({
         Checks: checks,

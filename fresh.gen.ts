@@ -11,11 +11,12 @@ import * as $5 from "./routes/api/[entLookup]/status/[commitId]/index.ts";
 import * as $6 from "./routes/api/[entLookup]/status/current.ts";
 import * as $7 from "./routes/api/[entLookup]/users.ts";
 import * as $8 from "./routes/api/_middleware.ts";
-import * as $9 from "./routes/api/handlers/clouds/EaCCloudAsCodeHandlerParameters.ts";
-import * as $10 from "./routes/api/handlers/clouds/index.ts";
-import * as $11 from "./routes/api/index.ts";
-import * as $12 from "./routes/dashboard/jwt.tsx";
-import * as $13 from "./routes/index.tsx";
+import * as $9 from "./routes/api/handlers/clouds/check.ts";
+import * as $10 from "./routes/api/handlers/clouds/helpers.ts";
+import * as $11 from "./routes/api/handlers/clouds/index.ts";
+import * as $12 from "./routes/api/index.ts";
+import * as $13 from "./routes/dashboard/jwt.tsx";
+import * as $14 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
@@ -28,11 +29,12 @@ const manifest = {
     "./routes/api/[entLookup]/status/current.ts": $6,
     "./routes/api/[entLookup]/users.ts": $7,
     "./routes/api/_middleware.ts": $8,
-    "./routes/api/handlers/clouds/EaCCloudAsCodeHandlerParameters.ts": $9,
-    "./routes/api/handlers/clouds/index.ts": $10,
-    "./routes/api/index.ts": $11,
-    "./routes/dashboard/jwt.tsx": $12,
-    "./routes/index.tsx": $13,
+    "./routes/api/handlers/clouds/check.ts": $9,
+    "./routes/api/handlers/clouds/helpers.ts": $10,
+    "./routes/api/handlers/clouds/index.ts": $11,
+    "./routes/api/index.ts": $12,
+    "./routes/dashboard/jwt.tsx": $13,
+    "./routes/index.tsx": $14,
   },
   islands: {},
   baseUrl: import.meta.url,
