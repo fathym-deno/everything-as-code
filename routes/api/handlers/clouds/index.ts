@@ -33,27 +33,27 @@ export const handler: Handlers = {
 
       const cloudLookup = handlerRequest.Lookup;
 
-      const current = currentClouds[cloudLookup] || {};
+      let current = currentClouds[cloudLookup] || {};
 
       const cloud = handlerRequest.Model as EaCCloudAsCode;
 
+      current = merge(current, cloud);
+
       const deployments = await buildCloudDeployments(
         cloudLookup,
-        cloud,
+        current,
       );
 
       const checks: EaCHandlerCheckRequest[] = await beginEaCDeployments(
-        cloud?.Details ? cloud : current,
+        current,
         deployments,
       );
-
-      const merged = merge(current, cloud);
 
       return respond({
         Checks: checks,
         Lookup: cloudLookup,
         Message: `The cloud '${cloudLookup}' has been handled.`,
-        Model: merged,
+        Model: current,
       } as EaCHandlerResponse);
     } catch (err) {
       return respond({

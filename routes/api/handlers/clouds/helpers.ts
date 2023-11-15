@@ -1,4 +1,4 @@
-import { Handlebars } from "@handlebars";
+import Handlebars from "@handlebars";
 import {
   AzureDeploymentManager,
   AzureDeploymentManagerModels,
@@ -67,17 +67,17 @@ export async function buildCloudDeployment(
       properties: {
         mode: "Incremental",
         expressionEvaluationOptions: {
-          scope: "outer",
+          scope: "inner",
         },
         template: {
-          type: "Microsoft.Resources/deployments",
-          apiVersion: "2019-10-01",
-          name: deploymentName,
+          $schema:
+            "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          contentVersion: "1.0.0.0",
           resources: resGroupTemplateResources,
-          tags: {
-            Cloud: cloudLookup,
-          },
         },
+      },
+      tags: {
+        Cloud: cloudLookup,
       },
     };
 
@@ -103,7 +103,6 @@ export async function buildArmResourcesForResourceGroupDeployment(
       apiVersion: "2018-05-01",
       name: resGroupLookup,
       location: resGroup.Details!.Location,
-      properties: {},
       tags: {
         Cloud: cloudLookup,
       },
@@ -114,7 +113,7 @@ export async function buildArmResourcesForResourceGroupDeployment(
     cloudLookup,
     resGroupLookup,
     resGroup.Resources || {},
-    [`[resourceId('Microsoft.Resources/resourceGroups', ${resGroupLookup})]`],
+    [`[resourceId('Microsoft.Resources/resourceGroups', '${resGroupLookup}')]`],
   );
 
   armResources.push(...resourceArmResources);
@@ -164,19 +163,21 @@ export async function buildResourceTemplateResource(
     {
       type: "Microsoft.Resources/deployments",
       apiVersion: "2019-10-01",
-      dependsOn: dependsOn,
+      // dependsOn: dependsOn,
       resourceGroup: resGroupLookup,
       name: `resource-${resLookup}-${Date.now()}`,
       properties: {
         mode: "Incremental",
         expressionEvaluationOptions: {
-          scope: "outer",
+          scope: "inner",
         },
         parameters: await formatParameters(
           details.Data || {},
           assets.Parameters,
         ),
-        template: assets.Content,
+        template: {
+          ...assets.Content,
+        },
       },
       tags: {
         Cloud: cloudLookup,
@@ -188,7 +189,7 @@ export async function buildResourceTemplateResource(
     cloudLookup,
     resGroupLookup,
     resource.Resources || {},
-    [`[resourceId('Microsoft.Resources/resourceGroups', ${resGroupLookup})]`],
+    [`[resourceId('Microsoft.Resources/resourceGroups', '${resGroupLookup}')]`],
   );
 
   armResources.push(...subResArmResources);
@@ -219,7 +220,9 @@ export async function loadCloudResourceDetailAssets(
   const assets = (await Promise.all(assetCalls)).reduce((prev, cur) => {
     return {
       ...prev,
-      [cur.Lookup]: cur.Value,
+      [cur.Lookup]: cur.Lookup == "Parameters"
+        ? cur.Value.parameters
+        : cur.Value,
     };
   }, {}) as {
     Content: Record<string, unknown>;
@@ -241,15 +244,18 @@ export async function beginEaCDeployments(
   );
 
   const beginDeploymentCalls = deployments.map(async (deployment) => {
-    const beginDeploy = await resClient.deployments.beginCreateOrUpdate(
-      deployment.ResourceGroupLookup,
-      deployment.Name,
-      deployment.Deployment,
-    );
+    const beginDeploy = await resClient.deployments
+      .beginCreateOrUpdateAtSubscriptionScope(
+        // deployment.ResourceGroupLookup,
+        deployment.Name,
+        deployment.Deployment,
+      );
+
+    const opState = await beginDeploy.getOperationState();
 
     return {
       ...deployment,
-      Operation: await beginDeploy.getOperationState(),
+      Operation: opState,
     } as EaCHandlerCloudCheckRequest;
   });
 
@@ -264,19 +270,6 @@ export type EaCHandlerCloudCheckRequest =
   }
   & EaCCloudDeployment
   & EaCHandlerCheckRequest;
-
-export async function formatParameters(
-  parameters: Record<string, unknown>,
-  paramsTemplate: Record<string, unknown>,
-): Promise<Record<string, unknown>> {
-  const params = JSON.stringify(paramsTemplate);
-
-  const handle = new Handlebars();
-
-  const result = await handle.renderView(params, parameters);
-
-  return JSON.parse(result) as Record<string, unknown>;
-}
 
 export async function loadDeployment(
   cloud: EaCCloudAsCode,
@@ -299,4 +292,15 @@ export async function loadDeployment(
   );
 
   return deployment;
+}
+
+export async function formatParameters(
+  parameters: Record<string, unknown>,
+  paramsTemplate: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const params = JSON.stringify(paramsTemplate);
+
+  const result = Handlebars.compile(params)(parameters);
+
+  return JSON.parse(result) as Record<string, unknown>;
 }
