@@ -6,8 +6,7 @@ export type EaCCommitCheckRequest =
   & {
     Checks: EaCHandlerCheckRequest[];
   }
-  & EaCCommitRequest
-  & DenoKVNonce;
+  & EaCCommitRequest;
 
 export function isEaCCommitCheckRequest(
   req: unknown,

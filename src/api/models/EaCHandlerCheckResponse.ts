@@ -1,6 +1,8 @@
 import { EaCStatus } from "./EaCStatus.ts";
 
 export type EaCHandlerCheckResponse = {
+  CorelationID: string;
+
   Complete: boolean;
 
   HasError: boolean;

@@ -270,8 +270,9 @@ export async function beginEaCDeployments(
       );
 
     return {
+      CorelationID: crypto.randomUUID(),
       ...deployment,
-    };
+    } as EaCHandlerCheckRequest;
   });
 
   const checks = await Promise.all(beginDeploymentCalls);

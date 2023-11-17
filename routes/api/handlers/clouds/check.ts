@@ -45,6 +45,7 @@ export const handler: Handlers = {
       } as EaCHandlerCheckResponse);
     } catch (err) {
       return respond({
+        CorelationID: checkRequest.CorelationID,
         Complete: true,
         HasError: true,
         Messages: {

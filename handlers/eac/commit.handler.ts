@@ -118,7 +118,7 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
       .set(["EaC", EnterpriseLookup], saveEaC)
       .set(["EaC", "Status", "ID", commitReq.CommitID], status.value);
 
-    if (status.value!.Processing) {
+    if (allChecks.length > 0) {
       const commitCheckReq: EaCCommitCheckRequest = {
         ...commitReq,
         Checks: allChecks,

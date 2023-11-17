@@ -1,6 +1,7 @@
 import { denoKv } from "../../configs/deno-kv.config.ts";
 import { eacHandlers } from "../../configs/eac-handlers.config.ts";
 import {
+  enqueueAtomic,
   enqueueAtomicOperation,
   listenQueueAtomic,
 } from "../../src/utils/deno-kv/helpers.ts";
@@ -28,6 +29,8 @@ export async function handleEaCCommitCheckRequest(
 
   const errors: EaCHandlerErrorResponse[] = [];
 
+  const allChecks: EaCHandlerCheckRequest[] = [];
+
   let checkResponses = await Promise.all(
     commitCheckReq.Checks.map(async (check) => {
       const checkResp = await callEaCHandlerCheck(
@@ -50,13 +53,13 @@ export async function handleEaCCommitCheckRequest(
         });
       }
 
+      if (!checkResp.Complete) {
+        allChecks.push(check);
+      }
+
       return checkResp;
     }),
   );
-
-  // TODO: Process checkResponses to determine which are completed, and only pass non completed ones forward
-
-  const allChecks: EaCHandlerCheckRequest[] = [];
 
   if (errors.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.ERROR;
@@ -68,6 +71,8 @@ export async function handleEaCCommitCheckRequest(
     status.value!.EndTime = new Date();
   } else if (allChecks.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.CHECKING;
+
+    await sleep(2500);
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 
@@ -76,13 +81,18 @@ export async function handleEaCCommitCheckRequest(
 
   await listenQueueAtomic(denoKv, commitCheckReq, (op) => {
     op = op
-      .check(status)
-      .set(["EaC", "Status", "ID", commitCheckReq.CommitID], status.value);
+      .set(["EaC", "Status", "ID", commitCheckReq.CommitID], status.value)
+      .set(
+        ["EaC", "Status", "EaC", commitCheckReq.EaC.EnterpriseLookup!],
+        status.value,
+      );
 
-    if (status.value!.Processing) {
+    if (allChecks.length > 0) {
       const newCommitCheckReq: EaCCommitCheckRequest = {
         ...commitCheckReq,
         Checks: allChecks,
+        nonce: undefined,
+        versionstamp: undefined,
       };
 
       op = enqueueAtomicOperation(op, newCommitCheckReq);
@@ -92,8 +102,4 @@ export async function handleEaCCommitCheckRequest(
 
     return op;
   });
-
-  if (allChecks.length > 0) {
-    await sleep(1000);
-  }
 }

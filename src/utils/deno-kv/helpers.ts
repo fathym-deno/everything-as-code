@@ -18,8 +18,7 @@ export async function enqueueAtomic(
 ): Promise<Deno.KvCommitResult | Deno.KvCommitError> {
   msg.nonce = crypto.randomUUID();
 
-  let op = denoKv.atomic()
-    .enqueueNonce(msg);
+  let op = enqueueAtomicOperation(denoKv.atomic(), msg);
 
   if (atomicOpHandler) {
     op = atomicOpHandler(op);
