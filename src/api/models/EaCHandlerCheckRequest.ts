@@ -3,6 +3,8 @@ import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
 export type EaCHandlerCheckRequest =
   & {
-    EaC: EverythingAsCode;
+    EaC?: EverythingAsCode;
+
+    Type?: string;
   }
   & EaCMetadataBase;

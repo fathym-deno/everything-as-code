@@ -1,12 +1,16 @@
+import { EaCStatus } from "./EaCStatus.ts";
+
 export type EaCHandlerCheckResponse = {
   Complete: boolean;
 
   HasError: boolean;
-  
-  Message: string;
+
+  Messages: Record<string, unknown>;
 };
 
-export function isEaCHandlerCheckResponse(res: unknown): res is EaCHandlerCheckResponse {
+export function isEaCHandlerCheckResponse(
+  res: unknown,
+): res is EaCHandlerCheckResponse {
   const checkResponse = res as EaCHandlerCheckResponse;
 
   return (
@@ -14,7 +18,6 @@ export function isEaCHandlerCheckResponse(res: unknown): res is EaCHandlerCheckR
     typeof checkResponse.Complete === "boolean" &&
     checkResponse.HasError !== undefined &&
     typeof checkResponse.HasError === "boolean" &&
-    checkResponse.Message !== undefined &&
-    typeof checkResponse.Message === "string"
+    checkResponse.Messages !== undefined
   );
 }

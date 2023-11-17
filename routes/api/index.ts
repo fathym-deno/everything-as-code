@@ -52,6 +52,12 @@ export const handler: Handlers = {
   async POST(req, ctx: HandlerContext<any, EaCAPIState>) {
     const username = ctx.state.Username!;
 
+    const url = new URL(req.url);
+
+    const processingSeconds = Number.parseInt(
+      url.searchParams.get("processingSeconds")!,
+    );
+
     const createStatus: EaCStatus = {
       ID: crypto.randomUUID(),
       EnterpriseLookup: crypto.randomUUID(),
@@ -72,6 +78,7 @@ export const handler: Handlers = {
         EnterpriseLookup: createStatus.EnterpriseLookup,
       },
       JWT: ctx.state.JWT!,
+      ProcessingSeconds: processingSeconds,
       Username: username,
     };
 

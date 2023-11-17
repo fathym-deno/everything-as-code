@@ -6,7 +6,6 @@ import {
 import {
   Deployment,
   DeploymentExtended,
-  DeploymentsCreateOrUpdateResponse,
   ResourceManagementClient,
 } from "npm:@azure/arm-resources";
 import { OperationState, SimplePollerLike } from "npm:@azure/core-lro";
@@ -18,6 +17,7 @@ import { EaCCloudResourceFormatDetails } from "../../../../src/eac/modules/cloud
 import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
 import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
+import { sleep } from "../../../../src/utils/sleep.ts";
 
 export async function buildCloudDeployments(
   cloudLookup: string,
@@ -67,7 +67,7 @@ export async function buildCloudDeployment(
       properties: {
         mode: "Incremental",
         expressionEvaluationOptions: {
-          scope: "inner",
+          scope: "outer",
         },
         template: {
           $schema:
@@ -134,7 +134,7 @@ export async function buildArmResourcesForResources(
   for (const resLookup of resLookups) {
     const resource = resources[resLookup];
 
-    const resArmResources = await buildResourceTemplateResource(
+    const resArmResource = await buildResourceTemplateResource(
       cloudLookup,
       resGroupLookup,
       resLookup,
@@ -142,7 +142,7 @@ export async function buildArmResourcesForResources(
       dependsOn,
     );
 
-    armResources.push(...resArmResources);
+    armResources.push(resArmResource);
   }
 
   return armResources;
@@ -154,47 +154,65 @@ export async function buildResourceTemplateResource(
   resLookup: string,
   resource: EaCCloudResourceAsCode,
   dependsOn: string[],
-): Promise<Record<string, unknown>[]> {
+): Promise<Record<string, unknown>> {
   const details = resource.Details as EaCCloudResourceFormatDetails;
 
   const assets = await loadCloudResourceDetailAssets(details);
 
-  const armResources: Record<string, unknown>[] = [
-    {
-      type: "Microsoft.Resources/deployments",
-      apiVersion: "2019-10-01",
-      // dependsOn: dependsOn,
-      resourceGroup: resGroupLookup,
-      name: `resource-${resLookup}-${Date.now()}`,
-      properties: {
-        mode: "Incremental",
-        expressionEvaluationOptions: {
-          scope: "inner",
-        },
-        parameters: await formatParameters(
-          details.Data || {},
-          assets.Parameters,
-        ),
-        template: {
-          ...assets.Content,
-        },
+  const deploymentName = `resource-${resLookup}-${Date.now()}`;
+
+  const armResource = {
+    type: "Microsoft.Resources/deployments",
+    apiVersion: "2019-10-01",
+    dependsOn: dependsOn,
+    resourceGroup: resGroupLookup,
+    name: deploymentName,
+    properties: {
+      mode: "Incremental",
+      expressionEvaluationOptions: {
+        scope: "inner",
       },
-      tags: {
-        Cloud: cloudLookup,
+      parameters: await formatParameters(details.Data || {}, assets.Parameters),
+      template: {
+        ...assets.Content,
       },
     },
-  ];
+    tags: {
+      Cloud: cloudLookup,
+    },
+  };
 
-  const subResArmResources = await buildArmResourcesForResources(
-    cloudLookup,
-    resGroupLookup,
-    resource.Resources || {},
-    [`[resourceId('Microsoft.Resources/resourceGroups', '${resGroupLookup}')]`],
-  );
+  const peerResources = armResource.properties.template.resources as Record<
+    string,
+    unknown
+  >[];
 
-  armResources.push(...subResArmResources);
+  if (resource.Resources) {
+    const subResArmResources = await buildArmResourcesForResources(
+      cloudLookup,
+      resGroupLookup,
+      resource.Resources || {},
+      peerResources.map((pr) => {
+        let name = pr.name as string;
 
-  return armResources;
+        if (name.startsWith("[")) {
+          name = name.substring(1, name.length - 1);
+        } else {
+          name = `'${name}'`;
+        }
+
+        return `[resourceId('${pr.type}', ${name})]`;
+      }),
+      // [
+      //   // `[resourceId('Microsoft.Resources/resourceGroups', '${resGroupLookup}')]`,
+      //   // `[resourceId('Microsoft.Resources/deployments', '${deploymentName}')]`,
+      // ],
+    );
+
+    peerResources.push(...subResArmResources);
+  }
+
+  return armResource;
 }
 
 export async function loadCloudResourceDetailAssets(
@@ -251,12 +269,9 @@ export async function beginEaCDeployments(
         deployment.Deployment,
       );
 
-    const opState = await beginDeploy.getOperationState();
-
     return {
       ...deployment,
-      Operation: opState,
-    } as EaCHandlerCloudCheckRequest;
+    };
   });
 
   const checks = await Promise.all(beginDeploymentCalls);
@@ -265,31 +280,35 @@ export async function beginEaCDeployments(
 }
 
 export type EaCHandlerCloudCheckRequest =
-  & {
-    Operation: OperationState<DeploymentExtended>;
-  }
-  & EaCCloudDeployment
+  & Omit<
+    EaCCloudDeployment,
+    "Deployment"
+  >
   & EaCHandlerCheckRequest;
 
 export async function loadDeployment(
   cloud: EaCCloudAsCode,
-  resGroupLookup: string,
   deploymentName: string,
 ): Promise<DeploymentExtended> {
   const details = cloud.Details as EaCCloudAzureDetails;
 
   const creds = loadAzureCloudCredentials(cloud);
 
-  const azDepClient = new AzureDeploymentManager(creds, details.SubscriptionID);
-
-  const res = await azDepClient.operations.list();
-
   const resClient = new ResourceManagementClient(creds, details.SubscriptionID);
 
-  const deployment = await resClient.deployments.get(
-    resGroupLookup,
+  const deployment = await resClient.deployments.getAtSubscriptionScope(
     deploymentName,
   );
+
+  const armMgr = new AzureDeploymentManager(creds, details.SubscriptionID);
+
+  const ops = await resClient.deploymentOperations.listAtSubscriptionScope(
+    deploymentName,
+  );
+
+  for await (const operation of ops) {
+    console.log(operation);
+  }
 
   return deployment;
 }

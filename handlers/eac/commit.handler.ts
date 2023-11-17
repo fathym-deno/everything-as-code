@@ -1,9 +1,13 @@
 // deno-lint-ignore-file no-explicit-any
 import { merge } from "@fathym/common";
 import { denoKv } from "../../configs/deno-kv.config.ts";
-import { listenQueueAtomic } from "../../src/utils/deno-kv/helpers.ts";
+import {
+  enqueueAtomicOperation,
+  listenQueueAtomic,
+} from "../../src/utils/deno-kv/helpers.ts";
 import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
 import {
+  callEaCHandler,
   markEaCProcessed,
   waitOnEaCProcessing,
 } from "../../src/utils/eac/helpers.ts";
@@ -12,17 +16,10 @@ import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 import { EaCMetadataBase } from "../../src/eac/EaCMetadataBase.ts";
-import {
-  EaCHandlerResponse,
-  isEaCHandlerResponse,
-} from "../../src/api/models/EaCHandlerResponse.ts";
-import { EaCHandlerRequest } from "../../src/api/models/EaCHandlerRequest.ts";
-import { OperationState, SimplePollerLike } from "npm:@azure/core-lro";
-import { DeploymentsCreateOrUpdateResponse } from "npm:@azure/arm-resources";
 import { EaCHandlerErrorResponse } from "../../src/api/models/EaCHandlerErrorResponse.ts";
-import { isEaCHandlerErrorResponse } from "../../src/api/models/EaCHandlerErrorResponse.ts";
-import { EaCCloudDeployment } from "../../src/api/models/EaCCloudDeployment.ts";
 import { EaCHandlerCheckRequest } from "../../src/api/models/EaCHandlerCheckRequest.ts";
+import { EaCCommitCheckRequest } from "../../src/api/models/EaCCommitCheckRequest.ts";
+import { eacHandlers } from "../../configs/eac-handlers.config.ts";
 
 export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   if (!commitReq.EaC.EnterpriseLookup) {
@@ -36,12 +33,9 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   const { EnterpriseLookup, ParentEnterpriseLookup, Details, ...eacDiff } =
     commitReq.EaC;
 
-  const status = await denoKv.get<EaCStatus>([
-    "EaC",
-    "Status",
-    "ID",
-    commitReq.CommitID,
-  ]);
+  const statusKey = ["EaC", "Status", "ID", commitReq.CommitID];
+
+  let status = await denoKv.get<EaCStatus>(statusKey);
 
   await waitOnEaCProcessing(
     denoKv,
@@ -49,6 +43,7 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     status.value!.ID,
     commitReq,
     handleEaCCommitRequest,
+    commitReq.ProcessingSeconds,
   );
 
   const existingEaC = await denoKv.get<EverythingAsCode>([
@@ -69,6 +64,8 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   const errors: EaCHandlerErrorResponse[] = [];
 
+  const allChecks: EaCHandlerCheckRequest[] = [];
+
   for (const key of diffKeys) {
     const diff = eacDiff[key];
 
@@ -80,15 +77,14 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
         diff !== undefined
       ) {
         const handled = await callEaCHandler(
+          eacHandlers,
           commitReq.JWT,
           key,
           saveEaC,
           diff as EaCMetadataBase,
         );
 
-        for (const check of handled.Checks) {
-          //  TODO: Process deployments until all complete, calling handler checks
-        }
+        allChecks.push(...(handled.Checks || []));
 
         saveEaC[key] = handled.Result;
 
@@ -99,24 +95,39 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     }
   }
 
-  if (errors.length === 0) {
-    status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
-  } else {
+  if (errors.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.ERROR;
 
     for (const error of errors) {
-      status.value!.Messages[error.Lookup] = error.Message;
+      status.value!.Messages = merge(status.value!.Messages, error.Messages);
     }
+
+    status.value!.EndTime = new Date();
+  } else if (allChecks.length > 0) {
+    status.value!.Processing = EaCStatusProcessingTypes.CHECKING;
+  } else {
+    status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
+
+    status.value!.EndTime = new Date();
   }
 
-  status.value!.EndTime = new Date();
-
   await listenQueueAtomic(denoKv, commitReq, (op) => {
-    op = markEaCProcessed(EnterpriseLookup, op)
+    op = op
       .check(existingEaC)
       .check(status)
       .set(["EaC", EnterpriseLookup], saveEaC)
       .set(["EaC", "Status", "ID", commitReq.CommitID], status.value);
+
+    if (status.value!.Processing) {
+      const commitCheckReq: EaCCommitCheckRequest = {
+        ...commitReq,
+        Checks: allChecks,
+      };
+
+      op = enqueueAtomicOperation(op, commitCheckReq);
+    } else {
+      op = markEaCProcessed(EnterpriseLookup, op);
+    }
 
     if (commitReq.Username) {
       const userEaCRecord: UserEaCRecord = {
@@ -139,76 +150,4 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
     return op;
   });
-}
-
-export type EaCHandlers = {
-  [key: string]: {
-    APIPath: string;
-  };
-};
-
-export async function callEaCHandler<T extends EaCMetadataBase>(
-  jwt: string,
-  key: string,
-  currentEaC: EverythingAsCode,
-  diff: T,
-): Promise<{
-  Checks: EaCHandlerCheckRequest[];
-
-  Errors: EaCHandlerErrorResponse[];
-
-  Result: T;
-}> {
-  const handlers: EaCHandlers = {
-    Clouds: {
-      APIPath: "http://localhost:5437/api/handlers/clouds",
-    },
-  };
-
-  const handler = handlers[key];
-
-  const toExecute = Object.keys(diff || {}).map(async (diffLookup) => {
-    const result = await fetch(handler.APIPath, {
-      method: "post",
-      body: JSON.stringify({
-        EaC: currentEaC,
-        Lookup: diffLookup,
-        Model: diff![diffLookup],
-      } as EaCHandlerRequest),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-
-    return (await result.json()) as
-      | EaCHandlerResponse
-      | EaCHandlerErrorResponse;
-  });
-
-  const handledResponses: (EaCHandlerResponse | EaCHandlerErrorResponse)[] =
-    await Promise.all(toExecute);
-
-  const current = (currentEaC[key] || {}) as T;
-
-  const errors: EaCHandlerErrorResponse[] = [];
-
-  const checks: EaCHandlerCheckRequest[] = [];
-
-  if (current) {
-    for (const handledResponse of handledResponses) {
-      if (isEaCHandlerResponse(handledResponse)) {
-        current[handledResponse.Lookup] = handledResponse.Model;
-
-        checks.push(...(handledResponse.Checks || []));
-      } else if (isEaCHandlerErrorResponse(handledResponse)) {
-        errors.push(handledResponse);
-      }
-    }
-  }
-
-  return {
-    Checks: checks,
-    Result: current,
-    Errors: errors,
-  };
 }

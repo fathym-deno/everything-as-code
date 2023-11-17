@@ -1,9 +1,7 @@
 export type EaCHandlerErrorResponse = {
   HasError: true;
 
-  Lookup: string;
-
-  Message: string;
+  Messages: Record<string, unknown>;
 };
 
 export function isEaCHandlerErrorResponse(
@@ -15,9 +13,6 @@ export function isEaCHandlerErrorResponse(
     errorResponse.HasError !== undefined &&
     errorResponse.HasError &&
     typeof errorResponse.HasError === "boolean" &&
-    errorResponse.Lookup !== undefined &&
-    typeof errorResponse.Lookup === "string" &&
-    errorResponse.Message !== undefined &&
-    typeof errorResponse.Message === "string"
+    errorResponse.Messages !== undefined
   );
 }

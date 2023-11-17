@@ -7,11 +7,7 @@ import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCod
 import { EaCHandlerRequest } from "../../../../src/api/models/EaCHandlerRequest.ts";
 import { EaCHandlerResponse } from "../../../../src/api/models/EaCHandlerResponse.ts";
 import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
-import {
-  beginEaCDeployments,
-  buildCloudDeployments,
-  loadDeployment,
-} from "./helpers.ts";
+import { beginEaCDeployments, buildCloudDeployments } from "./helpers.ts";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
 
 export const handler: Handlers = {
@@ -52,13 +48,17 @@ export const handler: Handlers = {
       return respond({
         Checks: checks,
         Lookup: cloudLookup,
-        Message: `The cloud '${cloudLookup}' has been handled.`,
+        Messages: {
+          Message: `The cloud '${cloudLookup}' has been handled.`,
+        },
         Model: current,
       } as EaCHandlerResponse);
     } catch (err) {
       return respond({
         HasError: true,
-        Message: JSON.stringify(err),
+        Messages: {
+          Error: JSON.stringify(err),
+        },
       } as EaCHandlerErrorResponse);
     }
   },

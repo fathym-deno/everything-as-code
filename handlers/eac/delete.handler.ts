@@ -24,6 +24,7 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
     status.value!.ID,
     deleteReq,
     handleEaCDeleteRequest,
+    deleteReq.ProcessingSeconds,
   );
 
   const eac = await denoKv.get<EverythingAsCode>([

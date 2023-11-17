@@ -38,6 +38,12 @@ export const handler: Handlers = {
 
     const username = ctx.state.Username;
 
+    const url = new URL(req.url);
+
+    const processingSeconds = Number.parseInt(
+      url.searchParams.get("processingSeconds")!,
+    );
+
     const eac = (await req.json()) as EverythingAsCode;
 
     const commitStatus: EaCStatus = {
@@ -56,6 +62,7 @@ export const handler: Handlers = {
         EnterpriseLookup: commitStatus.EnterpriseLookup,
       },
       JWT: ctx.state.JWT!,
+      ProcessingSeconds: processingSeconds,
       Username: "",
     };
 
@@ -112,6 +119,10 @@ export const handler: Handlers = {
 
     const url = new URL(req.url);
 
+    const processingSeconds = Number.parseInt(
+      url.searchParams.get("processingSeconds")!,
+    );
+
     const commitStatus: EaCStatus = {
       ID: crypto.randomUUID(),
       EnterpriseLookup: entLookup!,
@@ -128,6 +139,7 @@ export const handler: Handlers = {
       CommitID: commitStatus.ID,
       EnterpriseLookup: commitStatus.EnterpriseLookup,
       JWT: ctx.state.JWT!,
+      ProcessingSeconds: processingSeconds,
       Username: username,
     };
 

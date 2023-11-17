@@ -6,7 +6,7 @@ export type EaCHandlerResponse = {
 
   Lookup: string;
 
-  Message: string;
+  Messages: Record<string, unknown>;
 
   Model: EaCMetadataBase;
 };
@@ -19,8 +19,7 @@ export function isEaCHandlerResponse(res: unknown): res is EaCHandlerResponse {
     Array.isArray(handlerResponse.Checks) &&
     handlerResponse.Lookup !== undefined &&
     typeof handlerResponse.Lookup === "string" &&
-    handlerResponse.Message !== undefined &&
-    typeof handlerResponse.Message === "string" &&
+    handlerResponse.Messages !== undefined &&
     handlerResponse.Model !== undefined
   );
 }

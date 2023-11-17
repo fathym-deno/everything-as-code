@@ -18,18 +18,28 @@ export async function enqueueAtomic(
 ): Promise<Deno.KvCommitResult | Deno.KvCommitError> {
   msg.nonce = crypto.randomUUID();
 
-  let atomic = denoKv
-    .atomic()
-    .check({ key: ["nonces", msg.nonce], versionstamp: null })
+  let op = denoKv.atomic()
+    .enqueueNonce(msg);
+
+  if (atomicOpHandler) {
+    op = atomicOpHandler(op);
+  }
+
+  return await op.commit();
+}
+
+export function enqueueAtomicOperation(
+  op: Deno.AtomicOperation,
+  msg: DenoKVNonce,
+): Deno.AtomicOperation {
+  msg.nonce = crypto.randomUUID();
+
+  op.check({ key: ["nonces", msg.nonce], versionstamp: null })
     .enqueue(msg)
     .set(["nonces", msg.nonce], true)
     .sum(["enqueued_count"], 1n);
 
-  if (atomicOpHandler) {
-    atomic = atomicOpHandler(atomic);
-  }
-
-  return await atomic.commit();
+  return op;
 }
 
 export async function listenQueueAtomic(
@@ -38,9 +48,7 @@ export async function listenQueueAtomic(
   atomicOpHandler: AtomicOperationHandler,
 ) {
   if (!msg.nonce) {
-    throw new Error(
-      `The message is required to have a nonce value.`,
-    );
+    throw new Error(`The message is required to have a nonce value.`);
   }
 
   const nonce = await denoKv.get<DenoKVNonce>(["nonces", msg.nonce]);

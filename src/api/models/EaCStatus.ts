@@ -7,7 +7,7 @@ export type EaCStatus = {
 
   ID: string;
 
-  Messages: Record<string, string>;
+  Messages: Record<string, unknown>;
 
   Processing: EaCStatusProcessingTypes;
 

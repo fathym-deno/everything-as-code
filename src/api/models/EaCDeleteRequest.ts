@@ -9,6 +9,8 @@ export type EaCDeleteRequest = DenoKVNonce & {
 
   JWT: string;
 
+  ProcessingSeconds: number;
+
   Username: string;
 };
 

@@ -13,9 +13,12 @@ export class EaCServiceClient extends EaCBaseClient {
   //#region API Methods
   public async Commit<T extends EverythingAsCode>(
     eac: T,
+    processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
-      this.loadClientUrl(`${eac.EnterpriseLookup}`),
+      this.loadClientUrl(
+        `${eac.EnterpriseLookup}?processingSeconds=${processingSeconds}`,
+      ),
       {
         method: "POST",
         headers: this.loadHeaders(),
@@ -28,12 +31,16 @@ export class EaCServiceClient extends EaCBaseClient {
 
   public async Create<T extends EverythingAsCode>(
     eac: T,
+    processingSeconds: number,
   ): Promise<EaCCommitResponse> {
-    const response = await fetch(this.loadClientUrl(""), {
-      method: "POST",
-      headers: this.loadHeaders(),
-      body: JSON.stringify(eac),
-    });
+    const response = await fetch(
+      this.loadClientUrl(`?processingSeconds=${processingSeconds}`),
+      {
+        method: "POST",
+        headers: this.loadHeaders(),
+        body: JSON.stringify(eac),
+      },
+    );
 
     return await response.json();
   }
@@ -49,11 +56,17 @@ export class EaCServiceClient extends EaCBaseClient {
     return await response.json();
   }
 
-  public async Delete(entLookup: string): Promise<EaCCommitResponse> {
-    const response = await fetch(this.loadClientUrl(`${entLookup}`), {
-      method: "DELETE",
-      headers: this.loadHeaders(),
-    });
+  public async Delete(
+    entLookup: string,
+    processingSeconds: number,
+  ): Promise<EaCCommitResponse> {
+    const response = await fetch(
+      this.loadClientUrl(`${entLookup}?processingSeconds=${processingSeconds}`),
+      {
+        method: "DELETE",
+        headers: this.loadHeaders(),
+      },
+    );
 
     return await response.json();
   }

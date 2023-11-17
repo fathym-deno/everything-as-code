@@ -1,12 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
-import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerCloudCheckRequest, loadDeployment } from "./helpers.ts";
 import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
-import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { sleep } from "../../../../src/utils/sleep.ts";
 
 export const handler: Handlers = {
   /**
@@ -16,35 +15,42 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req: Request, _ctx: HandlerContext<any, EaCAPIUserState>) {
+    // const username = ctx.state.Username;
+
+    const checkRequest: EaCHandlerCloudCheckRequest = await req.json();
+
     try {
-      // const username = ctx.state.Username;
-
-      const checkRequest: EaCHandlerCloudCheckRequest = await req.json();
-
       const eac = checkRequest!.EaC as EverythingAsCodeClouds;
 
       const currentClouds = eac.Clouds || {};
 
-      const cloudLookup = checkRequest!.Lookup;
-
       const cloud = currentClouds[checkRequest.CloudLookup] || {};
 
-      const deployment = await loadDeployment(
-        cloud,
-        checkRequest.ResourceGroupLookup,
-        checkRequest.Name,
-      );
+      const deployment = await loadDeployment(cloud, checkRequest.Name);
+
+      const completeStati = ["Canceled", "Failed", "Succeeded"];
+
+      const errorStati = ["Canceled", "Failed"];
 
       return respond({
-        Complete: false,
-        HasError: false,
-        Message: `Temp message`,
+        Complete: completeStati.some(
+          (status) => status === deployment.properties?.provisioningState,
+        ),
+        HasError: errorStati.some(
+          (status) => status === deployment.properties?.provisioningState,
+        ),
+        Messages: {
+          [`Deployment: ${checkRequest.Name}`]: `Temp message`,
+        },
       } as EaCHandlerCheckResponse);
     } catch (err) {
       return respond({
+        Complete: true,
         HasError: true,
-        Message: JSON.stringify(err),
-      } as EaCHandlerErrorResponse);
+        Messages: {
+          [`Deployment: ${checkRequest.Name}`]: JSON.stringify(err),
+        },
+      } as EaCHandlerCheckResponse);
     }
   },
 };
