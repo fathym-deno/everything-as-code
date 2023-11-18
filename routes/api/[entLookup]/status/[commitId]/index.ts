@@ -1,9 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers } from "$fresh/server.ts";
-import { respond } from "@fathym/common";
-import { denoKv } from "../../../../../configs/deno-kv.config.ts";
-import { EaCAPIUserState } from "../../../../../src/api/EaCAPIUserState.ts";
-import { EaCStatus } from "../../../../../src/api/models/EaCStatus.ts";
+import { HandlerContext, Handlers } from '$fresh/server.ts';
+import { respond } from '@fathym/common';
+import { denoKv } from '../../../../../configs/deno-kv.config.ts';
+import { EaCAPIUserState } from '../../../../../src/api/EaCAPIUserState.ts';
+import { EaCStatus } from '../../../../../src/api/models/EaCStatus.ts';
 
 export const handler: Handlers = {
   /**
@@ -13,17 +13,18 @@ export const handler: Handlers = {
    * @returns
    */
   async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
+    const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
+
     const commitId: string = ctx.params.commitId;
 
     const status = await denoKv.get<EaCStatus>([
-      "EaC",
-      "Status",
-      "ID",
+      'EaC',
+      'Status',
+      entLookup,
+      'ID',
       commitId,
     ]);
 
-    return respond(
-      status?.value! || {},
-    );
+    return respond(status?.value! || {});
   },
 };

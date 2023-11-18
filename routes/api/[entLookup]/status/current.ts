@@ -19,8 +19,8 @@ export const handler: Handlers = {
     const status = await denoKv.get<EaCStatus>([
       "EaC",
       "Status",
-      "EaC",
       entLookup,
+      "EaC",
     ]);
 
     const idleStatus: EaCStatus = {

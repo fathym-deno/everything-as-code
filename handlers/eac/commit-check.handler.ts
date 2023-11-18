@@ -23,7 +23,13 @@ export async function handleEaCCommitCheckRequest(
   const { EnterpriseLookup, ParentEnterpriseLookup, Details, ...eacDiff } =
     commitCheckReq.EaC;
 
-  const statusKey = ["EaC", "Status", "ID", commitCheckReq.CommitID];
+  const statusKey = [
+    "EaC",
+    "Status",
+    EnterpriseLookup!,
+    "ID",
+    commitCheckReq.CommitID,
+  ];
 
   const status = await denoKv.get<EaCStatus>(statusKey);
 
@@ -81,9 +87,18 @@ export async function handleEaCCommitCheckRequest(
 
   await listenQueueAtomic(denoKv, commitCheckReq, (op) => {
     op = op
-      .set(["EaC", "Status", "ID", commitCheckReq.CommitID], status.value)
       .set(
-        ["EaC", "Status", "EaC", commitCheckReq.EaC.EnterpriseLookup!],
+        [
+          "EaC",
+          "Status",
+          commitCheckReq.EaC.EnterpriseLookup!,
+          "ID",
+          commitCheckReq.CommitID,
+        ],
+        status.value,
+      )
+      .set(
+        ["EaC", "Status", commitCheckReq.EaC.EnterpriseLookup!, "EaC"],
         status.value,
       );
 
@@ -97,7 +112,10 @@ export async function handleEaCCommitCheckRequest(
 
       op = enqueueAtomicOperation(op, newCommitCheckReq);
     } else {
-      op = markEaCProcessed(EnterpriseLookup!, op);
+      op = markEaCProcessed(EnterpriseLookup!, op).set(
+        ["EaC", commitCheckReq.EaC.EnterpriseLookup!],
+        commitCheckReq.EaC,
+      );
     }
 
     return op;

@@ -129,8 +129,8 @@ export async function invalidateProcessing(
   const status = await denoKv.get<EaCStatus>([
     "EaC",
     "Status",
-    "Eac",
     entLookup,
+    "Eac",
   ]);
 
   if (status?.value) {
@@ -150,12 +150,11 @@ export async function invalidateProcessing(
       status.value.EndTime = new Date(Date.now());
 
       await markEaCProcessed(entLookup, denoKv.atomic())
-        .set(["EaC", "Status", "ID", status.value.ID], status)
+        .set(["EaC", "Status", entLookup, "ID", status.value.ID], status)
         .commit();
     }
   } else {
-    await markEaCProcessed(entLookup, denoKv.atomic())
-      .commit();
+    await markEaCProcessed(entLookup, denoKv.atomic()).commit();
   }
 }
 
@@ -165,7 +164,7 @@ export function markEaCProcessed(
 ): Deno.AtomicOperation {
   return atomicOp
     .delete(["EaC", "Processing", entLookup])
-    .delete(["EaC", "Status", "Eac", entLookup]);
+    .delete(["EaC", "Status", entLookup, "Eac"]);
 }
 
 export async function waitOnEaCProcessing<T>(

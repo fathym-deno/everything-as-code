@@ -107,9 +107,18 @@ export const handler: Handlers = {
 
     await enqueueAtomic(denoKv, commitReq, (op) => {
       return op
-        .set(["EaC", "Status", "ID", createStatus.ID], createStatus)
         .set(
-          ["EaC", "Status", "EaC", createStatus.EnterpriseLookup],
+          [
+            "EaC",
+            "Status",
+            createStatus.EnterpriseLookup,
+            "ID",
+            createStatus.ID,
+          ],
+          createStatus,
+        )
+        .set(
+          ["EaC", "Status", createStatus.EnterpriseLookup, "EaC"],
           createStatus,
         );
     });

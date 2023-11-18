@@ -14,6 +14,7 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
   const status = await denoKv.get<EaCStatus>([
     "EaC",
     "Status",
+    deleteReq.EnterpriseLookup,
     "ID",
     deleteReq.CommitID,
   ]);
@@ -53,7 +54,16 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
         .check(status)
         .set(["EaC", "Archive", deleteReq.EnterpriseLookup], eac.value)
         .delete(["EaC", deleteReq.EnterpriseLookup])
-        .set(["EaC", "Status", "ID", deleteReq.CommitID], status.value);
+        .set(
+          [
+            "EaC",
+            "Status",
+            deleteReq.EnterpriseLookup,
+            "ID",
+            deleteReq.CommitID,
+          ],
+          status.value,
+        );
 
       for (const userEaCRecord of userEaCRecords) {
         if (!userEaCRecord.Owner) {

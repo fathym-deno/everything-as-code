@@ -33,7 +33,13 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   const { EnterpriseLookup, ParentEnterpriseLookup, Details, ...eacDiff } =
     commitReq.EaC;
 
-  const statusKey = ["EaC", "Status", "ID", commitReq.CommitID];
+  const statusKey = [
+    "EaC",
+    "Status",
+    EnterpriseLookup,
+    "ID",
+    commitReq.CommitID,
+  ];
 
   let status = await denoKv.get<EaCStatus>(statusKey);
 
@@ -115,8 +121,10 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     op = op
       .check(existingEaC)
       .check(status)
-      .set(["EaC", EnterpriseLookup], saveEaC)
-      .set(["EaC", "Status", "ID", commitReq.CommitID], status.value);
+      .set(
+        ["EaC", "Status", EnterpriseLookup, "ID", commitReq.CommitID],
+        status.value,
+      );
 
     if (allChecks.length > 0) {
       const commitCheckReq: EaCCommitCheckRequest = {
@@ -126,7 +134,10 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
       op = enqueueAtomicOperation(op, commitCheckReq);
     } else {
-      op = markEaCProcessed(EnterpriseLookup, op);
+      op = markEaCProcessed(EnterpriseLookup, op).set(
+        ["EaC", EnterpriseLookup],
+        saveEaC,
+      );
     }
 
     if (commitReq.Username) {

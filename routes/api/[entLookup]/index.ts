@@ -91,9 +91,18 @@ export const handler: Handlers = {
 
     await enqueueAtomic(denoKv, commitReq, (op) => {
       return op
-        .set(["EaC", "Status", "ID", commitStatus.ID], commitStatus)
         .set(
-          ["EaC", "Status", "EaC", commitStatus.EnterpriseLookup],
+          [
+            "EaC",
+            "Status",
+            commitStatus.EnterpriseLookup,
+            "ID",
+            commitStatus.ID,
+          ],
+          commitStatus,
+        )
+        .set(
+          ["EaC", "Status", commitStatus.EnterpriseLookup, "EaC"],
           commitStatus,
         );
     });
@@ -169,9 +178,18 @@ export const handler: Handlers = {
 
     await enqueueAtomic(denoKv, deleteReq, (op) => {
       return op
-        .set(["EaC", "Status", "ID", commitStatus.ID], commitStatus)
         .set(
-          ["EaC", "Status", "EaC", commitStatus.EnterpriseLookup],
+          [
+            "EaC",
+            "Status",
+            commitStatus.EnterpriseLookup,
+            "ID",
+            commitStatus.ID,
+          ],
+          commitStatus,
+        )
+        .set(
+          ["EaC", "Status", commitStatus.EnterpriseLookup, "EaC"],
           commitStatus,
         );
     });
