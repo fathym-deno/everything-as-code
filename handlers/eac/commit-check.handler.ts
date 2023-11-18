@@ -111,11 +111,13 @@ export async function handleEaCCommitCheckRequest(
       };
 
       op = enqueueAtomicOperation(op, newCommitCheckReq);
-    } else {
+    } else if (errors.length === 0) {
       op = markEaCProcessed(EnterpriseLookup!, op).set(
         ["EaC", commitCheckReq.EaC.EnterpriseLookup!],
         commitCheckReq.EaC,
       );
+    } else {
+      op = markEaCProcessed(commitCheckReq.EaC.EnterpriseLookup!, op);
     }
 
     return op;

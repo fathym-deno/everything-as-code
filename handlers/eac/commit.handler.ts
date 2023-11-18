@@ -133,11 +133,13 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
       };
 
       op = enqueueAtomicOperation(op, commitCheckReq);
-    } else {
+    } else if (errors.length === 0) {
       op = markEaCProcessed(EnterpriseLookup, op).set(
         ["EaC", EnterpriseLookup],
         saveEaC,
       );
+    } else {
+      op = markEaCProcessed(EnterpriseLookup, op);
     }
 
     if (commitReq.Username) {
