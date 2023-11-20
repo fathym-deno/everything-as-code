@@ -57,7 +57,7 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     EnterpriseLookup,
   ]);
 
-  const saveEaC: EverythingAsCode = existingEaC?.value! || {
+  let saveEaC: EverythingAsCode = existingEaC?.value! || {
     EnterpriseLookup,
     ParentEnterpriseLookup,
   };
@@ -71,6 +71,8 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
   const errors: EaCHandlerErrorResponse[] = [];
 
   const allChecks: EaCHandlerCheckRequest[] = [];
+
+  saveEaC = merge(saveEaC, eacDiff);
 
   for (const key of diffKeys) {
     const diff = eacDiff[key];
@@ -92,11 +94,11 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
         allChecks.push(...(handled.Checks || []));
 
-        saveEaC[key] = handled.Result;
+        saveEaC[key] = merge(saveEaC[key] || {}, handled.Result as object);
 
         errors.push(...handled.Errors);
       } else if (diff !== undefined) {
-        saveEaC[key] = diff;
+        saveEaC[key] = merge(saveEaC[key] || {}, diff);
       }
     }
   }
@@ -130,6 +132,9 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
       const commitCheckReq: EaCCommitCheckRequest = {
         ...commitReq,
         Checks: allChecks,
+        EaC: saveEaC,
+        nonce: undefined,
+        versionstamp: undefined,
       };
 
       op = enqueueAtomicOperation(op, commitCheckReq);

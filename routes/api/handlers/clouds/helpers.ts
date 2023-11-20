@@ -307,9 +307,9 @@ export async function loadDeployment(
     deploymentName,
   );
 
-  for await (const operation of ops) {
-    console.log(operation);
-  }
+  // for await (const operation of ops) {
+  //   console.log(operation);
+  // }
 
   return deployment;
 }
