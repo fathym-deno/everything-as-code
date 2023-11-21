@@ -15,9 +15,12 @@ import * as $9 from "./routes/api/_middleware.ts";
 import * as $10 from "./routes/api/handlers/clouds/check.ts";
 import * as $11 from "./routes/api/handlers/clouds/helpers.ts";
 import * as $12 from "./routes/api/handlers/clouds/index.ts";
-import * as $13 from "./routes/api/index.ts";
-import * as $14 from "./routes/dashboard/jwt.tsx";
-import * as $15 from "./routes/index.tsx";
+import * as $13 from "./routes/api/handlers/iot/check.ts";
+import * as $14 from "./routes/api/handlers/iot/helpers.ts";
+import * as $15 from "./routes/api/handlers/iot/index.ts";
+import * as $16 from "./routes/api/index.ts";
+import * as $17 from "./routes/dashboard/jwt.tsx";
+import * as $18 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
@@ -34,9 +37,12 @@ const manifest = {
     "./routes/api/handlers/clouds/check.ts": $10,
     "./routes/api/handlers/clouds/helpers.ts": $11,
     "./routes/api/handlers/clouds/index.ts": $12,
-    "./routes/api/index.ts": $13,
-    "./routes/dashboard/jwt.tsx": $14,
-    "./routes/index.tsx": $15,
+    "./routes/api/handlers/iot/check.ts": $13,
+    "./routes/api/handlers/iot/helpers.ts": $14,
+    "./routes/api/handlers/iot/index.ts": $15,
+    "./routes/api/index.ts": $16,
+    "./routes/dashboard/jwt.tsx": $17,
+    "./routes/index.tsx": $18,
   },
   islands: {},
   baseUrl: import.meta.url,

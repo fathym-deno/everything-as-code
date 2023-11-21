@@ -29,15 +29,13 @@ export const handler: Handlers = {
 
       const cloudLookup = handlerRequest.Lookup;
 
-      let current = currentClouds[cloudLookup] || {};
+      const current = currentClouds[cloudLookup] || {};
 
       const cloud = handlerRequest.Model as EaCCloudAsCode;
 
-      current = merge(current, cloud);
-
       const deployments = await buildCloudDeployments(
         cloudLookup,
-        current,
+        cloud,
       );
 
       const checks: EaCHandlerCheckRequest[] = await beginEaCDeployments(

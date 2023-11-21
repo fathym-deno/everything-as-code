@@ -280,13 +280,6 @@ export async function beginEaCDeployments(
   return checks;
 }
 
-export type EaCHandlerCloudCheckRequest =
-  & Omit<
-    EaCCloudDeployment,
-    "Deployment"
-  >
-  & EaCHandlerCheckRequest;
-
 export async function loadDeployment(
   cloud: EaCCloudAsCode,
   deploymentName: string,
