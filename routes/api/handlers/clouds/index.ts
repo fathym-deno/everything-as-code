@@ -7,7 +7,11 @@ import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCod
 import { EaCHandlerRequest } from "../../../../src/api/models/EaCHandlerRequest.ts";
 import { EaCHandlerResponse } from "../../../../src/api/models/EaCHandlerResponse.ts";
 import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
-import { beginEaCDeployments, buildCloudDeployments } from "./helpers.ts";
+import {
+  beginEaCDeployments,
+  buildCloudDeployments,
+  finalizeCloudDetails,
+} from "./helpers.ts";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
 
 export const handler: Handlers = {
@@ -33,7 +37,10 @@ export const handler: Handlers = {
 
       const cloud = handlerRequest.Model as EaCCloudAsCode;
 
+      await finalizeCloudDetails(cloud);
+
       const deployments = await buildCloudDeployments(
+        eac,
         cloudLookup,
         cloud,
       );
@@ -49,7 +56,7 @@ export const handler: Handlers = {
         Messages: {
           Message: `The cloud '${cloudLookup}' has been handled.`,
         },
-        Model: current,
+        Model: cloud,
       } as EaCHandlerResponse);
     } catch (err) {
       return respond({

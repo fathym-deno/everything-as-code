@@ -74,7 +74,7 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   saveEaC = merge(saveEaC, eacDiff);
 
-  for (const key of diffKeys) {
+  const diffCalls = diffKeys.map(async (key) => {
     const diff = eacDiff[key];
 
     if (diff) {
@@ -101,7 +101,9 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
         saveEaC[key] = merge(saveEaC[key] || {}, diff);
       }
     }
-  }
+  });
+
+  await Promise.all(diffCalls);
 
   if (errors.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.ERROR;

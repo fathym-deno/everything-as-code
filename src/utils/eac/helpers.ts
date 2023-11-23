@@ -62,7 +62,10 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
   if (current) {
     for (const handledResponse of handledResponses) {
       if (isEaCHandlerResponse(handledResponse)) {
-        current[handledResponse.Lookup] = handledResponse.Model;
+        current[handledResponse.Lookup] = merge(
+          current[handledResponse.Lookup] as object,
+          handledResponse.Model as object,
+        );
 
         handledResponse.Checks?.forEach((check) => {
           check.EaC = currentEaC;

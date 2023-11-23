@@ -8,18 +8,72 @@ import {
   DeploymentExtended,
   ResourceManagementClient,
 } from "npm:@azure/arm-resources";
-import { OperationState, SimplePollerLike } from "npm:@azure/core-lro";
+import {
+  AuthenticationProvider,
+  AuthenticationProviderOptions,
+  Client as GraphClient,
+} from "npm:@microsoft/microsoft-graph-client";
+// import { TokenCredentialAuthenticationProvider } from 'npm:@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
 import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
 import { EaCCloudDeployment } from "../../../../src/api/models/EaCCloudDeployment.ts";
 import { EaCCloudResourceGroupAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupAsCode.ts";
 import { EaCCloudResourceAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceAsCode.ts";
 import { EaCCloudResourceFormatDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceFormatDetails.ts";
 import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
+import {
+  loadAzureCloudCredentials,
+  loadMainAzureCredentials,
+} from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
-import { sleep } from "../../../../src/utils/sleep.ts";
+import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EaCCloudResourceGroupDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupDetails.ts";
+import { TokenCredential } from "npm:@azure/identity";
+
+class TokenProvider implements AuthenticationProvider {
+  constructor(
+    protected credential: TokenCredential,
+    protected authenticationProviderOptions: AuthenticationProviderOptions,
+  ) {}
+
+  public async getAccessToken(): Promise<string> {
+    const creds = loadMainAzureCredentials();
+
+    const accessToken = await creds.getToken(
+      this.authenticationProviderOptions!.scopes!,
+    );
+
+    return accessToken.token;
+  }
+}
+export async function finalizeCloudDetails(
+  cloud: EaCCloudAsCode,
+): Promise<void> {
+  if (cloud.Details) {
+    const details = cloud.Details as EaCCloudAzureDetails;
+
+    // const creds = loadAzureCloudCredentials(cloud);
+    const creds = loadMainAzureCredentials();
+
+    const graphClient = GraphClient.initWithMiddleware({
+      authProvider: new TokenProvider(creds, {
+        scopes: [`https://graph.microsoft.com/.default`], //"Application.Read.All"],
+      }),
+    });
+
+    // const client = new ApplicationClient(creds, details.SubscriptionID);
+
+    const svcPrinc = await graphClient
+      .api("/servicePrincipals")
+      .filter(`appId eq '${details.ApplicationID}'`)
+      .select(["id"])
+      .get();
+
+    cloud.Details.ID = svcPrinc.value[0].id;
+  }
+}
 
 export async function buildCloudDeployments(
+  eac: EverythingAsCodeClouds,
   cloudLookup: string,
   cloud: EaCCloudAsCode,
 ): Promise<EaCCloudDeployment[]> {
@@ -31,6 +85,7 @@ export async function buildCloudDeployments(
     const resGroup = cloud.ResourceGroups![resGroupLookup];
 
     const deployment = await buildCloudDeployment(
+      eac,
       cloudLookup,
       resGroupLookup,
       resGroup,
@@ -45,6 +100,7 @@ export async function buildCloudDeployments(
 }
 
 export async function buildCloudDeployment(
+  eac: EverythingAsCodeClouds,
   cloudLookup: string,
   resGroupLookup: string,
   resGroup: EaCCloudResourceGroupAsCode,
@@ -52,7 +108,11 @@ export async function buildCloudDeployment(
   if (Object.keys(resGroup.Resources || {}).length > 0) {
     const resGroupTemplateResources: Record<string, unknown>[] = [];
 
+    const useResGroupDetails = resGroup.Details ||
+      eac.Clouds![cloudLookup].ResourceGroups![resGroupLookup].Details;
+
     const armResources = await buildArmResourcesForResourceGroupDeployment(
+      useResGroupDetails!,
       cloudLookup,
       resGroupLookup,
       resGroup,
@@ -63,7 +123,7 @@ export async function buildCloudDeployment(
     const deploymentName = `resource-group-${resGroupLookup}-${Date.now()}`;
 
     const deployment: Deployment = {
-      location: resGroup.Details!.Location,
+      location: useResGroupDetails!.Location,
       properties: {
         mode: "Incremental",
         expressionEvaluationOptions: {
@@ -93,21 +153,22 @@ export async function buildCloudDeployment(
 }
 
 export async function buildArmResourcesForResourceGroupDeployment(
+  useResGroupDetails: EaCCloudResourceGroupDetails,
   cloudLookup: string,
   resGroupLookup: string,
   resGroup: EaCCloudResourceGroupAsCode,
 ): Promise<Record<string, unknown>[]> {
-  const armResources: Record<string, unknown>[] = [
-    {
-      type: "Microsoft.Resources/resourceGroups",
-      apiVersion: "2018-05-01",
-      name: resGroupLookup,
-      location: resGroup.Details!.Location,
-      tags: {
-        Cloud: cloudLookup,
-      },
+  const armResources: Record<string, unknown>[] = [];
+
+  armResources.push({
+    type: "Microsoft.Resources/resourceGroups",
+    apiVersion: "2018-05-01",
+    name: resGroupLookup,
+    location: useResGroupDetails.Location,
+    tags: {
+      Cloud: cloudLookup,
     },
-  ];
+  });
 
   const resourceArmResources = await buildArmResourcesForResources(
     cloudLookup,

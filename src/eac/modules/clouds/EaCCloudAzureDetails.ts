@@ -5,6 +5,8 @@ export type EaCCloudAzureDetails = {
 
   AuthKey: string;
 
+  ID?: string;
+
   SubscriptionID: string;
 
   TenantID: string;
