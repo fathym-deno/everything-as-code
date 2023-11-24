@@ -44,9 +44,17 @@ export async function ensureIoTDevices(
 
     const deviceDetails: EaCDeviceDetails = device.Details!;
 
-    const existingDevice = await iotRegistry.get(deviceLookup);
+    try {
+      await iotRegistry.get(deviceLookup);
 
-    return existingDevice ? null : {
+      return null;
+    } catch (err) {
+      if (err.name !== "DeviceNotFoundError") {
+        throw err;
+      }
+    }
+
+    return {
       deviceId: deviceLookup,
       capabilities: {
         iotEdge: deviceDetails.IsIoTEdge,
