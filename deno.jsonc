@@ -18,7 +18,8 @@
       "tags": [
         "fresh",
         "recommended"
-      ]
+      ],
+      "exclude": ["no-unused-vars"]
     }
   },
   "exclude": [
