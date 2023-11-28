@@ -19,7 +19,13 @@
         "fresh",
         "recommended"
       ],
-      "exclude": ["no-unused-vars"]
+      "exclude": [
+        "no-unused-vars",
+        "ban-unused-ignore",
+        "prefer-const",
+        "ban-types",
+        "require-await"
+      ]
     }
   },
   "exclude": [
