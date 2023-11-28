@@ -18,6 +18,13 @@
       "tags": [
         "fresh",
         "recommended"
+      ],
+      "exclude": [
+        "no-unused-vars",
+        "ban-unused-ignore",
+        "prefer-const",
+        "ban-types",
+        "require-await"
       ]
     }
   },

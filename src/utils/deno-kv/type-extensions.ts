@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
 import { DenoKVNonce } from "./DenoKVNonce.ts";
 import "./type-extensions.d.ts";
 
