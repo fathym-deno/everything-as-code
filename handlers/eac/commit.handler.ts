@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
 import { merge } from "@fathym/common";
 import { denoKv } from "../../configs/deno-kv.config.ts";
 import {
