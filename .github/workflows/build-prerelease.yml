@@ -38,4 +38,4 @@ jobs:
           tags: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}
           context: .
           file: Dockerfile
-          load: false 
+          load: false
