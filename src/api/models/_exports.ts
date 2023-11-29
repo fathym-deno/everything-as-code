@@ -9,3 +9,4 @@ export * from "./EaCHandlerResponse.ts";
 export * from "./EaCServiceDefinitions.ts";
 export * from "./EaCStatus.ts";
 export * from "./EaCStatusProcessingTypes.ts";
+export * from "./ExplorerRequest.ts";

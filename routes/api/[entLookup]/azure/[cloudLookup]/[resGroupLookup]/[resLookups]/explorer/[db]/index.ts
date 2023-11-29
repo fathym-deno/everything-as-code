@@ -4,13 +4,9 @@ import { respond } from "@fathym/common";
 import { ResourceManagementClient } from "npm:@azure/arm-resources";
 import { Location, SubscriptionClient } from "npm:@azure/arm-subscriptions";
 import { ClientRequestProperties } from "npm:azure-kusto-data";
-import { EaCAPIUserState } from "../../../../../../../../src/api/EaCAPIUserState.ts";
-import { denoKv } from "../../../../../../../../configs/deno-kv.config.ts";
-import { loadAzureCloudCredentials } from "../../../../../../../../src/utils/eac/loadAzureCloudCredentials.ts";
-import { EaCServiceDefinitions } from "../../../../../../../../src/api/models/EaCServiceDefinitions.ts";
-import { EverythingAsCodeClouds } from "../../../../../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
-import { EaCCloudAzureDetails } from "../../../../../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { loadKustoClient } from "../../../../../../../../src/services/azure/kusto.ts";
+import { EaCAPIUserState } from "../../../../../../../../../src/api/EaCAPIUserState.ts";
+import { loadKustoClient } from "../../../../../../../../../src/services/azure/kusto.ts";
+import { ExplorerRequest } from "../../../../../../../../../src/api/models/ExplorerRequest.ts";
 
 export const handler: Handlers = {
   /**
@@ -28,9 +24,13 @@ export const handler: Handlers = {
 
     const resLookups: string[] = ctx.params.resLookups.split("|");
 
+    const db: string = ctx.params.db;
+
     const url = new URL(req.url);
 
     const svcSuffix = url.searchParams.get("svcSuffix") as string | undefined;
+
+    const explorerReq: ExplorerRequest = await req.json();
 
     const kustoClient = await loadKustoClient(
       entLookup,
@@ -42,10 +42,8 @@ export const handler: Handlers = {
 
     kustoClient.ensureOpen();
 
-    // const dataSetResp = await kustoClient.execute();
+    const dataSetResp = await kustoClient.execute(db, explorerReq.Query);
 
-    return respond({
-      // Locations: locations,
-    });
+    return respond(JSON.stringify(dataSetResp));
   },
 };
