@@ -35,10 +35,4 @@ jobs:
           tags: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}
           context: .
           file: Dockerfile
-          load: false
-      -
-        name: Deploy to Web App for Containers
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'everythingascode'
-          images: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}
+          load: false     
