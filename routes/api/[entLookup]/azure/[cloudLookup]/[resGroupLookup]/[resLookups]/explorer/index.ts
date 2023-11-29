@@ -3,6 +3,7 @@ import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { ResourceManagementClient } from "npm:@azure/arm-resources";
 import { Location, SubscriptionClient } from "npm:@azure/arm-subscriptions";
+import { ClientRequestProperties } from "npm:azure-kusto-data";
 import { EaCAPIUserState } from "../../../../../../../../src/api/EaCAPIUserState.ts";
 import { denoKv } from "../../../../../../../../configs/deno-kv.config.ts";
 import { loadAzureCloudCredentials } from "../../../../../../../../src/utils/eac/loadAzureCloudCredentials.ts";
@@ -39,8 +40,12 @@ export const handler: Handlers = {
       svcSuffix,
     );
 
+    kustoClient.ensureOpen();
+
+    // const dataSetResp = await kustoClient.execute();
+
     return respond({
-      Locations: locations,
+      // Locations: locations,
     });
   },
 };
