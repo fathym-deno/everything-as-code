@@ -1,6 +1,7 @@
 import { create, decode, getNumericDate, verify } from "@djwt";
+import { JWTConfig } from "../src/utils/jwt/JWTConfig.ts";
 
-export const jwtConfig = {
+export const jwtConfig: JWTConfig = {
   Algorithm: { name: "HMAC", hash: "SHA-512" } as AlgorithmIdentifier,
   async Create(data: Record<string, unknown>) {
     const jwt = await create(
@@ -46,13 +47,3 @@ export const jwtConfig = {
     return verified;
   },
 };
-
-export async function generateKeyValue(): Promise<JsonWebKey> {
-  const key = await crypto.subtle.generateKey(
-    jwtConfig.Algorithm,
-    true,
-    jwtConfig.KeyUsages,
-  );
-
-  return await crypto.subtle.exportKey("jwk", key);
-}

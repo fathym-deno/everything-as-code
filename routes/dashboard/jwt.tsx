@@ -1,15 +1,16 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { jwtConfig } from "../../configs/jwt.config.ts";
+import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
 
 interface JWTPageData {
   jwt?: string;
 }
 
-export const handler: Handlers<JWTPageData | null, Record<string, unknown>> = {
-  async GET(_, ctx) {
+export const handler: Handlers<JWTPageData | null, EverythingAsCodeState> = {
+  async GET(_req, ctx) {
     //  TODO: Get username from oauth provider
     const jwt = await jwtConfig.Create({
-      Username: "michael.gearhardt@fathym.com",
+      Username: ctx.state.Username,
     });
 
     const data: JWTPageData = { jwt };
@@ -20,7 +21,7 @@ export const handler: Handlers<JWTPageData | null, Record<string, unknown>> = {
 
 export default function JWT({
   data,
-}: PageProps<JWTPageData | null, Record<string, unknown>>) {
+}: PageProps<JWTPageData | null, EverythingAsCodeState>) {
   return (
     <div>
       <form>
