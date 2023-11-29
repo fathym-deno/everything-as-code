@@ -1,4 +1,4 @@
-FROM denoland/deno:1.33.2
+FROM denoland/deno:latest
 
 ARG VERSION
 ENV DENO_DEPLOYMENT_ID=${VERSION}
@@ -8,6 +8,6 @@ WORKDIR /app
 COPY . .
 RUN deno cache main.ts
 
-EXPOSE 8000
+EXPOSE 5437
 
-CMD ["run", "-A", "main.ts"]
+CMD ["run", "-A", "--unstable", "main.ts"]
