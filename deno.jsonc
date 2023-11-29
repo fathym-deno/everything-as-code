@@ -9,7 +9,7 @@
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "preview": "deno run -A --unstable main.ts",
-    "start": "deno run -A --unstable --watch=handlers/,static/,routes/,src/ dev.ts",
+    "start": "deno run -A --unstable --allow-env --watch=handlers/,static/,routes/,src/ dev.ts",
     "test": "deno test -A --unstable --allow-env .env tests/tests.ts --coverage=cov",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
   },
