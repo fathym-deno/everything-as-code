@@ -4,5 +4,4 @@ export enum EaCStatusProcessingTypes {
   PROCESSING = 2,
   COMPLETE = 3,
   ERROR = 4,
-  CHECKING = 5,
 }
