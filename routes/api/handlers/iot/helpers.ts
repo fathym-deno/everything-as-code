@@ -11,71 +11,79 @@ import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
 
 export async function ensureIoTDevices(
   cloud: EaCCloudAsCode,
+  currentIoT: EaCIoTAsCode,
   iot: EaCIoTAsCode,
-): Promise<EnsureIoTDevicesResponse> {
-  const details = cloud.Details as EaCCloudAzureDetails;
+): Promise<EnsureIoTDevicesResponse | null> {
+  if (iot.Devices) {
+    const details = cloud.Details as EaCCloudAzureDetails;
 
-  const iotClient = new IotHubClient(
-    loadAzureCloudCredentials(cloud),
-    details.SubscriptionID,
-  );
+    const iotClient = new IotHubClient(
+      loadAzureCloudCredentials(cloud),
+      details.SubscriptionID,
+    );
 
-  const resGroupName = iot.ResourceGroupLookup;
+    const resGroupName = currentIoT.ResourceGroupLookup;
 
-  const iotHubName = `${resGroupName}-iot-hub`;
+    const iotHubName = `${resGroupName}-iot-hub`;
 
-  const keyName = "iothubowner";
+    const keyName = "iothubowner";
 
-  const keys = await iotClient.iotHubResource.getKeysForKeyName(
-    resGroupName,
-    iotHubName,
-    keyName,
-  );
+    const keys = await iotClient.iotHubResource.getKeysForKeyName(
+      resGroupName,
+      iotHubName,
+      keyName,
+    );
 
-  const iotHubConnStr =
-    `HostName=${iotHubName}.azure-devices.net;SharedAccessKeyName=${keyName};SharedAccessKey=${keys.primaryKey}`;
+    const iotHubConnStr =
+      `HostName=${iotHubName}.azure-devices.net;SharedAccessKeyName=${keyName};SharedAccessKey=${keys.primaryKey}`;
 
-  const iotRegistry = IoTRegistry.fromConnectionString(iotHubConnStr);
+    const iotRegistry = IoTRegistry.fromConnectionString(iotHubConnStr);
 
-  const deviceLookups = Object.keys(iot.Devices || {});
+    const deviceLookups = Object.keys(iot.Devices || {});
 
-  const deviceRequestCalls = deviceLookups.map(async (deviceLookup) => {
-    const device = iot.Devices![deviceLookup];
+    const deviceRequestCalls = deviceLookups.map(async (deviceLookup) => {
+      const device = iot.Devices![deviceLookup];
 
-    const deviceDetails: EaCDeviceDetails = device.Details!;
+      const deviceDetails: EaCDeviceDetails = device.Details!;
 
-    try {
-      await iotRegistry.get(deviceLookup);
+      try {
+        await iotRegistry.get(deviceLookup);
 
-      return null;
-    } catch (err) {
-      if (err.name !== "DeviceNotFoundError") {
-        throw err;
+        return null;
+      } catch (err) {
+        if (err.name !== "DeviceNotFoundError") {
+          throw err;
+        }
       }
-    }
 
-    return {
-      deviceId: deviceLookup,
-      capabilities: {
-        iotEdge: deviceDetails.IsIoTEdge,
+      return {
+        deviceId: deviceLookup,
+        capabilities: {
+          iotEdge: deviceDetails.IsIoTEdge,
+        },
+      };
+    });
+
+    const deviceRequests = await Promise.all(deviceRequestCalls);
+
+    const addDevicesResp = await iotRegistry.addDevices(
+      deviceRequests
+        .filter((deviceReq) => deviceReq)
+        .map((deviceReq) => deviceReq!),
+    );
+
+    return (addDevicesResp.responseBody.errors || []).reduce(
+      (result, error) => {
+        result[error.deviceId] = {
+          Error: error.errorCode.message,
+          ErrorStatus: error.errorStatus,
+        };
+
+        return result;
       },
-    };
-  });
-
-  const deviceRequests = await Promise.all(deviceRequestCalls);
-
-  const addDevicesResp = await iotRegistry.addDevices(
-    deviceRequests
-      .filter((deviceReq) => deviceReq)
-      .map((deviceReq) => deviceReq!),
-  );
-
-  return (addDevicesResp.responseBody.errors || []).reduce((result, error) => {
-    result[error.deviceId] = {
-      Error: error.errorCode.message,
-      ErrorStatus: error.errorStatus,
-    };
-
-    return result;
-  }, {} as EnsureIoTDevicesResponse);
+      {} as EnsureIoTDevicesResponse,
+    );
+  } else {
+    return null;
+  }
 }
