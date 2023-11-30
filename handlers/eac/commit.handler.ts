@@ -112,12 +112,18 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     }
 
     status.value!.EndTime = new Date();
+
+    delete status.value!.Messages.Queued;
   } else if (allChecks.length > 0) {
-    status.value!.Processing = EaCStatusProcessingTypes.CHECKING;
+    status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
+
+    status.value!.Messages.Queued = "Processing";
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 
     status.value!.EndTime = new Date();
+
+    delete status.value!.Messages.Queued;
   }
 
   await listenQueueAtomic(denoKv, commitReq, (op) => {

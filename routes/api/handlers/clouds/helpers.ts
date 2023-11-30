@@ -28,6 +28,7 @@ import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerChe
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { EaCCloudResourceGroupDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupDetails.ts";
 import { TokenCredential } from "npm:@azure/identity";
+import { merge } from "@fathym/common";
 
 class TokenProvider implements AuthenticationProvider {
   constructor(
@@ -341,31 +342,81 @@ export async function beginEaCDeployments(
   return checks;
 }
 
-export async function loadDeployment(
+export async function loadDeploymentDetails(
   cloud: EaCCloudAsCode,
   deploymentName: string,
-): Promise<DeploymentExtended> {
+  resGroupLookup?: string,
+  resGroupLookupPassthrough?: string,
+): Promise<{
+  Deployment: DeploymentExtended;
+  Messages: Record<string, unknown>;
+}> {
   const details = cloud.Details as EaCCloudAzureDetails;
 
   const creds = loadAzureCloudCredentials(cloud);
 
   const resClient = new ResourceManagementClient(creds, details.SubscriptionID);
 
-  const deployment = await resClient.deployments.getAtSubscriptionScope(
-    deploymentName,
-  );
+  const getDeployment = resGroupLookup
+    ? resClient.deployments.get(resGroupLookup, deploymentName)
+    : resClient.deployments.getAtSubscriptionScope(deploymentName);
 
-  const armMgr = new AzureDeploymentManager(creds, details.SubscriptionID);
+  const deployment = await getDeployment;
 
-  const ops = await resClient.deploymentOperations.listAtSubscriptionScope(
-    deploymentName,
-  );
+  console.log(deployment);
 
-  // for await (const operation of ops) {
-  //   console.log(operation);
-  // }
+  const list = resGroupLookup
+    ? resClient.deploymentOperations.list(resGroupLookup, deploymentName)
+    : resClient.deploymentOperations.listAtSubscriptionScope(deploymentName);
 
-  return deployment;
+  const ops = await list;
+
+  let messages: Record<string, unknown> = {
+    [deploymentName]: {
+      LastActivity: deployment.properties!.timestamp,
+      State: deployment.properties!.provisioningState,
+    },
+  };
+
+  for await (const operation of ops) {
+    console.log(operation);
+
+    const nextResource = operation.properties!.targetResource?.resourceName!;
+
+    if (
+      operation.properties?.targetResource?.resourceType ===
+        "Microsoft.Resources/deployments"
+    ) {
+      const subDeployDetails = await loadDeploymentDetails(
+        cloud,
+        nextResource,
+        resGroupLookupPassthrough,
+        resGroupLookupPassthrough,
+      );
+
+      messages[deploymentName] = merge(
+        messages[deploymentName] as object,
+        subDeployDetails.Messages,
+      );
+    } else if (nextResource) {
+      messages[deploymentName] = merge(messages[deploymentName] as object, {
+        [nextResource]: {
+          // Duration: operation.properties!.duration,
+          LastActivity: operation.properties!.timestamp,
+          Message: operation.properties!.statusMessage,
+          Operation: operation.properties!.provisioningOperation,
+          State: operation.properties!.provisioningState,
+          Status: operation.properties!.statusCode,
+          Type: operation.properties!.targetResource?.resourceType,
+        },
+      });
+    }
+  }
+
+  return {
+    Deployment: deployment,
+    Messages: messages,
+  };
 }
 
 export async function formatParameters(

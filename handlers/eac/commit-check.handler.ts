@@ -37,6 +37,8 @@ export async function handleEaCCommitCheckRequest(
 
   const allChecks: EaCHandlerCheckRequest[] = [];
 
+  delete status.value!.Messages.Queued;
+
   let checkResponses = await Promise.all(
     commitCheckReq.Checks.map(async (check) => {
       const checkResp = await callEaCHandlerCheck(
@@ -76,7 +78,7 @@ export async function handleEaCCommitCheckRequest(
 
     status.value!.EndTime = new Date();
   } else if (allChecks.length > 0) {
-    status.value!.Processing = EaCStatusProcessingTypes.CHECKING;
+    status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
 
     await sleep(2500);
   } else {

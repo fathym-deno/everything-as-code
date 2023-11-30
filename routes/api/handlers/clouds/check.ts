@@ -2,7 +2,7 @@
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { loadDeployment } from "./helpers.ts";
+import { loadDeploymentDetails } from "./helpers.ts";
 import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { EaCHandlerCloudCheckRequest } from "../../../../src/eac/modules/clouds/models/EaCHandlerCloudCheckRequest.ts";
@@ -26,7 +26,12 @@ export const handler: Handlers = {
 
       const cloud = currentClouds[checkRequest.CloudLookup] || {};
 
-      const deployment = await loadDeployment(cloud, checkRequest.Name);
+      const deployDetails = await loadDeploymentDetails(
+        cloud,
+        checkRequest.Name,
+        undefined,
+        checkRequest.ResourceGroupLookup,
+      );
 
       const completeStati = ["Canceled", "Failed", "Succeeded"];
 
@@ -34,14 +39,14 @@ export const handler: Handlers = {
 
       return respond({
         Complete: completeStati.some(
-          (status) => status === deployment.properties?.provisioningState,
+          (status) =>
+            status === deployDetails.Deployment.properties?.provisioningState,
         ),
         HasError: errorStati.some(
-          (status) => status === deployment.properties?.provisioningState,
+          (status) =>
+            status === deployDetails.Deployment.properties?.provisioningState,
         ),
-        Messages: {
-          [`Deployment: ${checkRequest.Name}`]: `Temp message`,
-        },
+        Messages: deployDetails.Messages,
       } as EaCHandlerCheckResponse);
     } catch (err) {
       return respond({

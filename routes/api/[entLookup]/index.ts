@@ -135,7 +135,7 @@ export const handler: Handlers = {
     const commitStatus: EaCStatus = {
       ID: crypto.randomUUID(),
       EnterpriseLookup: entLookup!,
-      Messages: { Queued: "Commiting existing EaC container" },
+      Messages: { Queued: "Deleting existing EaC container" },
       Processing: EaCStatusProcessingTypes.QUEUED,
       StartTime: new Date(Date.now()),
       Username: username!,
