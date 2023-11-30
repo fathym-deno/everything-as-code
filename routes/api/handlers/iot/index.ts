@@ -35,11 +35,11 @@ export const handler: Handlers = {
 
       const iot = handlerRequest.Model as EaCIoTAsCode;
 
-      const iotCloud = eac.Clouds![iot.CloudLookup];
+      const iotCloud = eac.Clouds![current.CloudLookup];
 
-      const devicesResp = await ensureIoTDevices(iotCloud, iot);
+      const devicesResp = await ensureIoTDevices(iotCloud, current, iot);
 
-      if (Object.keys(devicesResp).length === 0) {
+      if (Object.keys(devicesResp || {}).length === 0) {
         return respond({
           Checks: [],
           Lookup: iotLookup,

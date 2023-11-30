@@ -363,8 +363,6 @@ export async function loadDeploymentDetails(
 
   const deployment = await getDeployment;
 
-  console.log(deployment);
-
   const list = resGroupLookup
     ? resClient.deploymentOperations.list(resGroupLookup, deploymentName)
     : resClient.deploymentOperations.listAtSubscriptionScope(deploymentName);
@@ -379,8 +377,6 @@ export async function loadDeploymentDetails(
   };
 
   for await (const operation of ops) {
-    console.log(operation);
-
     const nextResource = operation.properties!.targetResource?.resourceName!;
 
     if (
