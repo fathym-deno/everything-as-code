@@ -29,6 +29,23 @@ export class EaCServiceClient extends EaCBaseClient {
     return await response.json();
   }
 
+  public async Connections<T extends EverythingAsCode>(
+    eac: T,
+  ): Promise<T> {
+    const response = await fetch(
+      this.loadClientUrl(
+        `${eac.EnterpriseLookup}/connections`,
+      ),
+      {
+        method: "POST",
+        headers: this.loadHeaders(),
+        body: JSON.stringify(eac),
+      },
+    );
+
+    return await response.json();
+  }
+
   public async Create<T extends EverythingAsCode>(
     eac: T,
     processingSeconds: number,

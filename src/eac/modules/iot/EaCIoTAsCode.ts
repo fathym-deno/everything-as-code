@@ -4,11 +4,11 @@ import { EaCDeviceAsCode } from "./EaCDeviceAsCode.ts";
 import { EaCIoTDetails } from "./EaCIoTDetails.ts";
 
 export type EaCIoTAsCode = {
-  CloudLookup: string;
+  CloudLookup?: string;
 
-  Dashboards?: { [key: string]: EaCDashboardAsCode } | null;
+  Dashboards?: Record<string, EaCDashboardAsCode> | null;
 
-  Devices?: { [key: string]: EaCDeviceAsCode } | null;
+  Devices?: Record<string, EaCDeviceAsCode> | null;
 
-  ResourceGroupLookup: string;
+  ResourceGroupLookup?: string;
 } & EaCDetails<EaCIoTDetails>;

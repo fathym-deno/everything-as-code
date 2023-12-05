@@ -9,6 +9,23 @@ export class EaCAzureServiceClient extends EaCBaseClient {
   }
 
   //#region API Methods
+  public async CloudAPIVersions(
+    entLookup: string,
+    cloudLookup: string,
+    svcDefs: EaCServiceDefinitions,
+  ): Promise<Record<string, string>> {
+    const response = await fetch(
+      this.loadClientUrl(`${entLookup}/azure/${cloudLookup}/api-versions`),
+      {
+        method: "POST",
+        headers: this.loadHeaders(),
+        body: JSON.stringify(svcDefs),
+      },
+    );
+
+    return await response.json();
+  }
+
   public async CloudLocations(
     entLookup: string,
     cloudLookup: string,

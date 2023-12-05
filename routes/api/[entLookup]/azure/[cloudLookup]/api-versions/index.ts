@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers } from "$fresh/server.ts";
-import { respond } from "@fathym/common";
+import { merge, respond } from "@fathym/common";
 import { ResourceManagementClient } from "npm:@azure/arm-resources";
 import { Location, SubscriptionClient } from "npm:@azure/arm-subscriptions";
 import { EaCAPIUserState } from "../../../../../../src/api/EaCAPIUserState.ts";
@@ -33,7 +33,7 @@ export const handler: Handlers = {
 
     const creds = loadAzureCloudCredentials(eac, cloudLookup);
 
-    const locations: Location[] = [];
+    let svcDefApiVersions: Record<string, string> = {};
 
     if (creds) {
       const details = eac.Clouds![cloudLookup!].Details as EaCCloudAzureDetails;
@@ -43,42 +43,45 @@ export const handler: Handlers = {
         details.SubscriptionID,
       );
 
-      const svcDefLocationCalls = Object.keys(svcDefs).map(async (sd) => {
+      const svcDefApiVersionCalls = Object.keys(svcDefs).map(async (sd) => {
         const svcDef = svcDefs[sd];
 
         const provider = await resClient.providers.get(sd);
 
-        const providerTypeLocations = provider.resourceTypes
+        const providerTypeApiVersions = provider.resourceTypes
           ?.filter((rt) => {
             return svcDef.Types.includes(rt.resourceType!);
           })
-          .map((rt) => rt.locations!)!;
+          .map((rt) => {
+            return {
+              type: rt.resourceType!,
+              apiVersion: rt.defaultApiVersion!,
+            };
+          })!;
 
-        return Array.from(new Set(...providerTypeLocations));
+        const res = providerTypeApiVersions.reduce((p, c) => {
+          p[c.type] = c.apiVersion;
+
+          return p;
+        }, {} as Record<string, string>);
+
+        return res;
       });
 
-      const svcDefLocations = await Promise.all<string[]>(svcDefLocationCalls);
-
-      const locationNames = Array.from(new Set(...svcDefLocations));
-
-      const subClient = new SubscriptionClient(creds);
-
-      const subLocationsList = subClient.subscriptions.listLocations(
-        details.SubscriptionID,
+      const svcDefApiVersionResults = await Promise.all<Record<string, string>>(
+        svcDefApiVersionCalls,
       );
 
-      for await (const subLocation of subLocationsList) {
-        if (
-          locationNames.length === 0 ||
-          locationNames.includes(subLocation.displayName!)
-        ) {
-          locations.push(subLocation);
-        }
-      }
+      svcDefApiVersions = merge(
+        svcDefApiVersions,
+        svcDefApiVersionResults.reduce((prev, cur) => {
+          const next = cur;
+
+          return merge(prev, next);
+        }, {} as Record<string, string>),
+      );
     }
 
-    return respond({
-      Locations: locations,
-    });
+    return respond(svcDefApiVersions);
   },
 };

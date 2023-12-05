@@ -1,8 +1,11 @@
+import { EaCHandlers } from "../api/EaCHandlers.ts";
 import { EaCDetails } from "./EaCDetails.ts";
 import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
 
 export type EverythingAsCode = {
   EnterpriseLookup?: string;
+
+  Handlers?: EaCHandlers;
 
   ParentEnterpriseLookup?: string;
 } & EaCDetails<EaCEnterpriseDetails>;

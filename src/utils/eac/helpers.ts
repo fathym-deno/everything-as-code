@@ -16,9 +16,11 @@ import { EaCStatusProcessingTypes } from "../../api/models/EaCStatusProcessingTy
 import { EaCMetadataBase } from "../../eac/EaCMetadataBase.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
+import { EaCHandler } from "../../api/EaCHandler.ts";
+import { EaCHandlerConnectionsRequest } from "../../api/models/EaCHandlerConnectionsRequest.ts";
+import { EaCHandlerConnectionsResponse } from "../../api/models/EaCHandlerConnectionsResponse.ts";
 
 export async function callEaCHandler<T extends EaCMetadataBase>(
-  handlers: EaCHandlers,
   jwt: string,
   key: string,
   currentEaC: EverythingAsCode,
@@ -30,61 +32,69 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
   Result: T;
 }> {
-  const handler = handlers[key];
-
-  const toExecute = Object.keys(diff || {}).map(async (diffLookup) => {
-    const result = await fetch(handler.APIPath, {
-      method: "post",
-      body: JSON.stringify({
-        EaC: currentEaC,
-        Lookup: diffLookup,
-        Model: diff![diffLookup],
-      } as EaCHandlerRequest),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-
-    return (await result.json()) as
-      | EaCHandlerResponse
-      | EaCHandlerErrorResponse;
-  });
-
-  const handledResponses: (EaCHandlerResponse | EaCHandlerErrorResponse)[] =
-    await Promise.all(toExecute);
+  const handler = currentEaC.Handlers![key];
 
   const current = (currentEaC[key] || {}) as T;
 
-  const errors: EaCHandlerErrorResponse[] = [];
+  if (handler != null) {
+    const toExecute = Object.keys(diff || {}).map(async (diffLookup) => {
+      const result = await fetch(handler.APIPath, {
+        method: "post",
+        body: JSON.stringify({
+          EaC: currentEaC,
+          Lookup: diffLookup,
+          Model: diff![diffLookup],
+        } as EaCHandlerRequest),
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
 
-  const checks: EaCHandlerCheckRequest[] = [];
+      return (await result.json()) as
+        | EaCHandlerResponse
+        | EaCHandlerErrorResponse;
+    });
 
-  if (current) {
-    for (const handledResponse of handledResponses) {
-      if (isEaCHandlerResponse(handledResponse)) {
-        current[handledResponse.Lookup] = merge(
-          current[handledResponse.Lookup] as object,
-          handledResponse.Model as object,
-        );
+    const handledResponses: (EaCHandlerResponse | EaCHandlerErrorResponse)[] =
+      await Promise.all(toExecute);
 
-        handledResponse.Checks?.forEach((check) => {
-          check.EaC = currentEaC;
+    const errors: EaCHandlerErrorResponse[] = [];
 
-          check.Type = key;
-        });
+    const checks: EaCHandlerCheckRequest[] = [];
 
-        checks.push(...(handledResponse.Checks || []));
-      } else if (isEaCHandlerErrorResponse(handledResponse)) {
-        errors.push(handledResponse);
+    if (current) {
+      for (const handledResponse of handledResponses) {
+        if (isEaCHandlerResponse(handledResponse)) {
+          current[handledResponse.Lookup] = merge(
+            current[handledResponse.Lookup] as object,
+            handledResponse.Model as object,
+          );
+
+          handledResponse.Checks?.forEach((check) => {
+            check.EaC = currentEaC;
+
+            check.Type = key;
+          });
+
+          checks.push(...(handledResponse.Checks || []));
+        } else if (isEaCHandlerErrorResponse(handledResponse)) {
+          errors.push(handledResponse);
+        }
       }
     }
-  }
 
-  return {
-    Checks: checks,
-    Result: current,
-    Errors: errors,
-  };
+    return {
+      Checks: checks,
+      Result: current,
+      Errors: errors,
+    };
+  } else {
+    return {
+      Checks: [],
+      Result: current,
+      Errors: [],
+    };
+  }
 }
 
 export async function callEaCHandlerCheck(
@@ -103,6 +113,24 @@ export async function callEaCHandlerCheck(
   });
 
   const checkResp = (await result.json()) as EaCHandlerCheckResponse;
+
+  return checkResp;
+}
+
+export async function callEaCHandlerConnections(
+  handler: EaCHandler,
+  jwt: string,
+  check: EaCHandlerConnectionsRequest,
+): Promise<EaCHandlerConnectionsResponse> {
+  const result = await fetch(`${handler.APIPath}/connections`, {
+    method: "post",
+    body: JSON.stringify(check),
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  const checkResp = (await result.json()) as EaCHandlerConnectionsResponse;
 
   return checkResp;
 }

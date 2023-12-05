@@ -73,6 +73,8 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   saveEaC = merge(saveEaC, eacDiff);
 
+  saveEaC.Handlers = merge(eacHandlers, saveEaC.Handlers || {});
+
   const diffCalls = diffKeys.map(async (key) => {
     const diff = eacDiff[key];
 
@@ -84,7 +86,6 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
         diff !== undefined
       ) {
         const handled = await callEaCHandler(
-          eacHandlers,
           commitReq.JWT,
           key,
           saveEaC,

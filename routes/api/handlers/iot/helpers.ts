@@ -22,7 +22,7 @@ export async function ensureIoTDevices(
       details.SubscriptionID,
     );
 
-    const resGroupName = currentIoT.ResourceGroupLookup;
+    const resGroupName = currentIoT.ResourceGroupLookup!;
 
     const iotHubName = `${resGroupName}-iot-hub`;
 
@@ -66,13 +66,15 @@ export async function ensureIoTDevices(
 
     const deviceRequests = await Promise.all(deviceRequestCalls);
 
-    const addDevicesResp = await iotRegistry.addDevices(
-      deviceRequests
-        .filter((deviceReq) => deviceReq)
-        .map((deviceReq) => deviceReq!),
-    );
+    const addDevices = deviceRequests
+      .filter((deviceReq) => deviceReq)
+      .map((deviceReq) => deviceReq!);
 
-    return (addDevicesResp.responseBody.errors || []).reduce(
+    const addDevicesResp = addDevices.length > 0
+      ? await iotRegistry.addDevices(addDevices)
+      : null;
+
+    return (addDevicesResp?.responseBody.errors || []).reduce(
       (result, error) => {
         result[error.deviceId] = {
           Error: error.errorCode.message,
