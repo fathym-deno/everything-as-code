@@ -186,7 +186,7 @@ export async function buildArmResourcesForResourceGroupDeployment(
 export async function buildArmResourcesForResources(
   cloudLookup: string,
   resGroupLookup: string,
-  resources: { [key: string]: EaCCloudResourceAsCode },
+  resources: Record<string, EaCCloudResourceAsCode>,
   dependsOn: string[],
 ): Promise<Record<string, unknown>[]> {
   const resLookups = Object.keys(resources);

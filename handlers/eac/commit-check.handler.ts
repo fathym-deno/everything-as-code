@@ -1,5 +1,4 @@
 import { denoKv } from "../../configs/deno-kv.config.ts";
-import { eacHandlers } from "../../configs/eac-handlers.config.ts";
 import {
   enqueueAtomic,
   enqueueAtomicOperation,
@@ -20,8 +19,13 @@ import { merge } from "@fathym/common";
 export async function handleEaCCommitCheckRequest(
   commitCheckReq: EaCCommitCheckRequest,
 ) {
-  const { EnterpriseLookup, ParentEnterpriseLookup, Details, ...eacDiff } =
-    commitCheckReq.EaC;
+  const {
+    EnterpriseLookup,
+    ParentEnterpriseLookup,
+    Details,
+    Handlers,
+    ...eacDiff
+  } = commitCheckReq.EaC;
 
   const statusKey = [
     "EaC",
@@ -42,7 +46,7 @@ export async function handleEaCCommitCheckRequest(
   let checkResponses = await Promise.all(
     commitCheckReq.Checks.map(async (check) => {
       const checkResp = await callEaCHandlerCheck(
-        eacHandlers,
+        Handlers!,
         commitCheckReq.JWT,
         check,
       );
@@ -80,7 +84,7 @@ export async function handleEaCCommitCheckRequest(
   } else if (allChecks.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
 
-    await sleep(2500);
+    await sleep(7500);
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 

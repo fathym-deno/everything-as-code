@@ -1,5 +1,3 @@
-export type EaCHandlers = {
-  [key: string]: {
-    APIPath: string;
-  };
-};
+import { EaCHandler } from "./EaCHandler.ts";
+
+export type EaCHandlers = Record<string, EaCHandler>;

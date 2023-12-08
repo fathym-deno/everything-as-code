@@ -35,7 +35,7 @@ export const handler: Handlers = {
 
       const iot = handlerRequest.Model as EaCIoTAsCode;
 
-      const iotCloud = eac.Clouds![current.CloudLookup];
+      const iotCloud = eac.Clouds![current.CloudLookup!];
 
       const devicesResp = await ensureIoTDevices(iotCloud, current, iot);
 
@@ -57,6 +57,8 @@ export const handler: Handlers = {
         } as EaCHandlerErrorResponse);
       }
     } catch (err) {
+      console.error(err);
+
       return respond({
         HasError: true,
         Messages: {

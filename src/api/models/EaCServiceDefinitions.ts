@@ -1,5 +1,6 @@
-export type EaCServiceDefinitions = {
-  [key: string]: {
+export type EaCServiceDefinitions = Record<
+  string,
+  {
     Types: string[];
-  };
-};
+  }
+>;

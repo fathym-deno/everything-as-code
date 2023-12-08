@@ -24,9 +24,11 @@ export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {
         failureRespBody.HasError = true;
       }
     } catch (err) {
-      failureRespBody.Message = err.message;
+      console.error(err);
 
       failureRespBody.HasError = true;
+
+      failureRespBody.Message = err.message;
     }
 
     if (failureRespBody.HasError) {

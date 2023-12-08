@@ -3,5 +3,5 @@ import { EaCLaunchPadDetails } from "./EaCLaunchPadDetails.ts";
 import { EaCOverhaulAsCode } from "./EaCOverhaulAsCode.ts";
 
 export type EaCLaunchPadAsCode = {
-  Overhauls?: { [key: string]: EaCOverhaulAsCode } | null;
+  Overhauls?: Record<string, EaCOverhaulAsCode> | null;
 } & EaCDetails<EaCLaunchPadDetails>;
