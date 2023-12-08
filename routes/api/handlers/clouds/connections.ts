@@ -150,6 +150,8 @@ async function loadCloudResourcesConnections(
         // resKeys[]
         keys.toString();
       } catch (err) {
+        console.error(err);
+
         err.toString();
       }
     }

@@ -49,6 +49,8 @@ export const handler: Handlers = {
         Messages: deployDetails.Messages,
       } as EaCHandlerCheckResponse);
     } catch (err) {
+      console.error(err);
+
       return respond({
         CorelationID: checkRequest.CorelationID,
         Complete: true,

@@ -84,7 +84,7 @@ export async function handleEaCCommitCheckRequest(
   } else if (allChecks.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
 
-    await sleep(5000);
+    await sleep(7500);
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 

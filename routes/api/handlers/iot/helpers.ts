@@ -51,6 +51,8 @@ export async function ensureIoTDevices(
 
         return null;
       } catch (err) {
+        console.error(err);
+
         if (err.name !== "DeviceNotFoundError") {
           throw err;
         }

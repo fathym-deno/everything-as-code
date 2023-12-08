@@ -59,6 +59,8 @@ export const handler: Handlers = {
         Model: cloud,
       } as EaCHandlerResponse);
     } catch (err) {
+      console.error(err);
+
       return respond({
         HasError: true,
         Messages: {

@@ -57,6 +57,8 @@ export const handler: Handlers = {
         } as EaCHandlerErrorResponse);
       }
     } catch (err) {
+      console.error(err);
+
       return respond({
         HasError: true,
         Messages: {
