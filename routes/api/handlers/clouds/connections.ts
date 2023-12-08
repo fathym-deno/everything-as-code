@@ -126,29 +126,21 @@ async function loadCloudResourcesConnections(
 
     const resKeys: Record<string, unknown> = {};
 
+    const resLocations: Record<string, unknown> = {};
+
     for (const ar of resAzureResources) {
       try {
         const apiVersion = apiVersions[ar.type!] || "2023-01-01";
 
-        const keys = await loadResourceKeys(creds, apiVersion, ar.id!);
+        const resLookupKey = `${ar.type}/${ar.name}`;
 
-        let localKeys: Record<string, unknown> = {};
+        resKeys[resLookupKey] = await loadResourceKeys(
+          creds,
+          apiVersion,
+          ar.id!,
+        );
 
-        if (!keys.error) {
-          if (Array.isArray(keys)) {
-            keys.forEach((key) => (localKeys[key.keyName] = key.value));
-          } else if (keys.value && Array.isArray(keys.value)) {
-            (keys.value as Record<string, any>[]).forEach((
-              key,
-            ) => (localKeys[key.keyName] = key.value || key.primaryKey));
-          } else {
-            localKeys = keys;
-          }
-
-          resKeys[`${ar.type}/${ar.name}`] = localKeys;
-        }
-        // resKeys[]
-        keys.toString();
+        resLocations[resLookupKey] = ar.location!;
       } catch (err) {
         console.error(err);
 
@@ -170,6 +162,7 @@ async function loadCloudResourcesConnections(
       ResourceLookup: resLookup,
       Resource: {
         Keys: resKeys,
+        Locations: resLocations,
         Resources: await loadCloudResourcesConnections(
           creds,
           azureResources,
@@ -214,5 +207,21 @@ async function loadResourceKeys(
     },
   });
 
-  return await response.json();
+  const keys = await response.json();
+
+  let localKeys: Record<string, unknown> = {};
+
+  if (!keys.error) {
+    if (Array.isArray(keys)) {
+      keys.forEach((key) => (localKeys[key.keyName] = key.value));
+    } else if (keys.value && Array.isArray(keys.value)) {
+      (keys.value as Record<string, any>[]).forEach((
+        key,
+      ) => (localKeys[key.keyName] = key.value || key.primaryKey));
+    } else {
+      localKeys = keys;
+    }
+  }
+
+  return localKeys;
 }

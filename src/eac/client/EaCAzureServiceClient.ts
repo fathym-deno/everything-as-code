@@ -26,6 +26,26 @@ export class EaCAzureServiceClient extends EaCBaseClient {
     return await response.json();
   }
 
+  public async CloudAuthToken(
+    entLookup: string,
+    cloudLookup: string,
+    scopes: string[],
+  ): Promise<string> {
+    const response = await fetch(
+      this.loadClientUrl(
+        `${entLookup}/azure/${cloudLookup}/auth-token?scope=${
+          scopes.join(",")
+        }`,
+      ),
+      {
+        method: "GET",
+        headers: this.loadHeaders(),
+      },
+    );
+
+    return await response.json();
+  }
+
   public async CloudLocations(
     entLookup: string,
     cloudLookup: string,
