@@ -19,6 +19,8 @@ import { merge } from "@fathym/common";
 export async function handleEaCCommitCheckRequest(
   commitCheckReq: EaCCommitCheckRequest,
 ) {
+  console.log(`Processing check for commit ${commitCheckReq.CommitID}`);
+
   const {
     EnterpriseLookup,
     ParentEnterpriseLookup,
@@ -84,7 +86,7 @@ export async function handleEaCCommitCheckRequest(
   } else if (allChecks.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
 
-    await sleep(7500);
+    await sleep(10000);
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 
@@ -117,13 +119,25 @@ export async function handleEaCCommitCheckRequest(
       };
 
       op = enqueueAtomicOperation(op, newCommitCheckReq);
+
+      console.log(
+        `Requeued processing check for commit ${commitCheckReq.CommitID}`,
+      );
     } else if (errors.length === 0) {
       op = markEaCProcessed(EnterpriseLookup!, op).set(
-        ["EaC", commitCheckReq.EaC.EnterpriseLookup!],
+        ["EaC", EnterpriseLookup!],
         commitCheckReq.EaC,
       );
+
+      console.log(
+        `Completed processing check for commit ${commitCheckReq.CommitID}`,
+      );
     } else {
-      op = markEaCProcessed(commitCheckReq.EaC.EnterpriseLookup!, op);
+      op = markEaCProcessed(EnterpriseLookup!, op);
+
+      console.log(
+        `Completed processing check for commit ${commitCheckReq.CommitID}`,
+      );
     }
 
     return op;

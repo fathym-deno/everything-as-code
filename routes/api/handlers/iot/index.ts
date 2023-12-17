@@ -1,15 +1,14 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
+import { ensureIoTDevices } from "./helpers.ts";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
-import { EverythingAsCodeIoT } from "../../../../src/eac/modules/iot/EverythingAsCodeIoT.ts";
 import { EaCHandlerRequest } from "../../../../src/api/models/EaCHandlerRequest.ts";
+import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EverythingAsCodeIoT } from "../../../../src/eac/modules/iot/EverythingAsCodeIoT.ts";
+import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
 import { EaCHandlerResponse } from "../../../../src/api/models/EaCHandlerResponse.ts";
 import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
-import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
-import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
-import { ensureIoTDevices } from "./helpers.ts";
 
 export const handler: Handlers = {
   /**
@@ -46,7 +45,7 @@ export const handler: Handlers = {
           Messages: {
             Message: `The iot '${iotLookup}' has been handled.`,
           },
-          Model: current,
+          Model: iot,
         } as EaCHandlerResponse);
       } else {
         return respond({

@@ -5,13 +5,13 @@ import { IotHubClient } from "npm:@azure/arm-iothub";
 import { Registry as IoTRegistry } from "npm:azure-iothub";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerConnectionsRequest } from "../../../../src/api/models/EaCHandlerConnectionsRequest.ts";
-import { EaCHandlerConnectionsResponse } from "../../../../src/api/models/EaCHandlerConnectionsResponse.ts";
-import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
-import { EaCDeviceAsCode } from "../../../../src/eac/modules/iot/EaCDeviceAsCode.ts";
-import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
-import { EverythingAsCodeIoT } from "../../../../src/eac/modules/iot/EverythingAsCodeIoT.ts";
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EverythingAsCodeIoT } from "../../../../src/eac/modules/iot/EverythingAsCodeIoT.ts";
+import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
+import { EaCHandlerConnectionsResponse } from "../../../../src/api/models/EaCHandlerConnectionsResponse.ts";
+import { EaCDeviceAsCode } from "../../../../src/eac/modules/iot/EaCDeviceAsCode.ts";
+import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
+import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
 
 export const handler: Handlers = {
   /**
@@ -59,7 +59,7 @@ async function loadIoTDevicesConnections(
 ): Promise<Record<string, EaCDeviceAsCode>> {
   const cloud = currentEaC.Clouds![iot.CloudLookup!];
 
-  const creds = loadAzureCloudCredentials(cloud);
+  const creds = await loadAzureCloudCredentials(cloud);
 
   const details = cloud.Details as EaCCloudAzureDetails;
 

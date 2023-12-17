@@ -2,10 +2,10 @@
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { loadDeploymentDetails } from "./helpers.ts";
-import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
-import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { EaCHandlerCloudCheckRequest } from "../../../../src/eac/modules/clouds/models/EaCHandlerCloudCheckRequest.ts";
+import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
+import { loadDeploymentDetails } from "./helpers.ts";
 
 export const handler: Handlers = {
   /**

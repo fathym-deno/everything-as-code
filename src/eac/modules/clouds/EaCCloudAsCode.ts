@@ -7,6 +7,4 @@ export type EaCCloudAsCode = {
   LandingZones?: Record<string, EaCLandingZoneAsCode>;
 
   ResourceGroups?: Record<string, EaCCloudResourceGroupAsCode>;
-
-  Type?: "Azure";
 } & EaCDetails<EaCCloudDetails>;

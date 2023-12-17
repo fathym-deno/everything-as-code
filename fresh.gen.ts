@@ -5,63 +5,90 @@
 import * as $0 from "./routes/_404.tsx";
 import * as $1 from "./routes/_app.tsx";
 import * as $2 from "./routes/_middleware.tsx";
-import * as $3 from "./routes/api/[entLookup]/_middleware.ts";
-import * as $4 from "./routes/api/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts";
-import * as $5 from "./routes/api/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
-import * as $6 from "./routes/api/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
-import * as $7 from "./routes/api/[entLookup]/azure/[cloudLookup]/locations/index.ts";
-import * as $8 from "./routes/api/[entLookup]/connections/index.ts";
-import * as $9 from "./routes/api/[entLookup]/index.ts";
-import * as $10 from "./routes/api/[entLookup]/status/[commitId]/index.ts";
-import * as $11 from "./routes/api/[entLookup]/status/current.ts";
-import * as $12 from "./routes/api/[entLookup]/status/index.ts";
-import * as $13 from "./routes/api/[entLookup]/users.ts";
-import * as $14 from "./routes/api/_middleware.ts";
-import * as $15 from "./routes/api/handlers/clouds/check.ts";
-import * as $16 from "./routes/api/handlers/clouds/connections.ts";
-import * as $17 from "./routes/api/handlers/clouds/helpers.ts";
-import * as $18 from "./routes/api/handlers/clouds/index.ts";
-import * as $19 from "./routes/api/handlers/iot/check.ts";
-import * as $20 from "./routes/api/handlers/iot/connections.ts";
-import * as $21 from "./routes/api/handlers/iot/helpers.ts";
-import * as $22 from "./routes/api/handlers/iot/index.ts";
-import * as $23 from "./routes/api/index.ts";
-import * as $24 from "./routes/dashboard/_middleware.tsx";
-import * as $25 from "./routes/dashboard/index.tsx";
-import * as $26 from "./routes/dashboard/jwt.tsx";
-import * as $27 from "./routes/index.tsx";
+import * as $3 from "./routes/api/eac/[entLookup]/_middleware.ts";
+import * as $4 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts";
+import * as $5 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
+import * as $6 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
+import * as $7 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts";
+import * as $8 from "./routes/api/eac/[entLookup]/connections/index.ts";
+import * as $9 from "./routes/api/eac/[entLookup]/index.ts";
+import * as $10 from "./routes/api/eac/[entLookup]/status/[commitId]/index.ts";
+import * as $11 from "./routes/api/eac/[entLookup]/status/current.ts";
+import * as $12 from "./routes/api/eac/[entLookup]/status/index.ts";
+import * as $13 from "./routes/api/eac/[entLookup]/users.ts";
+import * as $14 from "./routes/api/eac/_middleware.ts";
+import * as $15 from "./routes/api/eac/index.ts";
+import * as $16 from "./routes/api/github/webhooks.ts";
+import * as $17 from "./routes/api/handlers/clouds/check.ts";
+import * as $18 from "./routes/api/handlers/clouds/connections.ts";
+import * as $19 from "./routes/api/handlers/clouds/helpers.ts";
+import * as $20 from "./routes/api/handlers/clouds/index.ts";
+import * as $21 from "./routes/api/handlers/github/check.ts";
+import * as $22 from "./routes/api/handlers/github/connections.ts";
+import * as $23 from "./routes/api/handlers/github/helpers.ts";
+import * as $24 from "./routes/api/handlers/github/index.ts";
+import * as $25 from "./routes/api/handlers/iot/check.ts";
+import * as $26 from "./routes/api/handlers/iot/connections.ts";
+import * as $27 from "./routes/api/handlers/iot/helpers.ts";
+import * as $28 from "./routes/api/handlers/iot/index.ts";
+import * as $29 from "./routes/api/handlers/source-connections/check.ts";
+import * as $30 from "./routes/api/handlers/source-connections/connections.ts";
+import * as $31 from "./routes/api/handlers/source-connections/helpers.ts";
+import * as $32 from "./routes/api/handlers/source-connections/index.ts";
+import * as $33 from "./routes/api/handlers/sources/check.ts";
+import * as $34 from "./routes/api/handlers/sources/connections.ts";
+import * as $35 from "./routes/api/handlers/sources/helpers.ts";
+import * as $36 from "./routes/api/handlers/sources/index.ts";
+import * as $37 from "./routes/dashboard/_middleware.tsx";
+import * as $38 from "./routes/dashboard/index.tsx";
+import * as $39 from "./routes/dashboard/jwt.tsx";
+import * as $40 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
     "./routes/_404.tsx": $0,
     "./routes/_app.tsx": $1,
     "./routes/_middleware.tsx": $2,
-    "./routes/api/[entLookup]/_middleware.ts": $3,
-    "./routes/api/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts":
+    "./routes/api/eac/[entLookup]/_middleware.ts": $3,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts":
       $4,
-    "./routes/api/[entLookup]/azure/[cloudLookup]/api-versions/index.ts": $5,
-    "./routes/api/[entLookup]/azure/[cloudLookup]/auth-token/index.ts": $6,
-    "./routes/api/[entLookup]/azure/[cloudLookup]/locations/index.ts": $7,
-    "./routes/api/[entLookup]/connections/index.ts": $8,
-    "./routes/api/[entLookup]/index.ts": $9,
-    "./routes/api/[entLookup]/status/[commitId]/index.ts": $10,
-    "./routes/api/[entLookup]/status/current.ts": $11,
-    "./routes/api/[entLookup]/status/index.ts": $12,
-    "./routes/api/[entLookup]/users.ts": $13,
-    "./routes/api/_middleware.ts": $14,
-    "./routes/api/handlers/clouds/check.ts": $15,
-    "./routes/api/handlers/clouds/connections.ts": $16,
-    "./routes/api/handlers/clouds/helpers.ts": $17,
-    "./routes/api/handlers/clouds/index.ts": $18,
-    "./routes/api/handlers/iot/check.ts": $19,
-    "./routes/api/handlers/iot/connections.ts": $20,
-    "./routes/api/handlers/iot/helpers.ts": $21,
-    "./routes/api/handlers/iot/index.ts": $22,
-    "./routes/api/index.ts": $23,
-    "./routes/dashboard/_middleware.tsx": $24,
-    "./routes/dashboard/index.tsx": $25,
-    "./routes/dashboard/jwt.tsx": $26,
-    "./routes/index.tsx": $27,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts":
+      $5,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts": $6,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts": $7,
+    "./routes/api/eac/[entLookup]/connections/index.ts": $8,
+    "./routes/api/eac/[entLookup]/index.ts": $9,
+    "./routes/api/eac/[entLookup]/status/[commitId]/index.ts": $10,
+    "./routes/api/eac/[entLookup]/status/current.ts": $11,
+    "./routes/api/eac/[entLookup]/status/index.ts": $12,
+    "./routes/api/eac/[entLookup]/users.ts": $13,
+    "./routes/api/eac/_middleware.ts": $14,
+    "./routes/api/eac/index.ts": $15,
+    "./routes/api/github/webhooks.ts": $16,
+    "./routes/api/handlers/clouds/check.ts": $17,
+    "./routes/api/handlers/clouds/connections.ts": $18,
+    "./routes/api/handlers/clouds/helpers.ts": $19,
+    "./routes/api/handlers/clouds/index.ts": $20,
+    "./routes/api/handlers/github/check.ts": $21,
+    "./routes/api/handlers/github/connections.ts": $22,
+    "./routes/api/handlers/github/helpers.ts": $23,
+    "./routes/api/handlers/github/index.ts": $24,
+    "./routes/api/handlers/iot/check.ts": $25,
+    "./routes/api/handlers/iot/connections.ts": $26,
+    "./routes/api/handlers/iot/helpers.ts": $27,
+    "./routes/api/handlers/iot/index.ts": $28,
+    "./routes/api/handlers/source-connections/check.ts": $29,
+    "./routes/api/handlers/source-connections/connections.ts": $30,
+    "./routes/api/handlers/source-connections/helpers.ts": $31,
+    "./routes/api/handlers/source-connections/index.ts": $32,
+    "./routes/api/handlers/sources/check.ts": $33,
+    "./routes/api/handlers/sources/connections.ts": $34,
+    "./routes/api/handlers/sources/helpers.ts": $35,
+    "./routes/api/handlers/sources/index.ts": $36,
+    "./routes/dashboard/_middleware.tsx": $37,
+    "./routes/dashboard/index.tsx": $38,
+    "./routes/dashboard/jwt.tsx": $39,
+    "./routes/index.tsx": $40,
   },
   islands: {},
   baseUrl: import.meta.url,

@@ -50,21 +50,34 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
         },
       });
 
-      return (await result.json()) as
-        | EaCHandlerResponse
-        | EaCHandlerErrorResponse;
+      return {
+        Lookup: diffLookup,
+        Response: (await result.json()) as
+          | EaCHandlerResponse
+          | EaCHandlerErrorResponse,
+      };
     });
 
-    const handledResponses: (EaCHandlerResponse | EaCHandlerErrorResponse)[] =
-      await Promise.all(toExecute);
+    const handledResponses: {
+      Lookup: string;
+      Response: EaCHandlerResponse | EaCHandlerErrorResponse;
+    }[] = await Promise.all(toExecute);
 
     const errors: EaCHandlerErrorResponse[] = [];
 
     const checks: EaCHandlerCheckRequest[] = [];
 
     if (current) {
-      for (const handledResponse of handledResponses) {
+      for (const handled of handledResponses) {
+        const handledResponse = handled.Response;
+
         if (isEaCHandlerResponse(handledResponse)) {
+          if (handled.Lookup !== handledResponse.Lookup) {
+            current[handledResponse.Lookup] = current[handled.Lookup];
+
+            delete current[handled.Lookup];
+          }
+
           current[handledResponse.Lookup] = merge(
             current[handledResponse.Lookup] as object,
             handledResponse.Model as object,
@@ -85,14 +98,14 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
     return {
       Checks: checks,
-      Result: current,
       Errors: errors,
+      Result: current,
     };
   } else {
     return {
       Checks: [],
-      Result: current,
       Errors: [],
+      Result: current,
     };
   }
 }

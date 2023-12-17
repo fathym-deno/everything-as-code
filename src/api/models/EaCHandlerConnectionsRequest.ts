@@ -6,6 +6,8 @@ export type EaCHandlerConnectionsRequest = {
 
   EaC: EverythingAsCode;
 
+  Lookup: string;
+
   Model: EaCMetadataBase;
 };
 

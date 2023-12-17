@@ -1,18 +1,18 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
-import { merge, respond } from "@fathym/common";
-import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
-import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
-import { EaCHandlerRequest } from "../../../../src/api/models/EaCHandlerRequest.ts";
-import { EaCHandlerResponse } from "../../../../src/api/models/EaCHandlerResponse.ts";
-import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
+import { respond } from "@fathym/common";
 import {
   beginEaCDeployments,
   buildCloudDeployments,
   finalizeCloudDetails,
 } from "./helpers.ts";
+import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
+import { EaCHandlerRequest } from "../../../../src/api/models/EaCHandlerRequest.ts";
+import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
 import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
+import { EaCHandlerResponse } from "../../../../src/api/models/EaCHandlerResponse.ts";
+import { EaCHandlerErrorResponse } from "../../../../src/api/models/EaCHandlerErrorResponse.ts";
 
 export const handler: Handlers = {
   /**

@@ -1,13 +1,11 @@
 import { IotHubClient } from "npm:@azure/arm-iothub";
 import { Registry as IoTRegistry } from "npm:azure-iothub";
-import { EaCDeviceAsCode } from "../../../../src/eac/modules/iot/EaCDeviceAsCode.ts";
 import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
-import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
-import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { DeviceCodeCredential } from "npm:@azure/identity";
-import { EaCDeviceDetails } from "../../../../src/eac/modules/iot/EaCDeviceDetails.ts";
-import { EnsureIoTDevicesResponse } from "../../../../src/eac/modules/iot/models/EnsureIoTDevicesResponse.ts";
 import { EaCIoTAsCode } from "../../../../src/eac/modules/iot/EaCIoTAsCode.ts";
+import { EnsureIoTDevicesResponse } from "../../../../src/eac/modules/iot/models/EnsureIoTDevicesResponse.ts";
+import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
+import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
+import { EaCDeviceDetails } from "../../../../src/eac/modules/iot/EaCDeviceDetails.ts";
 
 export async function ensureIoTDevices(
   cloud: EaCCloudAsCode,
@@ -17,10 +15,9 @@ export async function ensureIoTDevices(
   if (iot.Devices) {
     const details = cloud.Details as EaCCloudAzureDetails;
 
-    const iotClient = new IotHubClient(
-      loadAzureCloudCredentials(cloud),
-      details.SubscriptionID,
-    );
+    const creds = await loadAzureCloudCredentials(cloud);
+
+    const iotClient = new IotHubClient(creds, details.SubscriptionID);
 
     const resGroupName = currentIoT.ResourceGroupLookup!;
 

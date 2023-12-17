@@ -1,8 +1,5 @@
 import Handlebars from "@handlebars";
-import {
-  AzureDeploymentManager,
-  AzureDeploymentManagerModels,
-} from "npm:@azure/arm-deploymentmanager";
+import { merge } from "@fathym/common";
 import {
   Deployment,
   DeploymentExtended,
@@ -13,22 +10,20 @@ import {
   AuthenticationProviderOptions,
   Client as GraphClient,
 } from "npm:@microsoft/microsoft-graph-client";
-// import { TokenCredentialAuthenticationProvider } from 'npm:@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
-import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
-import { EaCCloudDeployment } from "../../../../src/api/models/EaCCloudDeployment.ts";
-import { EaCCloudResourceGroupAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupAsCode.ts";
-import { EaCCloudResourceAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceAsCode.ts";
-import { EaCCloudResourceFormatDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceFormatDetails.ts";
-import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
+import { TokenCredential } from "npm:@azure/identity";
 import {
   loadAzureCloudCredentials,
   loadMainAzureCredentials,
 } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
-import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
+import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
+import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
 import { EverythingAsCodeClouds } from "../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
+import { EaCCloudDeployment } from "../../../../src/api/models/EaCCloudDeployment.ts";
+import { EaCCloudResourceGroupAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupAsCode.ts";
 import { EaCCloudResourceGroupDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupDetails.ts";
-import { TokenCredential } from "npm:@azure/identity";
-import { merge } from "@fathym/common";
+import { EaCCloudResourceAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceAsCode.ts";
+import { EaCCloudResourceFormatDetails } from "../../../../src/eac/modules/clouds/EaCCloudResourceFormatDetails.ts";
+import { EaCHandlerCheckRequest } from "../../../../src/api/models/EaCHandlerCheckRequest.ts";
 
 class TokenProvider implements AuthenticationProvider {
   constructor(
@@ -318,10 +313,9 @@ export async function beginEaCDeployments(
 ): Promise<EaCHandlerCheckRequest[]> {
   const details = cloud.Details as EaCCloudAzureDetails;
 
-  const resClient = new ResourceManagementClient(
-    loadAzureCloudCredentials(cloud),
-    details.SubscriptionID,
-  );
+  const creds = await loadAzureCloudCredentials(cloud);
+
+  const resClient = new ResourceManagementClient(creds, details.SubscriptionID);
 
   const beginDeploymentCalls = deployments.map(async (deployment) => {
     const beginDeploy = await resClient.deployments
@@ -353,7 +347,7 @@ export async function loadDeploymentDetails(
 }> {
   const details = cloud.Details as EaCCloudAzureDetails;
 
-  const creds = loadAzureCloudCredentials(cloud);
+  const creds = await loadAzureCloudCredentials(cloud);
 
   const resClient = new ResourceManagementClient(creds, details.SubscriptionID);
 

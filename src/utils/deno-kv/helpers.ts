@@ -6,9 +6,15 @@ export async function hasKvEntry(
   denoKv: Deno.Kv,
   key: Deno.KvKey,
 ): Promise<boolean> {
-  const entry = await denoKv.get(key);
+  try {
+    const entry = await denoKv.get(key);
 
-  return !!entry?.value;
+    return !!entry?.value;
+  } catch (err) {
+    console.error(err);
+
+    return false;
+  }
 }
 
 export async function enqueueAtomic(

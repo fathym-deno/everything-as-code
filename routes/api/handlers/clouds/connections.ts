@@ -5,17 +5,16 @@ import {
   GenericResourceExpanded,
   ResourceManagementClient,
 } from "npm:@azure/arm-resources";
+import { ClientSecretCredential } from "npm:@azure/identity";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerConnectionsRequest } from "../../../../src/api/models/EaCHandlerConnectionsRequest.ts";
 import { EaCCloudAsCode } from "../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
 import { EaCHandlerConnectionsResponse } from "../../../../src/api/models/EaCHandlerConnectionsResponse.ts";
 import { EaCCloudResourceGroupAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceGroupAsCode.ts";
-import { EaCCloudResourceAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceAsCode.ts";
 import { loadAzureCloudCredentials } from "../../../../src/utils/eac/loadAzureCloudCredentials.ts";
 import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { ClientSecretCredential } from "npm:@azure/identity";
 import { loadResoureTypeApiVersions } from "../../../../src/services/azure/loadResoureTypeApiVersions.ts";
-import { LeftHandSideExpression } from "https://deno.land/x/ts_morph@17.0.1/ts_morph.js";
+import { EaCCloudResourceAsCode } from "../../../../src/eac/modules/clouds/EaCCloudResourceAsCode.ts";
 
 export const handler: Handlers = {
   /**
@@ -56,7 +55,7 @@ async function loadCloudResourceGroupsConnections(
   resGroups: Record<string, EaCCloudResourceGroupAsCode>,
   resGroupLookups: string[],
 ): Promise<Record<string, EaCCloudResourceGroupAsCode>> {
-  const creds = loadAzureCloudCredentials(cloud);
+  const creds = await loadAzureCloudCredentials(cloud);
 
   const details = cloud.Details as EaCCloudAzureDetails;
 

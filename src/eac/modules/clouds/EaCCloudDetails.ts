@@ -1,3 +1,5 @@
 import { EaCVertexDetails } from "../../EaCVertexDetails.ts";
 
-export type EaCCloudDetails = EaCVertexDetails;
+export type EaCCloudDetails = {
+  Type: "Azure";
+} & EaCVertexDetails;

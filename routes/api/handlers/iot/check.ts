@@ -2,8 +2,8 @@
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
-import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
 import { EaCHandlerIoTCheckRequest } from "../../../../src/eac/modules/iot/models/EaCHandlerIoTCheckRequest.ts";
+import { EaCHandlerCheckResponse } from "../../../../src/api/models/EaCHandlerCheckResponse.ts";
 
 export const handler: Handlers = {
   /**
