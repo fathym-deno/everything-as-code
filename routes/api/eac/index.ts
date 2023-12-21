@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { Status } from "$std/http/http_status.ts";
 import { HandlerContext, Handlers } from "$fresh/server.ts";
-import { merge, respond } from "@fathym/common";
+import { respond } from "@fathym/common";
 import { EaCAPIState } from "../../../src/api/EaCAPIState.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
 import { denoKv } from "../../../configs/deno-kv.config.ts";
@@ -11,6 +11,7 @@ import { eacExists } from "../../../src/utils/eac/helpers.ts";
 import { EaCCommitRequest } from "../../../src/api/models/EaCCommitRequest.ts";
 import { enqueueAtomic } from "../../../src/utils/deno-kv/helpers.ts";
 import { EaCCommitResponse } from "../../../src/api/models/EaCCommitResponse.ts";
+import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 
 export const handler: Handlers = {
   /**
@@ -60,9 +61,11 @@ export const handler: Handlers = {
       url.searchParams.get("processingSeconds")!,
     );
 
+    const eac: EverythingAsCode = await req.json();
+
     const createStatus: EaCStatus = {
       ID: crypto.randomUUID(),
-      EnterpriseLookup: crypto.randomUUID(),
+      EnterpriseLookup: eac.EnterpriseLookup || crypto.randomUUID(),
       Messages: { Queued: "Creating new EaC container" },
       Processing: EaCStatusProcessingTypes.QUEUED,
       StartTime: new Date(Date.now()),
@@ -76,8 +79,9 @@ export const handler: Handlers = {
     const commitReq: EaCCommitRequest = {
       CommitID: createStatus.ID,
       EaC: {
-        ...((await req.json()) || {}),
+        ...(eac || {}),
         EnterpriseLookup: createStatus.EnterpriseLookup,
+        ParentEnterpriseLookup: ctx.state.EnterpriseLookup,
       },
       JWT: ctx.state.JWT!,
       ProcessingSeconds: processingSeconds,

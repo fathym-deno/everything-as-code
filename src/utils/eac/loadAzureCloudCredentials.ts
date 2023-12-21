@@ -1,8 +1,13 @@
 import { denoKv } from "../../../configs/deno-kv.config.ts";
-import { EaCCloudAsCode } from "../../eac/modules/clouds/EaCCloudAsCode.ts";
+import {
+  EaCCloudAsCode,
+  isEaCCloudAsCode,
+} from "../../eac/modules/clouds/EaCCloudAsCode.ts";
 import { EaCCloudAzureDetails } from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
 import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { ClientSecretCredential } from "npm:@azure/identity";
+import { deconstructCloudDetailsSecrets } from "./helpers.ts";
+import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 
 export async function loadAzureCloudCredentials(
   entLookup: string,
@@ -19,7 +24,15 @@ export async function loadAzureCloudCredentials(
 ): Promise<ClientSecretCredential>;
 
 export async function loadAzureCloudCredentials(
-  cloudEaCEntLookup: EverythingAsCodeClouds | EaCCloudAsCode | string,
+  cloudDetails: EaCCloudDetails,
+): Promise<ClientSecretCredential>;
+
+export async function loadAzureCloudCredentials(
+  cloudDetailsEaCEntLookup:
+    | EverythingAsCodeClouds
+    | EaCCloudAsCode
+    | EaCCloudDetails
+    | string,
   cloudLookup?: string,
 ): Promise<ClientSecretCredential> {
   let cloud: EaCCloudAsCode;
@@ -27,23 +40,29 @@ export async function loadAzureCloudCredentials(
   if (cloudLookup) {
     let eac: EverythingAsCodeClouds;
 
-    if (typeof cloudEaCEntLookup === "string") {
+    if (typeof cloudDetailsEaCEntLookup === "string") {
       const existingEaC = await denoKv.get<EverythingAsCodeClouds>([
         "EaC",
-        cloudEaCEntLookup,
+        cloudDetailsEaCEntLookup,
       ]);
 
       eac = existingEaC.value!;
     } else {
-      eac = cloudEaCEntLookup as EverythingAsCodeClouds;
+      eac = cloudDetailsEaCEntLookup as EverythingAsCodeClouds;
     }
 
     cloud = eac.Clouds![cloudLookup];
+  } else if (isEaCCloudAsCode(cloudDetailsEaCEntLookup)) {
+    cloud = cloudDetailsEaCEntLookup as EaCCloudAsCode;
   } else {
-    cloud = cloudEaCEntLookup as EaCCloudAsCode;
+    cloud = {
+      Details: cloudDetailsEaCEntLookup as EaCCloudDetails,
+    };
   }
 
-  const details = cloud.Details as EaCCloudAzureDetails;
+  const details = (await deconstructCloudDetailsSecrets(
+    cloud.Details,
+  )) as EaCCloudAzureDetails;
 
   return new ClientSecretCredential(
     details.TenantID,

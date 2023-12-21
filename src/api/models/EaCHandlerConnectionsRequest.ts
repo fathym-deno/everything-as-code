@@ -9,6 +9,8 @@ export type EaCHandlerConnectionsRequest = {
   Lookup: string;
 
   Model: EaCMetadataBase;
+
+  ParentEaC?: EverythingAsCode;
 };
 
 export function isEaCHandlerConnectionsRequest(

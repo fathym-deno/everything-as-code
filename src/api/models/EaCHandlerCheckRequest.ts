@@ -7,6 +7,8 @@ export type EaCHandlerCheckRequest =
 
     EaC?: EverythingAsCode;
 
+    ParentEaC?: EverythingAsCode;
+
     Type?: string;
   }
   & EaCMetadataBase;

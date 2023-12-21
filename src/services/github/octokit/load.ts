@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
 import { App, Octokit } from "@octokit";
 import { OctokitOptions } from "@octokit/core/types";
 import { createOAuthUserAuth } from "@octokit/auth-oauth-user";
@@ -79,9 +78,7 @@ export async function loadOctokit(
 
     detailsEaCToken = sourceDetailsGitHubApp!.Details as EaCGitHubAppDetails;
   } else if (isEaCGitHubAppDetails(detailsEaCToken)) {
-    secretClientLoader = loadMainSecretClient(
-      Deno.env.get("AZURE_KEY_VAULT_NAME")!,
-    );
+    secretClientLoader = loadMainSecretClient();
 
     sourceDetails = sourceDetailsGitHubApp as EaCSourceConnectionDetails;
   }
@@ -98,13 +95,21 @@ export async function loadOctokit(
   } else if (isEaCGitHubAppDetails(detailsEaCToken)) {
     octokitConfig.authStrategy = createAppAuth;
 
-    const secretClient = await secretClientLoader!;
+    let privateKey = detailsEaCToken.PrivateKey;
 
-    const privateKey = await secretClient.getSecret(detailsEaCToken.PrivateKey);
+    if (privateKey.startsWith("$secret:")) {
+      const secretClient = await secretClientLoader!;
+
+      const privateKeySecret = await secretClient.getSecret(
+        privateKey.replace("$secret:", ""),
+      );
+
+      privateKey = privateKeySecret.value!;
+    }
 
     octokitConfig.auth = {
       appId: detailsEaCToken.AppID,
-      privateKey: privateKey.value!,
+      privateKey: privateKey,
       clientId: detailsEaCToken.ClientID,
       clientSecret: detailsEaCToken.ClientSecret,
     };

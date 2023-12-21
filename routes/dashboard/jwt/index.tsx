@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { jwtConfig } from "../../configs/jwt.config.ts";
-import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
+import { jwtConfig } from "../../../configs/jwt.config.ts";
+import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
 
 interface JWTPageData {
   jwt?: string;
@@ -8,8 +8,8 @@ interface JWTPageData {
 
 export const handler: Handlers<JWTPageData | null, EverythingAsCodeState> = {
   async GET(_req, ctx) {
-    //  TODO: Get username from oauth provider
     const jwt = await jwtConfig.Create({
+      EnterpriseLookup: ctx.state.EaC!.EnterpriseLookup,
       Username: ctx.state.Username,
     });
 

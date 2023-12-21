@@ -13,6 +13,7 @@ export async function configureBranchProtection(
   requiredStatusChecks: string[],
   restrictionTeams: string[],
   lockBranch: boolean,
+  username: string,
 ): Promise<void> {
   await octokit.rest.repos.updateBranchProtection({
     owner: owner,
@@ -32,7 +33,7 @@ export async function configureBranchProtection(
       require_code_owner_reviews: requireReviews,
       required_approving_review_count: requireReviews ? 1 : 0,
     },
-    restrictions: {
+    restrictions: owner === username ? null : {
       teams: restrictionTeams,
       users: [],
     },
@@ -79,6 +80,13 @@ export async function configureRepository(
     });
   }
 
+  const requiredStatusChecks: string[] = [
+    "continuous-integration",
+    "code-review",
+  ];
+
+  const restrictionTeams: string[] = ["code-owners"];
+
   await configureBranchProtection(
     octokit,
     sourceDetails.Organization!,
@@ -86,9 +94,10 @@ export async function configureRepository(
     integrationBranchName,
     false,
     true,
-    ["continuous-integration", "code-review"],
-    ["code-owners"],
+    requiredStatusChecks,
+    restrictionTeams,
     true,
+    sourceDetails.Username!,
   );
 
   await configureBranchProtection(
@@ -98,9 +107,10 @@ export async function configureRepository(
     masterBranchName,
     true,
     false,
-    ["continuous-integration", "code-review"],
-    ["code-owners"],
+    requiredStatusChecks,
+    restrictionTeams,
     false,
+    sourceDetails.Username!,
   );
 
   repo = (await tryGetRepository(
@@ -137,7 +147,7 @@ export async function getOrCreateRepository(
     details.Repository!,
   );
 
-  if (repo === null) {
+  if (!repo) {
     const newRepo: NewRepository = {
       name: details.Repository!,
       delete_branch_on_merge: true,

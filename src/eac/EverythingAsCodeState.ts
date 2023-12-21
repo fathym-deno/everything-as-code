@@ -1,7 +1,11 @@
-import { EverythingAsCode } from "./EverythingAsCode.ts";
+import { FathymEaC } from "../FathymEaC.ts";
 
 export type EverythingAsCodeState = {
-  EaC?: EverythingAsCode;
+  CloudLookup?: string;
+
+  EaC?: FathymEaC;
+
+  ResourceGroupLookup?: string;
 
   Username?: string;
 } & Record<string, unknown>;

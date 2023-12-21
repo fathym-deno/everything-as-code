@@ -7,6 +7,10 @@ export type ProtectedBranch = components["schemas"]["protected-branch"];
 
 export type Branch = ShortBranch; // & ProtectedBranch;
 
+export type Installation = components["schemas"]["installation"];
+
+export type Organization = components["schemas"]["organization"];
+
 export type RepositoryCreateInOrgParameters =
   RestEndpointMethodTypes["repos"]["createInOrg"]["parameters"];
 
@@ -18,3 +22,5 @@ export type NewRepository =
   | RepositoryCreateForAuthenticatedUserParameters;
 
 export type Repository = components["schemas"]["repository"];
+
+export type SimpleUser = components["schemas"]["simple-user"];
