@@ -3,7 +3,7 @@ import { dirname } from "$std/path/mod.ts";
 
 const denoKvPath = Deno.env.get("DENO_KV_PATH") || undefined;
 
-if (denoKvPath && !existsSync(denoKvPath)) {
+if (denoKvPath && !denoKvPath.startsWith("https") && !existsSync(denoKvPath)) {
   const path = dirname(denoKvPath);
 
   if (path && !existsSync(path)) {

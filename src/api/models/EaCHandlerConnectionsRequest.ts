@@ -6,7 +6,11 @@ export type EaCHandlerConnectionsRequest = {
 
   EaC: EverythingAsCode;
 
+  Lookup: string;
+
   Model: EaCMetadataBase;
+
+  ParentEaC?: EverythingAsCode;
 };
 
 export function isEaCHandlerConnectionsRequest(

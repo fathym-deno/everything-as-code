@@ -7,6 +7,8 @@ export type EaCHandlerRequest = {
   Lookup: string;
 
   Model: EaCMetadataBase;
+
+  ParentEaC?: EverythingAsCode;
 };
 
 export function isEaCHandlerRequest(req: unknown): req is EaCHandlerRequest {

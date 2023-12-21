@@ -1,40 +1,80 @@
-import { EaCCloudAsCode } from "../../eac/modules/clouds/EaCCloudAsCode.ts";
+import { denoKv } from "../../../configs/deno-kv.config.ts";
+import {
+  EaCCloudAsCode,
+  isEaCCloudAsCode,
+} from "../../eac/modules/clouds/EaCCloudAsCode.ts";
 import { EaCCloudAzureDetails } from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
 import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { ClientSecretCredential } from "npm:@azure/identity";
+import { deconstructCloudDetailsSecrets } from "./helpers.ts";
+import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 
-export function loadAzureCloudCredentials(
+export async function loadAzureCloudCredentials(
+  entLookup: string,
+  cloudLookup: string,
+): Promise<ClientSecretCredential>;
+
+export async function loadAzureCloudCredentials(
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
-): ClientSecretCredential;
+): Promise<ClientSecretCredential>;
 
-export function loadAzureCloudCredentials(
+export async function loadAzureCloudCredentials(
   cloud: EaCCloudAsCode,
-): ClientSecretCredential;
+): Promise<ClientSecretCredential>;
 
-export function loadAzureCloudCredentials(
-  cloud: EverythingAsCodeClouds | EaCCloudAsCode,
+export async function loadAzureCloudCredentials(
+  cloudDetails: EaCCloudDetails,
+): Promise<ClientSecretCredential>;
+
+export async function loadAzureCloudCredentials(
+  cloudDetailsEaCEntLookup:
+    | EverythingAsCodeClouds
+    | EaCCloudAsCode
+    | EaCCloudDetails
+    | string,
   cloudLookup?: string,
-): ClientSecretCredential | undefined {
+): Promise<ClientSecretCredential> {
+  let cloud: EaCCloudAsCode;
+
   if (cloudLookup) {
-    cloud = (cloud as EverythingAsCodeClouds).Clouds![cloudLookup];
+    let eac: EverythingAsCodeClouds;
+
+    if (typeof cloudDetailsEaCEntLookup === "string") {
+      const existingEaC = await denoKv.get<EverythingAsCodeClouds>([
+        "EaC",
+        cloudDetailsEaCEntLookup,
+      ]);
+
+      eac = existingEaC.value!;
+    } else {
+      eac = cloudDetailsEaCEntLookup as EverythingAsCodeClouds;
+    }
+
+    cloud = eac.Clouds![cloudLookup];
+  } else if (isEaCCloudAsCode(cloudDetailsEaCEntLookup)) {
+    cloud = cloudDetailsEaCEntLookup as EaCCloudAsCode;
+  } else {
+    cloud = {
+      Details: cloudDetailsEaCEntLookup as EaCCloudDetails,
+    };
   }
 
-  const details = cloud.Details as EaCCloudAzureDetails;
+  const details = (await deconstructCloudDetailsSecrets(
+    cloud.Details,
+  )) as EaCCloudAzureDetails;
 
-  return details
-    ? new ClientSecretCredential(
-      details.TenantID,
-      details.ApplicationID,
-      details.AuthKey,
-    )
-    : undefined;
+  return new ClientSecretCredential(
+    details.TenantID,
+    details.ApplicationID,
+    details.AuthKey,
+  );
 }
 
 export function loadMainAzureCredentials(): ClientSecretCredential {
   return new ClientSecretCredential(
-    "6dcbebd0-f8d0-4a9d-89e5-5873e8146b0a",
-    "0d757bb5-3dbb-4f8f-8c89-12e8714aa7c5",
-    "Kci8Q~uvZHTb~XFRdly2VL1XSZq1rNgmS3PL~aE4",
+    Deno.env.get("AZURE_TENANT_ID")!,
+    Deno.env.get("AZURE_CLIENT_ID")!,
+    Deno.env.get("AZURE_CLIENT_SECRET")!,
   );
 }

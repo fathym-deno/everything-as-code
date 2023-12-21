@@ -1,4 +1,6 @@
 import { merge } from "@fathym/common";
+import { SecretClient } from "npm:@azure/keyvault-secrets";
+import { paramCase } from "$case";
 import { EaCHandlers } from "../../api/EaCHandlers.ts";
 import { EaCHandlerCheckRequest } from "../../api/models/EaCHandlerCheckRequest.ts";
 import { EaCHandlerCheckResponse } from "../../api/models/EaCHandlerCheckResponse.ts";
@@ -19,6 +21,13 @@ import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
 import { EaCHandler } from "../../api/EaCHandler.ts";
 import { EaCHandlerConnectionsRequest } from "../../api/models/EaCHandlerConnectionsRequest.ts";
 import { EaCHandlerConnectionsResponse } from "../../api/models/EaCHandlerConnectionsResponse.ts";
+import { denoKv } from "../../../configs/deno-kv.config.ts";
+import {
+  EaCCloudAzureDetails,
+  isEaCCloudAzureDetails,
+} from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
+import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
+import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 
 export async function callEaCHandler<T extends EaCMetadataBase>(
   jwt: string,
@@ -36,6 +45,13 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
   const current = (currentEaC[key] || {}) as T;
 
+  const parentEaC = currentEaC?.ParentEnterpriseLookup
+    ? await denoKv.get<EverythingAsCode>([
+      "EaC",
+      currentEaC.ParentEnterpriseLookup,
+    ])
+    : undefined;
+
   if (handler != null) {
     const toExecute = Object.keys(diff || {}).map(async (diffLookup) => {
       const result = await fetch(handler.APIPath, {
@@ -44,27 +60,41 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
           EaC: currentEaC,
           Lookup: diffLookup,
           Model: diff![diffLookup],
+          ParentEaC: parentEaC?.value!,
         } as EaCHandlerRequest),
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       });
 
-      return (await result.json()) as
-        | EaCHandlerResponse
-        | EaCHandlerErrorResponse;
+      return {
+        Lookup: diffLookup,
+        Response: (await result.json()) as
+          | EaCHandlerResponse
+          | EaCHandlerErrorResponse,
+      };
     });
 
-    const handledResponses: (EaCHandlerResponse | EaCHandlerErrorResponse)[] =
-      await Promise.all(toExecute);
+    const handledResponses: {
+      Lookup: string;
+      Response: EaCHandlerResponse | EaCHandlerErrorResponse;
+    }[] = await Promise.all(toExecute);
 
     const errors: EaCHandlerErrorResponse[] = [];
 
     const checks: EaCHandlerCheckRequest[] = [];
 
     if (current) {
-      for (const handledResponse of handledResponses) {
+      for (const handled of handledResponses) {
+        const handledResponse = handled.Response;
+
         if (isEaCHandlerResponse(handledResponse)) {
+          if (handled.Lookup !== handledResponse.Lookup) {
+            current[handledResponse.Lookup] = current[handled.Lookup];
+
+            delete current[handled.Lookup];
+          }
+
           current[handledResponse.Lookup] = merge(
             current[handledResponse.Lookup] as object,
             handledResponse.Model as object,
@@ -85,14 +115,14 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
     return {
       Checks: checks,
-      Result: current,
       Errors: errors,
+      Result: current,
     };
   } else {
     return {
       Checks: [],
-      Result: current,
       Errors: [],
+      Result: current,
     };
   }
 }
@@ -100,13 +130,22 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 export async function callEaCHandlerCheck(
   handlers: EaCHandlers,
   jwt: string,
-  check: EaCHandlerCheckRequest,
+  req: EaCHandlerCheckRequest,
 ): Promise<EaCHandlerCheckResponse> {
-  const handler = handlers[check.Type!];
+  const handler = handlers[req.Type!];
+
+  const parentEaC = req.EaC?.ParentEnterpriseLookup
+    ? await denoKv.get<EverythingAsCode>([
+      "EaC",
+      req.EaC.ParentEnterpriseLookup,
+    ])
+    : undefined;
+
+  req.ParentEaC = parentEaC?.value!;
 
   const result = await fetch(`${handler.APIPath}/check`, {
     method: "post",
-    body: JSON.stringify(check),
+    body: JSON.stringify(req),
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
@@ -120,11 +159,20 @@ export async function callEaCHandlerCheck(
 export async function callEaCHandlerConnections(
   handler: EaCHandler,
   jwt: string,
-  check: EaCHandlerConnectionsRequest,
+  req: EaCHandlerConnectionsRequest,
 ): Promise<EaCHandlerConnectionsResponse> {
+  const parentEaC = req.EaC?.ParentEnterpriseLookup
+    ? await denoKv.get<EverythingAsCode>([
+      "EaC",
+      req.EaC.ParentEnterpriseLookup,
+    ])
+    : undefined;
+
+  req.ParentEaC = parentEaC?.value!;
+
   const result = await fetch(`${handler.APIPath}/connections`, {
     method: "post",
-    body: JSON.stringify(check),
+    body: JSON.stringify(req),
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
@@ -133,6 +181,29 @@ export async function callEaCHandlerConnections(
   const checkResp = (await result.json()) as EaCHandlerConnectionsResponse;
 
   return checkResp;
+}
+
+export async function deconstructCloudDetailsSecrets(
+  details: EaCCloudDetails | undefined,
+): Promise<EaCCloudDetails | undefined> {
+  let cloudDetails = details;
+
+  if (details) {
+    const secretClient = await loadMainSecretClient();
+
+    if (isEaCCloudAzureDetails(cloudDetails)) {
+      const secreted = await eacGetSecrets(secretClient, {
+        AuthKey: cloudDetails.AuthKey,
+      });
+
+      cloudDetails = {
+        ...details,
+        ...secreted,
+      } as EaCCloudAzureDetails;
+    }
+  }
+
+  return cloudDetails;
 }
 
 export async function eacExists(
@@ -150,6 +221,79 @@ export async function eacExists(
   }
 
   return exists;
+}
+
+export async function eacGetSecrets(
+  secretClient: SecretClient,
+  toSecrets: Record<string, string>,
+): Promise<Record<string, string>> {
+  const secreted: Record<string, string> = {};
+
+  const secrets = Object.keys(toSecrets || {});
+
+  const calls = secrets.map((secret) => {
+    return new Promise((resolve, reject) => {
+      let toSecret = toSecrets[secret];
+
+      if (toSecret && toSecret.startsWith("$secret:")) {
+        try {
+          const secretName = toSecret.replace("$secret:", "");
+
+          secretClient.getSecret(secretName).then((response) => {
+            secreted[secret] = response.value!;
+
+            resolve(secreted[secret]);
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        resolve(toSecret);
+      }
+    });
+  });
+
+  await Promise.all(calls);
+
+  return secreted;
+}
+
+export async function eacSetSecrets(
+  secretClient: SecretClient,
+  secretRoot: string,
+  toSecrets: Record<string, string | undefined>,
+): Promise<Record<string, string>> {
+  const secreted: Record<string, string> = {};
+
+  const secrets = Object.keys(toSecrets || {});
+
+  const calls = secrets.map((secret) => {
+    return new Promise((resolve, reject) => {
+      const secretName = paramCase(`${secretRoot}-${secret}`);
+
+      let toSecret = toSecrets[secret];
+
+      if (toSecret && !toSecret.startsWith("$secret:")) {
+        try {
+          secretClient
+            .setSecret(secretName, toSecret as string)
+            .then((response) => {
+              secreted[secret] = `$secret:${secretName}`;
+
+              resolve(secreted[secret]);
+            });
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        resolve(toSecret);
+      }
+    });
+  });
+
+  await Promise.all(calls);
+
+  return secreted;
 }
 
 export async function invalidateProcessing(

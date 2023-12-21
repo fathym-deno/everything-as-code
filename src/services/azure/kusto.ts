@@ -61,7 +61,7 @@ export async function loadKustoClient(
 
       const eac = await denoKv.get<EverythingAsCodeClouds>(["EaC", entLookup]);
 
-      creds = loadAzureCloudCredentials(eac.value!, cloudLookup);
+      creds = await loadAzureCloudCredentials(eac.value!, cloudLookup);
 
       const cloud = eac.value!.Clouds![cloudLookup];
 
