@@ -48,13 +48,31 @@ export async function finalizeCloudDetails(
     const details = cloud.Details as EaCCloudAzureDetails;
 
     // const creds = loadAzureCloudCredentials(cloud);
-    const creds = loadMainAzureCredentials();
+    // const creds = loadMainAzureCredentials();
 
     const graphClient = GraphClient.initWithMiddleware({
-      authProvider: new TokenProvider(creds, {
-        scopes: [`https://graph.microsoft.com/.default`], //"Application.Read.All"],
-      }),
+      authProvider: new TokenProvider(
+        {
+          getToken: () => {
+            return cloud.Token;
+          },
+        } as TokenCredential,
+        {
+          scopes: [`https://graph.microsoft.com/.default`], //"Application.Read.All"],
+        },
+      ),
     });
+
+    if (
+      cloud.Token &&
+      details.SubscriptionID &&
+      details.TenantID &&
+      !details.ApplicationID &&
+      !details.AuthKey
+    ) {
+      // TODO:  Create RBAC service principal
+      // TODO: Set cloud.Details.* values to RBAC svc principal
+    }
 
     // const client = new ApplicationClient(creds, details.SubscriptionID);
 
@@ -66,6 +84,8 @@ export async function finalizeCloudDetails(
 
     cloud.Details.ID = svcPrinc.value[0].id;
   }
+
+  delete cloud.Token;
 }
 
 export async function buildCloudDeployments(

@@ -5,6 +5,8 @@ import { gitHubOAuth } from "../../src/services/github.ts";
 import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";
 import { UserGitHubConnection } from "../../src/github/UserGitHubConnection.ts";
+import { cookieSession } from "$fresh/session";
+import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 
 async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
   const url = new URL(req.url);
@@ -48,7 +50,7 @@ async function currentEaC(
     "EaC",
   ]);
 
-  let eac: EverythingAsCodeState | undefined = undefined;
+  let eac: EverythingAsCode | undefined = undefined;
 
   if (currentEaC.value) {
     const eacSvc = await loadEaCSvc(currentEaC.value, ctx.state.Username!);
@@ -81,7 +83,7 @@ async function currentState(
       state.CloudLookup = clouds[0];
 
       const resGroups =
-        ctx.state.EaC!.Clouds![state.CloudLookup].ResourceGroups || {};
+        ctx.state.EaC.Clouds![state.CloudLookup].ResourceGroups || {};
 
       const resGroupLookups = Object.keys(resGroups);
 
@@ -112,4 +114,13 @@ async function currentState(
   return await ctx.next();
 }
 
-export const handler = [loggedInCheck, currentEaC, currentState];
+const session = cookieSession();
+
+function userSession(
+  req: Request,
+  ctx: MiddlewareHandlerContext<EverythingAsCodeState>,
+) {
+  return session(req, ctx);
+}
+
+export const handler = [loggedInCheck, currentEaC, currentState, userSession];

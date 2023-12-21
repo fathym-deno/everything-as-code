@@ -1,11 +1,15 @@
+import { WithSession } from "$fresh/session";
 import { FathymEaC } from "../FathymEaC.ts";
 
-export type EverythingAsCodeState = {
-  CloudLookup?: string;
+export type EverythingAsCodeState =
+  & {
+    CloudLookup?: string;
 
-  EaC?: FathymEaC;
+    EaC?: FathymEaC;
 
-  ResourceGroupLookup?: string;
+    ResourceGroupLookup?: string;
 
-  Username?: string;
-} & Record<string, unknown>;
+    Username?: string;
+  }
+  & WithSession
+  & Record<string, unknown>;
