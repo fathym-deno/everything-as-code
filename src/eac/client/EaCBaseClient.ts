@@ -21,5 +21,22 @@ export class EaCBaseClient {
       ...(headers || {}),
     };
   }
+
+  protected async json<T extends unknown>(
+    response: Response,
+    defaultResp: T = {} as T,
+  ): Promise<T> {
+    const text = await response.text();
+
+    try {
+      return JSON.parse(text) as T;
+    } catch (err) {
+      console.log(text);
+
+      console.error(err);
+
+      return defaultResp;
+    }
+  }
   //#endregion
 }
