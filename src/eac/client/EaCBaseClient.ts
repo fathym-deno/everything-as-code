@@ -35,7 +35,7 @@ export class EaCBaseClient {
 
       console.error(err);
 
-      return defaultResp;
+      throw new Error(text);
     }
   }
   //#endregion
