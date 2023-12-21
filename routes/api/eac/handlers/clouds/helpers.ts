@@ -65,6 +65,16 @@ export async function finalizeCloudDetails(
 
     if (
       cloud.Token &&
+      !details.SubscriptionID &&
+      !details.TenantID
+    ) {
+      // TODO: Create Subsction
+      // TODO: Set cloud.Details.SubscriptionID values to cloud
+      // TODO: Set cloud.Details.TenantID values to cloud
+    }
+
+    if (
+      cloud.Token &&
       details.SubscriptionID &&
       details.TenantID &&
       !details.ApplicationID &&
