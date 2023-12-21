@@ -32,7 +32,6 @@ export class EaCBaseClient {
       return JSON.parse(text) as T;
     } catch (err) {
       console.log(text);
-
       console.error(err);
 
       throw new Error(text);
