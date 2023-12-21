@@ -40,13 +40,14 @@ import * as $34 from "./routes/api/eac/handlers/sources/index.ts";
 import * as $35 from "./routes/api/eac/index.ts";
 import * as $36 from "./routes/api/github/webhooks.ts";
 import * as $37 from "./routes/dashboard/_middleware.tsx";
-import * as $38 from "./routes/dashboard/clouds/azure.tsx";
-import * as $39 from "./routes/dashboard/clouds/calz.tsx";
-import * as $40 from "./routes/dashboard/enterprise.tsx";
-import * as $41 from "./routes/dashboard/github-app/index.tsx";
-import * as $42 from "./routes/dashboard/index.tsx";
-import * as $43 from "./routes/dashboard/jwt/index.tsx";
-import * as $44 from "./routes/index.tsx";
+import * as $38 from "./routes/dashboard/clouds/azure/index.tsx";
+import * as $39 from "./routes/dashboard/clouds/azure/new.tsx";
+import * as $40 from "./routes/dashboard/clouds/calz.tsx";
+import * as $41 from "./routes/dashboard/enterprise.tsx";
+import * as $42 from "./routes/dashboard/github-app/index.tsx";
+import * as $43 from "./routes/dashboard/index.tsx";
+import * as $44 from "./routes/dashboard/jwt/index.tsx";
+import * as $45 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
@@ -90,13 +91,14 @@ const manifest = {
     "./routes/api/eac/index.ts": $35,
     "./routes/api/github/webhooks.ts": $36,
     "./routes/dashboard/_middleware.tsx": $37,
-    "./routes/dashboard/clouds/azure.tsx": $38,
-    "./routes/dashboard/clouds/calz.tsx": $39,
-    "./routes/dashboard/enterprise.tsx": $40,
-    "./routes/dashboard/github-app/index.tsx": $41,
-    "./routes/dashboard/index.tsx": $42,
-    "./routes/dashboard/jwt/index.tsx": $43,
-    "./routes/index.tsx": $44,
+    "./routes/dashboard/clouds/azure/index.tsx": $38,
+    "./routes/dashboard/clouds/azure/new.tsx": $39,
+    "./routes/dashboard/clouds/calz.tsx": $40,
+    "./routes/dashboard/enterprise.tsx": $41,
+    "./routes/dashboard/github-app/index.tsx": $42,
+    "./routes/dashboard/index.tsx": $43,
+    "./routes/dashboard/jwt/index.tsx": $44,
+    "./routes/index.tsx": $45,
   },
   islands: {},
   baseUrl: import.meta.url,

@@ -1,11 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { CloudConnectForm } from "@fathym/atomic";
-import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
-import { FathymEaC } from "../../../src/FathymEaC.ts";
-import { EaCCloudAzureDetails } from "../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { loadEaCSvc } from "../../../configs/eac.ts";
-import { waitForStatus } from "../../../src/utils/eac/waitForStatus.ts";
-import { EaCStatusProcessingTypes } from "../../../src/api/models/EaCStatusProcessingTypes.ts";
+import { EverythingAsCodeState } from "../../../../src/eac/EverythingAsCodeState.ts";
+import { FathymEaC } from "../../../../src/FathymEaC.ts";
+import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
+import { loadEaCSvc } from "../../../../configs/eac.ts";
+import { waitForStatus } from "../../../../src/utils/eac/waitForStatus.ts";
+import { EaCStatusProcessingTypes } from "../../../../src/api/models/EaCStatusProcessingTypes.ts";
 import { redirectRequest } from "@fathym/common";
 
 interface AzurePageData {}
