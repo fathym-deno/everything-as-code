@@ -23,7 +23,7 @@ export class EaCAzureServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async CloudAuthToken(
@@ -43,7 +43,7 @@ export class EaCAzureServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response, "");
   }
 
   public async CloudLocations(
@@ -62,7 +62,7 @@ export class EaCAzureServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
   //#endregion
 

@@ -31,7 +31,7 @@ export class EaCExplorerServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
   //#endregion
 

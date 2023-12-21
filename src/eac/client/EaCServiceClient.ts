@@ -26,16 +26,12 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
-  public async Connections<T extends EverythingAsCode>(
-    eac: T,
-  ): Promise<T> {
+  public async Connections<T extends EverythingAsCode>(eac: T): Promise<T> {
     const response = await fetch(
-      this.loadClientUrl(
-        `${eac.EnterpriseLookup}/connections`,
-      ),
+      this.loadClientUrl(`${eac.EnterpriseLookup}/connections`),
       {
         method: "POST",
         headers: this.loadHeaders(),
@@ -43,7 +39,7 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async Create<T extends EverythingAsCode>(
@@ -59,7 +55,7 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async CurrentStatus(entLookup: string): Promise<EaCStatus> {
@@ -70,7 +66,7 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async Delete(
@@ -85,7 +81,7 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async Get<T extends EverythingAsCode>(entLookup: string): Promise<T> {
@@ -93,7 +89,7 @@ export class EaCServiceClient extends EaCBaseClient {
       headers: this.loadHeaders(),
     });
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async InviteUser(
@@ -106,7 +102,7 @@ export class EaCServiceClient extends EaCBaseClient {
       body: JSON.stringify(userEaC),
     });
 
-    return await response.json();
+    return await this.json(response);
   }
 
   public async ListForUser(): Promise<UserEaCRecord[]> {
@@ -114,20 +110,15 @@ export class EaCServiceClient extends EaCBaseClient {
       headers: this.loadHeaders(),
     });
 
-    return await response.json();
+    return await this.json<UserEaCRecord[]>(response, []);
   }
 
-  public async ListStati(
-    entLookup: string,
-  ): Promise<EaCStatus[]> {
-    const response = await fetch(
-      this.loadClientUrl(`${entLookup}/status`),
-      {
-        headers: this.loadHeaders(),
-      },
-    );
+  public async ListStati(entLookup: string): Promise<EaCStatus[]> {
+    const response = await fetch(this.loadClientUrl(`${entLookup}/status`), {
+      headers: this.loadHeaders(),
+    });
 
-    return await response.json();
+    return await this.json<EaCStatus[]>(response, []);
   }
 
   public async ListUsers(entLookup: string): Promise<UserEaCRecord[]> {
@@ -135,7 +126,7 @@ export class EaCServiceClient extends EaCBaseClient {
       headers: this.loadHeaders(),
     });
 
-    return await response.json();
+    return await this.json<UserEaCRecord[]>(response, []);
   }
 
   public async Status(entLookup: string, commitId: string): Promise<EaCStatus> {
@@ -146,7 +137,7 @@ export class EaCServiceClient extends EaCBaseClient {
       },
     );
 
-    return await response.json();
+    return await this.json(response);
   }
   //#endregion
 
