@@ -74,8 +74,6 @@ export const handler: Handlers = {
       Username: username,
     });
 
-    return respond({
-      Token: jwt,
-    });
+    return respond(jwt);
   },
 };
