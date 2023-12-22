@@ -37,7 +37,7 @@
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
     "_@fathym/atomic": "../biotech-atomic/mod.ts",
     "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.23-integration/mod.ts",
-    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.117-integration/mod.ts",
+    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.118/mod.ts",
     "__@fathym/msal": "../../fathym-deno/msal/mod.ts",
     "_@fathym/msal": "https://deno.land/x/msal@v0.0.39-integration/mod.ts",
     "@fathym/msal": "https://raw.githubusercontent.com/fathym-deno/msal/integration/mod.ts",

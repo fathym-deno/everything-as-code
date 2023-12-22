@@ -7,15 +7,26 @@ import { waitForStatus } from "../../src/utils/eac/waitForStatus.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";
 import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 import { FathymEaC } from "../../src/FathymEaC.ts";
+import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
 
-type EnterprisePageData = {};
+type EnterprisePageData = {
+  enterprises: UserEaCRecord[];
+};
 
-export const handler: Handlers<
-  EnterprisePageData | null,
-  EverythingAsCodeState
-> = {
+export const handler: Handlers<EnterprisePageData, EverythingAsCodeState> = {
   async GET(_req, ctx) {
-    const data: EnterprisePageData = {};
+    const data: EnterprisePageData = {
+      enterprises: [],
+    };
+
+    if (ctx.state.EaC) {
+      const eacSvc = await loadEaCSvc(
+        ctx.state.EaC?.EnterpriseLookup!,
+        ctx.state.Username!,
+      );
+
+      data.enterprises = await eacSvc.ListForUser();
+    }
 
     return ctx.render(data);
   },
@@ -65,6 +76,14 @@ export const handler: Handlers<
 
 export default function Enterprise({
   data,
-}: PageProps<EnterprisePageData | null, EverythingAsCodeState>) {
-  return <EaCCreateForm action="" />;
+}: PageProps<EnterprisePageData, EverythingAsCodeState>) {
+  return (
+    <>
+      <EaCCreateForm action="" />
+
+      <div>
+        <pre>{JSON.stringify(data.enterprises)}</pre>
+      </div>
+    </>
+  );
 }

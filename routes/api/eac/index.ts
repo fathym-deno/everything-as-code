@@ -43,9 +43,7 @@ export const handler: Handlers = {
 
     // const eacs = userEaCs.map((eac) => eac.value!);
 
-    return respond({
-      UserEaCs: userEaCRecords,
-    });
+    return respond(userEaCRecords);
   },
 
   /**

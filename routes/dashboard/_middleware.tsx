@@ -30,7 +30,7 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
         if (currentUsername.value) {
           ctx.state.Username = currentUsername.value!;
         } else {
-          throw new Error(`Invalid username`);
+          return redirectRequest(`/signin?success_url=${pathname}`);
         }
 
         return ctx.next();
