@@ -13,6 +13,18 @@ export async function handler(
 
   const entLookup = ctx.params.entLookup;
 
+  if (entLookup !== ctx.state.EnterpriseLookup) {
+    return respond(
+      {
+        Message:
+          `The current JWT does not have access to the enterprise '${entLookup}'.`,
+      },
+      {
+        status: Status.Unauthorized,
+      },
+    );
+  }
+
   const userEaC = await denoKv.get<UserEaCRecord>([
     "User",
     username,

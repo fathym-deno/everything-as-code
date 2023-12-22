@@ -105,6 +105,20 @@ export class EaCServiceClient extends EaCBaseClient {
     return await this.json(response);
   }
 
+  public async JWT<T extends EverythingAsCode>(
+    entLookup: string,
+    username: string,
+  ): Promise<T> {
+    const response = await fetch(
+      this.loadClientUrl(`jwt?entLookup=${entLookup}&username=${username}`),
+      {
+        headers: this.loadHeaders(),
+      },
+    );
+
+    return await this.json(response);
+  }
+
   public async ListForUser(): Promise<UserEaCRecord[]> {
     const response = await fetch(this.loadClientUrl(""), {
       headers: this.loadHeaders(),
