@@ -1,7 +1,7 @@
 import * as msal from "npm:@azure/msal-node@2.1.0";
 import { Configuration } from "npm:@azure/msal-node@2.1.0";
 import { MSALAuthProvider, MSALPluginConfiguration } from "@fathym/msal";
-import { fathymDenoKv } from "./fathym-deno-kv.config.ts";
+import { fathymDenoKv } from "./deno-kv.config.ts";
 
 export const msalCryptoProvider = new msal.CryptoProvider();
 

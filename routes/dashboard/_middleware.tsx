@@ -1,6 +1,6 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { redirectRequest } from "@fathym/common";
-import { fathymDenoKv } from "../../configs/fathym-deno-kv.config.ts";
+import { fathymDenoKv } from "../../configs/deno-kv.config.ts";
 import { gitHubOAuth } from "../../src/services/github.ts";
 import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";

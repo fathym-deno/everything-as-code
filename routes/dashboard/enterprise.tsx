@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { EaCCreateForm } from "@fathym/atomic";
 import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
-import { fathymDenoKv } from "../../configs/fathym-deno-kv.config.ts";
+import { fathymDenoKv } from "../../configs/deno-kv.config.ts";
 import { redirectRequest } from "@fathym/common";
 import { waitForStatus } from "../../src/utils/eac/waitForStatus.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";

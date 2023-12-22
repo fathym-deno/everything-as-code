@@ -1,7 +1,7 @@
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { createGitHubOAuthConfig, createHelpers } from "$fresh/oauth";
-import { fathymDenoKv } from "../configs/fathym-deno-kv.config.ts";
+import { fathymDenoKv } from "../configs/deno-kv.config.ts";
 import { redirectRequest } from "@fathym/common";
 import { UserGitHubConnection } from "../src/github/UserGitHubConnection.ts";
 import { gitHubOAuth } from "../src/services/github.ts";
