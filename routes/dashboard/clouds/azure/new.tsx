@@ -43,7 +43,9 @@ async function listSubscriptions(session: Session): Promise<Subscription[]> {
     for await (const sub of subsList) {
       subs.push(sub);
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 
   return subs;
 }

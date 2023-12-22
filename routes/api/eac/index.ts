@@ -33,7 +33,9 @@ export const handler: Handlers = {
       for await (const userEaCRecord of userEaCResults) {
         userEaCRecords.push(userEaCRecord.value);
       }
-    } catch {}
+    } catch (err) {
+      console.log(err);
+    }
 
     // const userEaCs = await denoKv.getMany<EverythingAsCode[]>(
     //   userEaCRecords.map((userEaC) => ["EaC", userEaC.EnterpriseLookup]),

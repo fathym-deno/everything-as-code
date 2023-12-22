@@ -8,7 +8,7 @@ import { waitForStatus } from "../../../../src/utils/eac/waitForStatus.ts";
 import { EaCStatusProcessingTypes } from "../../../../src/api/models/EaCStatusProcessingTypes.ts";
 import { redirectRequest } from "@fathym/common";
 
-interface AzurePageData {}
+type AzurePageData = {};
 
 export const handler: Handlers<AzurePageData, EverythingAsCodeState> = {
   async GET(_req, ctx) {

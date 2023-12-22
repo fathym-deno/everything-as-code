@@ -8,7 +8,7 @@ import { loadEaCSvc } from "../../configs/eac.ts";
 import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 import { FathymEaC } from "../../src/FathymEaC.ts";
 
-interface EnterprisePageData {}
+type EnterprisePageData = {};
 
 export const handler: Handlers<
   EnterprisePageData | null,
