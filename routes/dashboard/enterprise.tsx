@@ -82,7 +82,7 @@ export default function Enterprise({
       <EaCCreateForm action="" />
 
       <div>
-        <pre>{JSON.stringify(data.enterprises)}</pre>
+        <pre>{JSON.stringify(data.enterprises, null, 2)}</pre>
       </div>
     </>
   );
