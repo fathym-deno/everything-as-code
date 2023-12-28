@@ -112,11 +112,16 @@ export class EaCServiceClient extends EaCBaseClient {
   public async JWT(
     entLookup: string,
     username: string,
+    expTime?: number,
   ): Promise<{
     Token: string;
   }> {
     const response = await fetch(
-      this.loadClientUrl(`jwt?entLookup=${entLookup}&username=${username}`),
+      this.loadClientUrl(
+        `jwt?entLookup=${entLookup}&username=${username}&expTime=${
+          expTime || ""
+        }`,
+      ),
       {
         headers: this.loadHeaders(),
       },

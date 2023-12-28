@@ -34,6 +34,10 @@ export const handler: Handlers = {
 
     const username = url.searchParams.get("username")!;
 
+    const expTime = Number.parseInt(
+      url.searchParams.get("expTime") || `${60 * 60 * 1}`,
+    );
+
     const eacRes = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
 
     const eac = eacRes.value;
@@ -72,7 +76,7 @@ export const handler: Handlers = {
     const jwt = await jwtConfig.Create({
       EnterpriseLookup: entLookup,
       Username: username,
-    });
+    }, expTime);
 
     return respond({
       Token: jwt,
