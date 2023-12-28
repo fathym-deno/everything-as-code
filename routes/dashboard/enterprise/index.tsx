@@ -1,13 +1,22 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { EaCCreateForm } from "@fathym/atomic";
-import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
-import { fathymDenoKv } from "../../configs/deno-kv.config.ts";
-import { redirectRequest } from "@fathym/common";
-import { waitForStatus } from "../../src/utils/eac/waitForStatus.ts";
-import { loadEaCSvc } from "../../configs/eac.ts";
-import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
-import { FathymEaC } from "../../src/FathymEaC.ts";
-import { UserEaCRecord } from "../../src/api/UserEaCRecord.ts";
+import {
+  Action,
+  ActionGroup,
+  ActionStyleTypes,
+  EaCCreateForm,
+} from "@fathym/atomic";
+import { BeginIcon, DeleteIcon } from "$fathym/atomic-icons";
+import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
+import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
+import { loadEaCSvc } from "../../../configs/eac.ts";
+import { FathymEaC } from "../../../src/FathymEaC.ts";
+import { waitForStatus } from "../../../src/utils/eac/waitForStatus.ts";
+import { EaCStatusProcessingTypes } from "../../../src/api/models/EaCStatusProcessingTypes.ts";
+import { denoKv, fathymDenoKv } from "../../../configs/deno-kv.config.ts";
+import { redirectRequest, respond } from "@fathym/common";
+import { EntepriseManagementItem } from "../../../islands/EntepriseManagementItem.tsx";
+import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
+import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 
 type EnterprisePageData = {
   enterprises: UserEaCRecord[];
@@ -72,6 +81,33 @@ export const handler: Handlers<EnterprisePageData, EverythingAsCodeState> = {
       );
     }
   },
+
+  async PUT(req, ctx) {
+    const eac: EverythingAsCode = await req.json();
+
+    await fathymDenoKv.set(
+      ["User", ctx.state.Username!, "Current", "EaC"],
+      eac.EnterpriseLookup,
+    );
+
+    return respond({ Processing: EaCStatusProcessingTypes.COMPLETE });
+  },
+
+  async DELETE(req, ctx) {
+    const eac: EverythingAsCode = await req.json();
+
+    const eacSvc = await loadEaCSvc(eac.EnterpriseLookup!, ctx.state.Username!);
+
+    const deleteResp = await eacSvc.Delete(eac, true, 60);
+
+    const status = await waitForStatus(
+      eacSvc,
+      eac.EnterpriseLookup!,
+      deleteResp.CommitID,
+    );
+
+    return respond(status);
+  },
 };
 
 export default function Enterprise({
@@ -82,7 +118,10 @@ export default function Enterprise({
       <EaCCreateForm action="" />
 
       <div>
-        <pre>{JSON.stringify(data.enterprises, null, 2)}</pre>
+        {data.enterprises &&
+          data.enterprises.map((enterprise) => {
+            return <EntepriseManagementItem enterprise={enterprise} />;
+          })}
       </div>
     </>
   );

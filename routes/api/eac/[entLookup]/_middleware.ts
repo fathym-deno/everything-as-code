@@ -25,12 +25,22 @@ export async function handler(
     );
   }
 
-  const userEaC = await denoKv.get<UserEaCRecord>([
+  let userEaC = await denoKv.get<UserEaCRecord>([
     "User",
     username,
     "EaC",
     entLookup,
   ]);
+
+  if (!userEaC.value) {
+    userEaC = await denoKv.get<UserEaCRecord>([
+      "User",
+      username,
+      "Archive",
+      "EaC",
+      entLookup,
+    ]);
+  }
 
   if (!userEaC?.value) {
     return respond(

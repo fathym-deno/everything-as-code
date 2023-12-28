@@ -1,3 +1,4 @@
+import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { DenoKVNonce } from "../../utils/deno-kv/DenoKVNonce.ts";
 
 export type EaCDeleteRequest = DenoKVNonce & {
@@ -5,7 +6,7 @@ export type EaCDeleteRequest = DenoKVNonce & {
 
   CommitID: string;
 
-  EnterpriseLookup: string;
+  EaC: EverythingAsCode;
 
   JWT: string;
 
@@ -18,8 +19,9 @@ export function isEaCDeleteRequest(req: unknown): req is EaCDeleteRequest {
   const deleteRequest = req as EaCDeleteRequest;
 
   return (
-    deleteRequest.EnterpriseLookup !== undefined &&
-    typeof deleteRequest.EnterpriseLookup === "string" &&
+    deleteRequest.EaC !== undefined &&
+    deleteRequest.EaC.EnterpriseLookup !== undefined &&
+    typeof deleteRequest.EaC.EnterpriseLookup === "string" &&
     typeof deleteRequest.Archive === "boolean" &&
     deleteRequest.CommitID !== undefined &&
     typeof deleteRequest.CommitID === "string"

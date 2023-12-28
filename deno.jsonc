@@ -9,7 +9,7 @@
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "preview": "deno run -A --unstable main.ts",
-    "start": "deno run -A --unstable --allow-env --watch=handlers/,static/,routes/,src/ dev.ts",
+    "start": "deno run -A --unstable --watch=static/,routes/,configs/,services/,src/ dev.ts",
     "start:relay": "ngrok http 8000",
     "test": "deno test -A --unstable --allow-env .env tests/tests.ts --coverage=cov",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
@@ -35,8 +35,11 @@
   "imports": {
     "$case": "https://deno.land/x/case@2.1.1/mod.ts",
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
-    "_@fathym/atomic": "../biotech-atomic/mod.ts",
-    "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.23-integration/mod.ts",
+    "@fathym/atomic": "../fathym-atomic/mod.ts",
+    "_@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.23-integration/mod.ts",
+    "@fathym/atomic-icons": "https://deno.land/x/fathym_atomic_icons@v0.0.9/mod.ts",
+    "$fathym/atomic-icons": "./build/iconset/icons/_exports.ts",
+    "@fathym/atomic-icons/browser": "https://deno.land/x/fathym_atomic_icons@v0.0.9/browser.ts",
     "@fathym/common": "https://deno.land/x/fathym_common@v0.0.118/mod.ts",
     "__@fathym/msal": "../../fathym-deno/msal/mod.ts",
     "_@fathym/msal": "https://deno.land/x/msal@v0.0.39-integration/mod.ts",

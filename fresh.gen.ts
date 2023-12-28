@@ -44,11 +44,12 @@ import * as $38 from "./routes/dashboard/_middleware.tsx";
 import * as $39 from "./routes/dashboard/clouds/azure/index.tsx";
 import * as $40 from "./routes/dashboard/clouds/azure/new.tsx";
 import * as $41 from "./routes/dashboard/clouds/calz.tsx";
-import * as $42 from "./routes/dashboard/enterprise.tsx";
+import * as $42 from "./routes/dashboard/enterprise/index.tsx";
 import * as $43 from "./routes/dashboard/github-app/index.tsx";
 import * as $44 from "./routes/dashboard/index.tsx";
 import * as $45 from "./routes/dashboard/jwt/index.tsx";
 import * as $46 from "./routes/index.tsx";
+import * as $$0 from "./islands/EntepriseManagementItem.tsx";
 
 const manifest = {
   routes: {
@@ -96,13 +97,15 @@ const manifest = {
     "./routes/dashboard/clouds/azure/index.tsx": $39,
     "./routes/dashboard/clouds/azure/new.tsx": $40,
     "./routes/dashboard/clouds/calz.tsx": $41,
-    "./routes/dashboard/enterprise.tsx": $42,
+    "./routes/dashboard/enterprise/index.tsx": $42,
     "./routes/dashboard/github-app/index.tsx": $43,
     "./routes/dashboard/index.tsx": $44,
     "./routes/dashboard/jwt/index.tsx": $45,
     "./routes/index.tsx": $46,
   },
-  islands: {},
+  islands: {
+    "./islands/EntepriseManagementItem.tsx": $$0,
+  },
   baseUrl: import.meta.url,
 };
 

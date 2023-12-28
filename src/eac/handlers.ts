@@ -15,9 +15,9 @@ denoKv.listenQueue(async (msg: unknown) => {
 
   if (isEaCCommitCheckRequest(msg)) {
     await handleEaCCommitCheckRequest(msg);
-  } else if (isEaCCommitRequest(msg)) {
-    await handleEaCCommitRequest(msg);
   } else if (isEaCDeleteRequest(msg)) {
     await handleEaCDeleteRequest(msg);
+  } else if (isEaCCommitRequest(msg)) {
+    await handleEaCCommitRequest(msg);
   }
 });

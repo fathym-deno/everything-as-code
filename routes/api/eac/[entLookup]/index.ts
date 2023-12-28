@@ -126,6 +126,8 @@ export const handler: Handlers = {
 
     const username = ctx.state.Username!;
 
+    const eac = (await req.json()) as EverythingAsCode;
+
     const url = new URL(req.url);
 
     const processingSeconds = Number.parseInt(
@@ -146,13 +148,16 @@ export const handler: Handlers = {
         url.searchParams.get("archive") || "false",
       ) as boolean,
       CommitID: commitStatus.ID,
-      EnterpriseLookup: commitStatus.EnterpriseLookup,
+      EaC: {
+        ...eac,
+        EnterpriseLookup: entLookup,
+      },
       JWT: ctx.state.JWT!,
       ProcessingSeconds: processingSeconds,
       Username: username,
     };
 
-    if (!deleteReq.EnterpriseLookup) {
+    if (!deleteReq.EaC.EnterpriseLookup) {
       return respond(
         {
           Message: "The enterprise lookup must be provided.",
@@ -163,7 +168,7 @@ export const handler: Handlers = {
       );
     }
 
-    if (!(await eacExists(denoKv, deleteReq.EnterpriseLookup))) {
+    if (!(await eacExists(denoKv, deleteReq.EaC.EnterpriseLookup))) {
       return respond(
         {
           Message: `The enterprise must first be created before it can ${
@@ -197,7 +202,7 @@ export const handler: Handlers = {
     return respond({
       CommitID: commitStatus.ID,
       EnterpriseLookup: commitStatus.EnterpriseLookup,
-      Message: `The enterprise '${deleteReq.EnterpriseLookup}' ${
+      Message: `The enterprise '${deleteReq.EaC.EnterpriseLookup}' ${
         deleteReq.Archive ? "archiving" : "delete operations"
       } have been queued.`,
     } as EaCCommitResponse);

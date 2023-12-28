@@ -70,14 +70,18 @@ export class EaCServiceClient extends EaCBaseClient {
   }
 
   public async Delete(
-    entLookup: string,
+    eac: EverythingAsCode,
+    archive: boolean,
     processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
-      this.loadClientUrl(`${entLookup}?processingSeconds=${processingSeconds}`),
+      this.loadClientUrl(
+        `${eac.EnterpriseLookup}?archive=${archive}&processingSeconds=${processingSeconds}`,
+      ),
       {
         method: "DELETE",
         headers: this.loadHeaders(),
+        body: JSON.stringify(eac),
       },
     );
 

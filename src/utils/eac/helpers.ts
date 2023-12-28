@@ -178,9 +178,18 @@ export async function callEaCHandlerConnections(
     },
   });
 
-  const checkResp = (await result.json()) as EaCHandlerConnectionsResponse;
+  const text = await result.text();
 
-  return checkResp;
+  try {
+    const checkResp = JSON.parse(text) as EaCHandlerConnectionsResponse;
+
+    return checkResp;
+  } catch (err) {
+    console.log(err);
+    console.log(text);
+
+    throw err;
+  }
 }
 
 export async function deconstructCloudDetailsSecrets(
