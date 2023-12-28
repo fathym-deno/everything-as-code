@@ -3,10 +3,10 @@ import { JWTConfig } from "../src/utils/jwt/JWTConfig.ts";
 
 export const jwtConfig: JWTConfig = {
   Algorithm: { name: "HMAC", hash: "SHA-512" } as AlgorithmIdentifier,
-  async Create(data: Record<string, unknown>) {
+  async Create(data: Record<string, unknown>, expTime?: number) {
     const jwt = await create(
       { alg: "HS512", typ: "JWT" },
-      { exp: getNumericDate(this.ExpirationTime), ...data },
+      { exp: getNumericDate(expTime || this.ExpirationTime), ...data },
       await this.SecretKey(),
     );
 
@@ -19,7 +19,7 @@ export const jwtConfig: JWTConfig = {
 
     return [header, payload as T, signature];
   },
-  ExpirationTime: 60 * 60 * 24 * 365, // 1 year
+  ExpirationTime: 60 * 60 * 24 * 365 * 5, // 5 years
   Header: "Authorization",
   JWK: JSON.parse(Deno.env.get("SECURE_API_SECRET") || "") as JsonWebKey,
   KeyUsages: ["sign", "verify"] as KeyUsage[],

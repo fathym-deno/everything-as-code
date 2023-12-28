@@ -20,7 +20,7 @@ export async function loadEaCSvc(
     eacApiKeyEntLookup = await jwtConfig.Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
-    });
+    }, 60 * 60 * 1);
   }
 
   return new EaCServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);
@@ -43,7 +43,7 @@ export async function loadEaCAzureSvc(
     eacApiKeyEntLookup = await jwtConfig.Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
-    });
+    }, 60 * 60 * 1);
   }
 
   return new EaCAzureServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);
@@ -66,7 +66,7 @@ export async function loadEaCExplorerSvc(
     eacApiKeyEntLookup = await jwtConfig.Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
-    });
+    }, 60 * 60 * 1);
   }
 
   return new EaCExplorerServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);

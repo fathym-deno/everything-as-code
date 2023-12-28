@@ -3,7 +3,7 @@ import { Payload } from "@djwt";
 export type JWTConfig = {
   Algorithm: AlgorithmIdentifier;
 
-  Create: (data: Record<string, unknown>) => Promise<string>;
+  Create: (data: Record<string, unknown>, expTime?: number) => Promise<string>;
 
   Decode: <T>(
     token: string,
