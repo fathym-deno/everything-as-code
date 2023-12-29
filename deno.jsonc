@@ -35,8 +35,8 @@
   "imports": {
     "$case": "https://deno.land/x/case@2.1.1/mod.ts",
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
-    "@fathym/atomic": "../fathym-atomic/mod.ts",
-    "_@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.23-integration/mod.ts",
+    "_@fathym/atomic": "../fathym-atomic/mod.ts",
+    "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.23-integration/mod.ts",
     "@fathym/atomic-icons": "https://deno.land/x/fathym_atomic_icons@v0.0.9/mod.ts",
     "$fathym/atomic-icons": "./build/iconset/icons/_exports.ts",
     "@fathym/atomic-icons/browser": "https://deno.land/x/fathym_atomic_icons@v0.0.9/browser.ts",
