@@ -18,7 +18,7 @@ import { EaCStatusProcessingTypes } from "../../api/models/EaCStatusProcessingTy
 import { EaCMetadataBase } from "../../eac/EaCMetadataBase.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
-import { EaCHandler } from "../../api/EaCHandler.ts";
+import { EaCHandler } from "../../eac/EaCHandler.ts";
 import { EaCHandlerConnectionsRequest } from "../../api/models/EaCHandlerConnectionsRequest.ts";
 import { EaCHandlerConnectionsResponse } from "../../api/models/EaCHandlerConnectionsResponse.ts";
 import { denoKv } from "../../../configs/deno-kv.config.ts";

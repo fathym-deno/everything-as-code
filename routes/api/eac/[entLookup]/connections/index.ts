@@ -5,7 +5,7 @@ import { EaCAPIUserState } from "../../../../../src/api/EaCAPIUserState.ts";
 import { EverythingAsCode } from "../../../../../src/eac/EverythingAsCode.ts";
 import { denoKv } from "../../../../../configs/deno-kv.config.ts";
 import { EaCMetadataBase } from "../../../../../src/eac/EaCMetadataBase.ts";
-import { EaCHandler } from "../../../../../src/api/EaCHandler.ts";
+import { EaCHandler } from "../../../../../src/eac/EaCHandler.ts";
 import { callEaCHandlerConnections } from "../../../../../src/utils/eac/helpers.ts";
 
 export const handler: Handlers = {
