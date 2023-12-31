@@ -9,13 +9,6 @@ import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
 } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
-import { denoKv } from "../../../configs/deno-kv.config.ts";
-
-export async function loadKeyClient(
-  entLookup: string,
-  cloudLookup: string,
-  keyVaultLookup: string,
-): Promise<KeyClient>;
 
 export async function loadKeyClient(
   eac: EverythingAsCodeClouds,
@@ -29,12 +22,12 @@ export async function loadKeyClient(
 ): Promise<KeyClient>;
 
 export async function loadKeyClient(
-  credsEaCEntLookup: string | TokenCredential | EverythingAsCodeClouds,
+  credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
   keyVaultLookup?: string,
 ): Promise<KeyClient> {
   const { creds, url } = await loadKeyVaultUrlAndCreds(
-    credsEaCEntLookup,
+    credsEaC,
     keyVaultCloudLookup,
     keyVaultLookup,
   );
@@ -51,12 +44,6 @@ export async function loadMainKeyClient(
 }
 
 export async function loadSecretClient(
-  entLookup: string,
-  cloudLookup: string,
-  keyVaultLookup: string,
-): Promise<SecretClient>;
-
-export async function loadSecretClient(
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
   keyVaultLookup: string,
@@ -68,12 +55,12 @@ export async function loadSecretClient(
 ): Promise<SecretClient>;
 
 export async function loadSecretClient(
-  credsEaCEntLookup: string | TokenCredential | EverythingAsCodeClouds,
+  credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
   keyVaultLookup?: string,
 ): Promise<SecretClient> {
   const { creds, url } = await loadKeyVaultUrlAndCreds(
-    credsEaCEntLookup,
+    credsEaC,
     keyVaultCloudLookup,
     keyVaultLookup,
   );
@@ -96,7 +83,7 @@ export async function loadMainSecretClient(
 }
 
 export async function loadKeyVaultUrlAndCreds(
-  credsEaCEntLookup: string | TokenCredential | EverythingAsCodeClouds,
+  credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
   keyVaultLookup?: string,
 ): Promise<{
@@ -106,23 +93,13 @@ export async function loadKeyVaultUrlAndCreds(
 }> {
   let creds: TokenCredential | undefined;
 
-  if (typeof credsEaCEntLookup === "string") {
-    const existingEaC = await denoKv.get<EverythingAsCodeClouds>([
-      "EaC",
-      credsEaCEntLookup,
-    ]);
-
+  if (isEverythingAsCodeClouds(credsEaC)) {
     creds = await loadAzureCloudCredentials(
-      existingEaC.value!,
-      keyVaultCloudLookup,
-    );
-  } else if (isEverythingAsCodeClouds(credsEaCEntLookup)) {
-    creds = await loadAzureCloudCredentials(
-      credsEaCEntLookup,
+      credsEaC,
       keyVaultCloudLookup,
     );
   } else {
-    creds = credsEaCEntLookup;
+    creds = credsEaC;
   }
 
   if (!keyVaultLookup) {
