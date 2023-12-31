@@ -164,7 +164,7 @@ function configureListenQueueOp(
         versionstamp: undefined,
       };
 
-      op = enqueueAtomicOperation(op, commitCheckReq, 1000 * 10);
+      op = enqueueAtomicOperation(op, commitCheckReq, 1000 * 1);
 
       console.log(`Queuing EaC commit ${commitReq.CommitID} checks`);
     } else if (errors.length > 0) {
