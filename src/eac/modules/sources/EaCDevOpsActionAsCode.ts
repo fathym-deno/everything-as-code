@@ -5,6 +5,4 @@ export type EaCDevOpsActionAsCode = {
   ArtifactLookups?: string[] | null;
 
   DevOpsActionTriggerLookups?: string[] | null;
-
-  SecretLookups?: string[] | null;
 } & EaCDetails<EaCDevOpsActionDetails>;

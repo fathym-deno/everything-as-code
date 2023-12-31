@@ -19,8 +19,12 @@ import { EaCHandlerErrorResponse } from "../../src/api/models/EaCHandlerErrorRes
 import { EaCHandlerCheckRequest } from "../../src/api/models/EaCHandlerCheckRequest.ts";
 import { EaCCommitCheckRequest } from "../../src/api/models/EaCCommitCheckRequest.ts";
 import { eacHandlers } from "../../configs/eac-handlers.config.ts";
+import { EaCHandler } from "../../src/eac/EaCHandler.ts";
+import { AtomicOperationHandler } from "../../src/utils/deno-kv/AtomicOperationHandler.ts";
 
 export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
+  console.log(`Processing EaC commit for ${commitReq.CommitID}`);
+
   if (!commitReq.EaC.EnterpriseLookup) {
     throw new Error("The enterprise lookup must be provided.");
   }
@@ -75,51 +79,25 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   saveEaC.Handlers = merge(eacHandlers, saveEaC.Handlers || {});
 
-  const diffCalls = diffKeys.map(async (key) => {
-    const diff = eacDiff[key];
+  const diffCalls: Record<number, Promise<void>[]> = {};
 
-    if (diff) {
-      if (
-        !Array.isArray(diff) &&
-        typeof diff === "object" &&
-        diff !== null &&
-        diff !== undefined
-      ) {
-        const handled = await callEaCHandler(
-          commitReq.JWT,
-          key,
-          saveEaC,
-          diff as EaCMetadataBase,
-        );
+  let toProcess = { keys: [...diffKeys] };
 
-        allChecks.push(...(handled.Checks || []));
+  diffKeys.forEach(
+    processDiffKey(
+      eacDiff,
+      saveEaC,
+      commitReq,
+      toProcess,
+      allChecks,
+      errors,
+      diffCalls,
+    ),
+  );
 
-        saveEaC[key] = merge(saveEaC[key] || {}, handled.Result as object);
+  await processDiffCalls(diffCalls, allChecks, errors, status.value!);
 
-        errors.push(...handled.Errors);
-      } else if (diff !== undefined) {
-        saveEaC[key] = merge(saveEaC[key] || {}, diff);
-      }
-    }
-  });
-
-  await Promise.all(diffCalls);
-
-  if (errors.length > 0) {
-    status.value!.Processing = EaCStatusProcessingTypes.ERROR;
-
-    for (const error of errors) {
-      status.value!.Messages = merge(status.value!.Messages, error.Messages);
-    }
-
-    status.value!.EndTime = new Date();
-
-    delete status.value!.Messages.Queued;
-  } else if (allChecks.length > 0) {
-    status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
-
-    status.value!.Messages.Queued = "Processing";
-  } else {
+  if (errors.length === 0 && allChecks.length === 0) {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 
     status.value!.EndTime = new Date();
@@ -127,53 +105,199 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
     delete status.value!.Messages.Queued;
   }
 
-  await listenQueueAtomic(denoKv, commitReq, (op) => {
+  await listenQueueAtomic(
+    denoKv,
+    commitReq,
+    configureListenQueueOp(
+      existingEaC,
+      status,
+      EnterpriseLookup,
+      commitReq,
+      allChecks,
+      errors,
+      saveEaC,
+      toProcess,
+    ),
+  );
+}
+
+function configureListenQueueOp(
+  existingEaC: Deno.KvEntryMaybe<EverythingAsCode>,
+  status: Deno.KvEntryMaybe<EaCStatus>,
+  entLookup: string,
+  commitReq: EaCCommitRequest,
+  allChecks: EaCHandlerCheckRequest[],
+  errors: EaCHandlerErrorResponse[],
+  saveEaC: EverythingAsCode,
+  toProcess: { keys: string[] },
+): AtomicOperationHandler {
+  return (op) => {
     op = op
       .check(existingEaC)
       .check(status)
       .set(
-        ["EaC", "Status", EnterpriseLookup, "ID", commitReq.CommitID],
+        ["EaC", "Status", entLookup, "ID", commitReq.CommitID],
         status.value,
       );
 
-    if (allChecks.length > 0) {
-      const commitCheckReq: EaCCommitCheckRequest = {
-        ...commitReq,
-        Checks: allChecks,
-        EaC: saveEaC,
-        nonce: undefined,
-        versionstamp: undefined,
-      };
-
-      op = enqueueAtomicOperation(op, commitCheckReq);
-    } else if (errors.length === 0) {
-      op = markEaCProcessed(EnterpriseLookup, op).set(
-        ["EaC", EnterpriseLookup],
-        saveEaC,
-      );
-    } else {
-      op = markEaCProcessed(EnterpriseLookup, op);
-    }
-
     if (commitReq.Username) {
       const userEaCRecord: UserEaCRecord = {
-        EnterpriseLookup: EnterpriseLookup,
+        EnterpriseLookup: entLookup,
         EnterpriseName: saveEaC.Details!.Name!,
         Owner: true,
         Username: commitReq.Username,
       };
 
       op = op
-        .set(
-          ["User", commitReq.Username, "EaC", EnterpriseLookup],
-          userEaCRecord,
-        )
-        .set(
-          ["EaC", "Users", EnterpriseLookup, commitReq.Username],
-          userEaCRecord,
-        );
+        .set(["User", commitReq.Username, "EaC", entLookup], userEaCRecord)
+        .set(["EaC", "Users", entLookup, commitReq.Username], userEaCRecord);
+    }
+
+    if (allChecks.length > 0) {
+      const commitCheckReq: EaCCommitCheckRequest = {
+        ...commitReq,
+        Checks: allChecks,
+        EaC: saveEaC,
+        OriginalEaC: existingEaC?.value!,
+        ToProcessKeys: toProcess.keys,
+        nonce: undefined,
+        versionstamp: undefined,
+      };
+
+      op = enqueueAtomicOperation(op, commitCheckReq, 1000 * 10);
+
+      console.log(`Queuing EaC commit ${commitReq.CommitID} checks`);
+    } else if (errors.length > 0) {
+      op = markEaCProcessed(entLookup, op);
+
+      console.log(`Processed EaC commit ${commitReq.CommitID} with errors`);
+    } else {
+      op = markEaCProcessed(entLookup, op).set(["EaC", entLookup], saveEaC);
+
+      console.log(`Processed EaC commit ${commitReq.CommitID}`);
     }
 
     return op;
-  });
+  };
+}
+
+async function processDiffCalls(
+  diffCalls: Record<number, Promise<void>[]>,
+  allChecks: EaCHandlerCheckRequest[],
+  errors: EaCHandlerErrorResponse[],
+  status: EaCStatus,
+): Promise<void> {
+  const ordered = Object.keys(diffCalls)
+    .map((k) => Number.parseInt(k))
+    .sort((a, b) => {
+      return a < b ? -1 : a > b ? 1 : 0;
+    });
+
+  for (const order of ordered) {
+    console.log(
+      `Processing EaC commit ${status.ID} diff calls (${
+        diffCalls[order]?.length || 0
+      }) for order '${order}'`,
+    );
+
+    await Promise.all(diffCalls[order]);
+
+    if (errors.length > 0) {
+      status.Processing = EaCStatusProcessingTypes.ERROR;
+
+      for (const error of errors) {
+        status.Messages = merge(status.Messages, error.Messages);
+      }
+
+      status.EndTime = new Date();
+
+      delete status.Messages.Queued;
+
+      break;
+    } else if (allChecks.length > 0) {
+      status.Processing = EaCStatusProcessingTypes.PROCESSING;
+
+      status.Messages.Queued = "Processing";
+
+      break;
+    }
+  }
+}
+
+function processDiffKey(
+  eacDiff: EverythingAsCode,
+  saveEaC: EverythingAsCode,
+  commitReq: EaCCommitRequest,
+  toProcess: { keys: string[] },
+  allChecks: EaCHandlerCheckRequest[],
+  errors: EaCHandlerErrorResponse[],
+  diffCalls: Record<number, Promise<void>[]>,
+): (key: string) => void {
+  return (key) => {
+    console.log(
+      `Preparing EaC commit ${commitReq.CommitID} to process key ${key}`,
+    );
+
+    const diff = eacDiff[key];
+
+    if (diff) {
+      const handler = saveEaC.Handlers![key];
+
+      const process = processEaCHandler(
+        diff,
+        handler,
+        commitReq,
+        key,
+        saveEaC,
+        toProcess,
+        allChecks,
+        errors,
+      );
+
+      diffCalls[handler.Order] = [
+        ...(diffCalls[handler.Order] || []),
+        process(),
+      ];
+    }
+  };
+}
+
+function processEaCHandler(
+  diff: unknown,
+  handler: EaCHandler,
+  commitReq: EaCCommitRequest,
+  key: string,
+  saveEaC: EverythingAsCode,
+  toProcess: { keys: string[] },
+  allChecks: EaCHandlerCheckRequest[],
+  errors: EaCHandlerErrorResponse[],
+): () => Promise<void> {
+  return async () => {
+    console.log(`Processing EaC commit ${commitReq.CommitID} for key ${key}`);
+
+    if (
+      !Array.isArray(diff) &&
+      typeof diff === "object" &&
+      diff !== null &&
+      diff !== undefined
+    ) {
+      const handled = await callEaCHandler(
+        handler,
+        commitReq.JWT,
+        key,
+        saveEaC,
+        diff as EaCMetadataBase,
+      );
+
+      toProcess.keys = toProcess.keys.filter((k) => k !== key);
+
+      allChecks.push(...(handled.Checks || []));
+
+      saveEaC[key] = merge(saveEaC[key] || {}, handled.Result as object);
+
+      errors.push(...handled.Errors);
+    } else if (diff !== undefined) {
+      saveEaC[key] = merge(saveEaC[key] || {}, diff || {});
+    }
+  };
 }

@@ -1,6 +1,7 @@
 import { EaCHandlers } from "../api/EaCHandlers.ts";
 import { EaCDetails } from "./EaCDetails.ts";
 import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
+import { EaCSecretAsCode } from "./EaCSecretAsCode.ts";
 
 export type EverythingAsCode = {
   EnterpriseLookup?: string;
@@ -8,6 +9,8 @@ export type EverythingAsCode = {
   Handlers?: EaCHandlers;
 
   ParentEnterpriseLookup?: string;
+
+  Secrets?: Record<string, EaCSecretAsCode>;
 } & EaCDetails<EaCEnterpriseDetails>;
 
 export type EaCDiff = Omit<

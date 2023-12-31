@@ -36,11 +36,12 @@ export async function enqueueAtomic(
 export function enqueueAtomicOperation(
   op: Deno.AtomicOperation,
   msg: DenoKVNonce,
+  delay?: number,
 ): Deno.AtomicOperation {
   msg.nonce = crypto.randomUUID();
 
   op.check({ key: ["nonces", msg.nonce], versionstamp: null })
-    .enqueue(msg)
+    .enqueue(msg, { delay })
     .set(["nonces", msg.nonce], true)
     .sum(["enqueued_count"], 1n);
 

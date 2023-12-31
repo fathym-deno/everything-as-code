@@ -11,6 +11,8 @@ import { EaCStatus } from "../../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../../src/api/models/EaCStatusProcessingTypes.ts";
 
 export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
+  console.log(`Processing EaC delete for ${deleteReq.CommitID}`);
+
   const status = await denoKv.get<EaCStatus>([
     "EaC",
     "Status",
@@ -57,6 +59,9 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
   }
 
   status.value!.EndTime = new Date();
+
+  console.log(`Processed EaC delete for ${deleteReq.CommitID}:`);
+  console.log(status.value!);
 
   await listenQueueAtomic(denoKv, deleteReq, (op) => {
     op = markEaCProcessed(deleteReq.EaC.EnterpriseLookup!, op)

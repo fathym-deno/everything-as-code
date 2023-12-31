@@ -4,7 +4,7 @@ import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIState } from "../../../src/api/EaCAPIState.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
-import { denoKv } from "../../../configs/deno-kv.config.ts";
+import { denoKv, fathymDenoKv } from "../../../configs/deno-kv.config.ts";
 import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../../../src/api/models/EaCStatusProcessingTypes.ts";
 import { eacExists } from "../../../src/utils/eac/helpers.ts";
@@ -14,38 +14,6 @@ import { EaCCommitResponse } from "../../../src/api/models/EaCCommitResponse.ts"
 import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 
 export const handler: Handlers = {
-  /**
-   * Use this endpoint to list a user's EaCs they have access to.
-   * @param _req
-   * @param ctx
-   * @returns
-   */
-  async GET(_req: Request, ctx: HandlerContext<any, EaCAPIState>) {
-    const username = ctx.state.Username!;
-
-    const userEaCResults = await denoKv.list<UserEaCRecord>({
-      prefix: ["User", username, "EaC"],
-    });
-
-    const userEaCRecords: UserEaCRecord[] = [];
-
-    try {
-      for await (const userEaCRecord of userEaCResults) {
-        userEaCRecords.push(userEaCRecord.value);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-
-    // const userEaCs = await denoKv.getMany<EverythingAsCode[]>(
-    //   userEaCRecords.map((userEaC) => ["EaC", userEaC.EnterpriseLookup]),
-    // );
-
-    // const eacs = userEaCs.map((eac) => eac.value!);
-
-    return respond(userEaCRecords);
-  },
-
   /**
    * Use this endpoint to commit a new EaC container.
    * @param _req

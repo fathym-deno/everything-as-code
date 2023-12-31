@@ -131,7 +131,7 @@ export class EaCServiceClient extends EaCBaseClient {
   }
 
   public async ListForUser(): Promise<UserEaCRecord[]> {
-    const response = await fetch(this.loadClientUrl(""), {
+    const response = await fetch(this.loadClientUrl("list"), {
       headers: this.loadHeaders(),
     });
 

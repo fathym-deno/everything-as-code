@@ -1,8 +1,14 @@
 import { EaCMetadataBase } from "../../EaCMetadataBase.ts";
+import { EaCArtifactAsCode } from "./EaCArtifactAsCode.ts";
+import { EaCDevOpsActionAsCode } from "./EaCDevOpsActionAsCode.ts";
 import { EaCSourceAsCode } from "./EaCSourceAsCode.ts";
 import { EaCSourceConnectionAsCode } from "./EaCSourceConnectionAsCode.ts";
 
 export type EverythingAsCodeSources = {
+  Artifacts?: Record<string, EaCArtifactAsCode>;
+
+  DevOpsActions?: Record<string, EaCDevOpsActionAsCode>;
+
   SourceConnections?: Record<string, EaCSourceConnectionAsCode>;
 
   Sources?: Record<string, EaCSourceAsCode>;

@@ -30,6 +30,7 @@ import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
 import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 
 export async function callEaCHandler<T extends EaCMetadataBase>(
+  handler: EaCHandler,
   jwt: string,
   key: string,
   currentEaC: EverythingAsCode,
@@ -41,8 +42,6 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 
   Result: T;
 }> {
-  const handler = currentEaC.Handlers![key];
-
   const current = (currentEaC[key] || {}) as T;
 
   const parentEaC = currentEaC?.ParentEnterpriseLookup

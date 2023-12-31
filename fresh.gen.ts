@@ -39,16 +39,18 @@ import * as $33 from "./routes/api/eac/handlers/sources/helpers.ts";
 import * as $34 from "./routes/api/eac/handlers/sources/index.ts";
 import * as $35 from "./routes/api/eac/index.ts";
 import * as $36 from "./routes/api/eac/jwt.ts";
-import * as $37 from "./routes/api/github/webhooks.ts";
-import * as $38 from "./routes/dashboard/_middleware.tsx";
-import * as $39 from "./routes/dashboard/clouds/azure/index.tsx";
-import * as $40 from "./routes/dashboard/clouds/azure/new.tsx";
-import * as $41 from "./routes/dashboard/clouds/calz.tsx";
-import * as $42 from "./routes/dashboard/enterprise/index.tsx";
-import * as $43 from "./routes/dashboard/github-app/index.tsx";
-import * as $44 from "./routes/dashboard/index.tsx";
-import * as $45 from "./routes/dashboard/jwt/index.tsx";
-import * as $46 from "./routes/index.tsx";
+import * as $37 from "./routes/api/eac/list.ts";
+import * as $38 from "./routes/api/github/webhooks.ts";
+import * as $39 from "./routes/dashboard/_middleware.tsx";
+import * as $40 from "./routes/dashboard/api/eac/index.ts";
+import * as $41 from "./routes/dashboard/clouds/azure/index.tsx";
+import * as $42 from "./routes/dashboard/clouds/azure/new.tsx";
+import * as $43 from "./routes/dashboard/clouds/calz.tsx";
+import * as $44 from "./routes/dashboard/enterprise/index.tsx";
+import * as $45 from "./routes/dashboard/github-app/index.tsx";
+import * as $46 from "./routes/dashboard/index.tsx";
+import * as $47 from "./routes/dashboard/jwt/index.tsx";
+import * as $48 from "./routes/index.tsx";
 import * as $$0 from "./islands/EntepriseManagementItem.tsx";
 
 const manifest = {
@@ -92,16 +94,18 @@ const manifest = {
     "./routes/api/eac/handlers/sources/index.ts": $34,
     "./routes/api/eac/index.ts": $35,
     "./routes/api/eac/jwt.ts": $36,
-    "./routes/api/github/webhooks.ts": $37,
-    "./routes/dashboard/_middleware.tsx": $38,
-    "./routes/dashboard/clouds/azure/index.tsx": $39,
-    "./routes/dashboard/clouds/azure/new.tsx": $40,
-    "./routes/dashboard/clouds/calz.tsx": $41,
-    "./routes/dashboard/enterprise/index.tsx": $42,
-    "./routes/dashboard/github-app/index.tsx": $43,
-    "./routes/dashboard/index.tsx": $44,
-    "./routes/dashboard/jwt/index.tsx": $45,
-    "./routes/index.tsx": $46,
+    "./routes/api/eac/list.ts": $37,
+    "./routes/api/github/webhooks.ts": $38,
+    "./routes/dashboard/_middleware.tsx": $39,
+    "./routes/dashboard/api/eac/index.ts": $40,
+    "./routes/dashboard/clouds/azure/index.tsx": $41,
+    "./routes/dashboard/clouds/azure/new.tsx": $42,
+    "./routes/dashboard/clouds/calz.tsx": $43,
+    "./routes/dashboard/enterprise/index.tsx": $44,
+    "./routes/dashboard/github-app/index.tsx": $45,
+    "./routes/dashboard/index.tsx": $46,
+    "./routes/dashboard/jwt/index.tsx": $47,
+    "./routes/index.tsx": $48,
   },
   islands: {
     "./islands/EntepriseManagementItem.tsx": $$0,

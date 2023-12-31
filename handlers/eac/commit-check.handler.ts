@@ -13,21 +13,17 @@ import {
   callEaCHandlerCheck,
   markEaCProcessed,
 } from "../../src/utils/eac/helpers.ts";
-import { sleep } from "../../src/utils/sleep.ts";
 import { merge } from "@fathym/common";
+import { EaCCommitRequest } from "../../src/api/models/EaCCommitRequest.ts";
+import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 
 export async function handleEaCCommitCheckRequest(
   commitCheckReq: EaCCommitCheckRequest,
 ) {
-  console.log(`Processing check for commit ${commitCheckReq.CommitID}`);
+  console.log(`Processing EaC commit check for ${commitCheckReq.CommitID}`);
 
-  const {
-    EnterpriseLookup,
-    ParentEnterpriseLookup,
-    Details,
-    Handlers,
-    ...eacDiff
-  } = commitCheckReq.EaC;
+  const { EnterpriseLookup, ParentEnterpriseLookup, Details, Handlers } =
+    commitCheckReq.EaC;
 
   const statusKey = [
     "EaC",
@@ -85,8 +81,6 @@ export async function handleEaCCommitCheckRequest(
     status.value!.EndTime = new Date();
   } else if (allChecks.length > 0) {
     status.value!.Processing = EaCStatusProcessingTypes.PROCESSING;
-
-    await sleep(10000);
   } else {
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
 
@@ -118,26 +112,53 @@ export async function handleEaCCommitCheckRequest(
         versionstamp: undefined,
       };
 
-      op = enqueueAtomicOperation(op, newCommitCheckReq);
+      op = enqueueAtomicOperation(op, newCommitCheckReq, 1000 * 10);
 
-      console.log(
-        `Requeued processing check for commit ${commitCheckReq.CommitID}`,
-      );
-    } else if (errors.length === 0) {
-      op = markEaCProcessed(EnterpriseLookup!, op).set(
-        ["EaC", EnterpriseLookup!],
-        commitCheckReq.EaC,
-      );
-
-      console.log(
-        `Completed processing check for commit ${commitCheckReq.CommitID}`,
-      );
-    } else {
+      console.log(`Requeuing EaC commit ${commitCheckReq.CommitID} checks`);
+    } else if (errors.length > 0) {
       op = markEaCProcessed(EnterpriseLookup!, op);
 
       console.log(
-        `Completed processing check for commit ${commitCheckReq.CommitID}`,
+        `Processed EaC commit ${commitCheckReq.CommitID}, from checks, with errors`,
       );
+    } else {
+      let saveEaC = { ...commitCheckReq.EaC };
+
+      const toProcessEaC: EverythingAsCode = {
+        EnterpriseLookup,
+      };
+
+      if (commitCheckReq.ToProcessKeys.length > 0) {
+        commitCheckReq.ToProcessKeys.forEach((tpk) => {
+          toProcessEaC[tpk] = saveEaC[tpk];
+
+          delete saveEaC[tpk];
+        });
+
+        saveEaC = merge(commitCheckReq.OriginalEaC, saveEaC);
+
+        const commitReq: EaCCommitRequest = {
+          CommitID: commitCheckReq.CommitID,
+          EaC: toProcessEaC,
+          JWT: commitCheckReq.JWT,
+          ProcessingSeconds: commitCheckReq.ProcessingSeconds,
+          Username: commitCheckReq.Username,
+        };
+
+        op = enqueueAtomicOperation(op, commitReq);
+
+        console.log(
+          `Completed processing checks for commit ${commitCheckReq.CommitID}, requeued with keys ${
+            commitCheckReq.ToProcessKeys.join(",")
+          } `,
+        );
+      } else {
+        op = markEaCProcessed(EnterpriseLookup!, op);
+
+        console.log(`Processed EaC commit ${commitCheckReq.CommitID}`);
+      }
+
+      op = op.set(["EaC", EnterpriseLookup!], saveEaC);
     }
 
     return op;
