@@ -3,7 +3,6 @@ import {
   KustoConnectionStringBuilder,
 } from "npm:azure-kusto-data";
 import { TokenCredential } from "npm:@azure/identity";
-import { denoKv } from "../../../configs/deno-kv.config.ts";
 import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { loadAzureCloudCredentials } from "../../utils/eac/loadAzureCloudCredentials.ts";
 import { EaCCloudWithResources } from "../../eac/modules/clouds/EaCCloudWithResources.ts";
@@ -17,6 +16,7 @@ export function loadKustoClient(
   cloudLookup: string,
   resGroupLookup: string,
   resLookups: string[],
+  loadEaC: (entLookup: string) => Promise<EverythingAsCodeClouds>,
   svcSuffix?: string,
 ): Promise<KustoClient>;
 
@@ -31,6 +31,7 @@ export async function loadKustoClient(
   regionCloudLookup: string,
   credsResGroupLookup: TokenCredential | string,
   resLookups?: string[],
+  loadEaC?: (entLookup: string) => Promise<EverythingAsCodeClouds>,
   svcSuffix?: string,
 ): Promise<KustoClient> {
   let [cluster, region, creds] = [
@@ -59,11 +60,11 @@ export async function loadKustoClient(
         credsResGroupLookup as string,
       ];
 
-      const eac = await denoKv.get<EverythingAsCodeClouds>(["EaC", entLookup]);
+      const eac = await loadEaC!(entLookup);
 
-      creds = await loadAzureCloudCredentials(eac.value!, cloudLookup);
+      creds = await loadAzureCloudCredentials(eac, cloudLookup);
 
-      const cloud = eac.value!.Clouds![cloudLookup];
+      const cloud = eac.Clouds![cloudLookup];
 
       const resGroup = cloud.ResourceGroups![resGroupLookup];
 

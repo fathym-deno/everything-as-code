@@ -4,6 +4,8 @@ import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../../../../../../../src/api/EaCAPIUserState.ts";
 import { ExplorerRequest } from "../../../../../../../../../../src/api/models/ExplorerRequest.ts";
 import { loadKustoClient } from "../../../../../../../../../../src/services/azure/kusto.ts";
+import { denoKv } from "../../../../../../../../../../configs/deno-kv.config.ts";
+import { EverythingAsCodeClouds } from "../../../../../../../../../../src/eac/modules/clouds/EverythingAsCodeClouds.ts";
 
 export const handler: Handlers = {
   /**
@@ -34,6 +36,14 @@ export const handler: Handlers = {
       cloudLookup,
       resGroupLookup,
       resLookups,
+      async (entLookup) => {
+        const eac = await denoKv.get<EverythingAsCodeClouds>([
+          "EaC",
+          entLookup,
+        ]);
+
+        return eac.value!;
+      },
       svcSuffix,
     );
 
