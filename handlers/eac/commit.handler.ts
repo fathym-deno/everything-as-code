@@ -288,7 +288,7 @@ function processEaCHandler(
           return eac.value!;
         },
         handler,
-        commitReq.JWT,
+        commitReq,
         key,
         saveEaC,
         diff as EaCMetadataBase,

@@ -33,6 +33,10 @@ export const handler: Handlers = {
 
       const handlerRequest: EaCHandlerRequest = await req.json();
 
+      console.log(
+        `Processing EaC commit ${handlerRequest.CommitID} Cloud processes for cloud ${handlerRequest.Lookup}`,
+      );
+
       const eac = handlerRequest.EaC as EverythingAsCodeClouds;
 
       const currentClouds = eac.Clouds || {};
@@ -45,9 +49,15 @@ export const handler: Handlers = {
 
       await finalizeCloudDetails(cloud);
 
-      const deployments = await buildCloudDeployments(eac, cloudLookup, cloud);
+      const deployments = await buildCloudDeployments(
+        handlerRequest.CommitID,
+        eac,
+        cloudLookup,
+        cloud,
+      );
 
       const checks: EaCHandlerCheckRequest[] = await beginEaCDeployments(
+        handlerRequest.CommitID,
         current,
         deployments,
       );

@@ -41,6 +41,7 @@ class TokenProvider implements AuthenticationProvider {
     return accessToken.token;
   }
 }
+
 export async function finalizeCloudDetails(
   cloud: EaCCloudAsCode,
 ): Promise<void> {
@@ -99,10 +100,13 @@ export async function finalizeCloudDetails(
 }
 
 export async function buildCloudDeployments(
+  commitId: string,
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
   cloud: EaCCloudAsCode,
 ): Promise<EaCCloudDeployment[]> {
+  console.log(`Building EaC commit ${commitId} Cloud deloyments`);
+
   const resGroupLookups = Object.keys(cloud.ResourceGroups || {});
 
   const deployments: EaCCloudDeployment[] = [];
@@ -338,9 +342,12 @@ export async function loadCloudResourceDetailAssets(
 }
 
 export async function beginEaCDeployments(
+  commitId: string,
   cloud: EaCCloudAsCode,
   deployments: EaCCloudDeployment[],
 ): Promise<EaCHandlerCheckRequest[]> {
+  console.log(`Beginning EaC commit ${commitId} Cloud deloyments`);
+
   const details = cloud.Details as EaCCloudAzureDetails;
 
   const creds = await loadAzureCloudCredentials(cloud);
@@ -356,6 +363,7 @@ export async function beginEaCDeployments(
       );
 
     return {
+      CommitID: commitId,
       CorelationID: crypto.randomUUID(),
       ...deployment,
     } as EaCHandlerCheckRequest;

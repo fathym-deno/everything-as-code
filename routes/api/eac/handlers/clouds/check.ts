@@ -19,7 +19,9 @@ export const handler: Handlers = {
 
     const checkRequest: EaCHandlerCloudCheckRequest = await req.json();
 
-    console.log(`Processing EaC commit ${checkRequest.CommitID} Cloud checks`);
+    console.log(
+      `Processing EaC commit ${checkRequest.CommitID} Cloud checks for cloud ${checkRequest.CloudLookup}`,
+    );
 
     try {
       const eac = checkRequest!.EaC as EverythingAsCodeClouds;
@@ -29,6 +31,7 @@ export const handler: Handlers = {
       const cloud = currentClouds[checkRequest.CloudLookup] || {};
 
       const deployDetails = await loadDeploymentDetails(
+        checkRequest.CommitID,
         cloud,
         checkRequest.Name,
         undefined,

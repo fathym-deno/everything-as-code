@@ -3,6 +3,8 @@ import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
 export type EaCHandlerCheckRequest =
   & {
+    CommitID: string;
+
     CorelationID: string;
 
     EaC?: EverythingAsCode;

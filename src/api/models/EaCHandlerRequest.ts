@@ -2,6 +2,8 @@ import { EaCMetadataBase } from "../../eac/EaCMetadataBase.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
 export type EaCHandlerRequest = {
+  CommitID: string;
+
   EaC: EverythingAsCode;
 
   Lookup: string;

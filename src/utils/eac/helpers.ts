@@ -27,11 +27,12 @@ import {
 } from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
 import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
 import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
+import { EaCCommitRequest } from "../../api/models/EaCCommitRequest.ts";
 
 export async function callEaCHandler<T extends EaCMetadataBase>(
   loadEac: (entLookup: string) => Promise<EverythingAsCode>,
   handler: EaCHandler,
-  jwt: string,
+  commitReq: EaCCommitRequest,
   key: string,
   currentEaC: EverythingAsCode,
   diff: T,
@@ -53,13 +54,14 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
       const result = await fetch(handler.APIPath, {
         method: "post",
         body: JSON.stringify({
+          CommitID: commitReq.CommitID,
           EaC: currentEaC,
           Lookup: diffLookup,
           Model: diff![diffLookup],
           ParentEaC: parentEaC,
         } as EaCHandlerRequest),
         headers: {
-          Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${commitReq.JWT}`,
         },
       });
 
