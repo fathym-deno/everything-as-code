@@ -71,12 +71,21 @@ async function loadConnections(
   const mappedCalls = lookups!.map(async (lookup) => {
     return {
       Lookup: lookup,
-      Result: await callEaCHandlerConnections(handler, jwt, {
-        Current: current![lookup],
-        EaC: currentEaC,
-        Lookup: lookup,
-        Model: def![lookup],
-      }),
+      Result: await callEaCHandlerConnections(
+        async (entLookup) => {
+          const eac = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
+
+          return eac.value!;
+        },
+        handler,
+        jwt,
+        {
+          Current: current![lookup],
+          EaC: currentEaC,
+          Lookup: lookup,
+          Model: def![lookup],
+        },
+      ),
     };
   }, {});
 

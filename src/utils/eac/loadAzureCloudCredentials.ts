@@ -1,4 +1,3 @@
-import { denoKv } from "../../../configs/deno-kv.config.ts";
 import {
   EaCCloudAsCode,
   isEaCCloudAsCode,
@@ -8,10 +7,12 @@ import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCod
 import { ClientSecretCredential } from "npm:@azure/identity";
 import { deconstructCloudDetailsSecrets } from "./helpers.ts";
 import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
+import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
 export async function loadAzureCloudCredentials(
   entLookup: string,
   cloudLookup: string,
+  loadEac: (entLookup: string) => Promise<EverythingAsCode>,
 ): Promise<ClientSecretCredential>;
 
 export async function loadAzureCloudCredentials(
@@ -34,6 +35,7 @@ export async function loadAzureCloudCredentials(
     | EaCCloudDetails
     | string,
   cloudLookup?: string,
+  loadEaC?: (entLookup: string) => Promise<EverythingAsCode>,
 ): Promise<ClientSecretCredential> {
   let cloud: EaCCloudAsCode;
 
@@ -41,12 +43,7 @@ export async function loadAzureCloudCredentials(
     let eac: EverythingAsCodeClouds;
 
     if (typeof cloudDetailsEaCEntLookup === "string") {
-      const existingEaC = await denoKv.get<EverythingAsCodeClouds>([
-        "EaC",
-        cloudDetailsEaCEntLookup,
-      ]);
-
-      eac = existingEaC.value!;
+      eac = await loadEaC!(cloudDetailsEaCEntLookup);
     } else {
       eac = cloudDetailsEaCEntLookup as EverythingAsCodeClouds;
     }

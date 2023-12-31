@@ -21,7 +21,6 @@ import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
 import { EaCHandler } from "../../eac/EaCHandler.ts";
 import { EaCHandlerConnectionsRequest } from "../../api/models/EaCHandlerConnectionsRequest.ts";
 import { EaCHandlerConnectionsResponse } from "../../api/models/EaCHandlerConnectionsResponse.ts";
-import { denoKv } from "../../../configs/deno-kv.config.ts";
 import {
   EaCCloudAzureDetails,
   isEaCCloudAzureDetails,
@@ -30,6 +29,7 @@ import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
 import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 
 export async function callEaCHandler<T extends EaCMetadataBase>(
+  loadEac: (entLookup: string) => Promise<EverythingAsCode>,
   handler: EaCHandler,
   jwt: string,
   key: string,
@@ -45,10 +45,7 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
   const current = (currentEaC[key] || {}) as T;
 
   const parentEaC = currentEaC?.ParentEnterpriseLookup
-    ? await denoKv.get<EverythingAsCode>([
-      "EaC",
-      currentEaC.ParentEnterpriseLookup,
-    ])
+    ? await loadEac(currentEaC.ParentEnterpriseLookup)
     : undefined;
 
   if (handler != null) {
@@ -59,7 +56,7 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
           EaC: currentEaC,
           Lookup: diffLookup,
           Model: diff![diffLookup],
-          ParentEaC: parentEaC?.value!,
+          ParentEaC: parentEaC,
         } as EaCHandlerRequest),
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -127,20 +124,16 @@ export async function callEaCHandler<T extends EaCMetadataBase>(
 }
 
 export async function callEaCHandlerCheck(
+  loadEaC: (entLookup: string) => Promise<EverythingAsCode>,
   handlers: EaCHandlers,
   jwt: string,
   req: EaCHandlerCheckRequest,
 ): Promise<EaCHandlerCheckResponse> {
   const handler = handlers[req.Type!];
 
-  const parentEaC = req.EaC?.ParentEnterpriseLookup
-    ? await denoKv.get<EverythingAsCode>([
-      "EaC",
-      req.EaC.ParentEnterpriseLookup,
-    ])
+  req.ParentEaC = req.EaC?.ParentEnterpriseLookup
+    ? await loadEaC(req.EaC.ParentEnterpriseLookup)
     : undefined;
-
-  req.ParentEaC = parentEaC?.value!;
 
   const result = await fetch(`${handler.APIPath}/check`, {
     method: "post",
@@ -156,18 +149,14 @@ export async function callEaCHandlerCheck(
 }
 
 export async function callEaCHandlerConnections(
+  loadEaC: (entLookup: string) => Promise<EverythingAsCode>,
   handler: EaCHandler,
   jwt: string,
   req: EaCHandlerConnectionsRequest,
 ): Promise<EaCHandlerConnectionsResponse> {
-  const parentEaC = req.EaC?.ParentEnterpriseLookup
-    ? await denoKv.get<EverythingAsCode>([
-      "EaC",
-      req.EaC.ParentEnterpriseLookup,
-    ])
+  req.ParentEaC = req.EaC?.ParentEnterpriseLookup
+    ? await loadEaC(req.EaC.ParentEnterpriseLookup)
     : undefined;
-
-  req.ParentEaC = parentEaC?.value!;
 
   const result = await fetch(`${handler.APIPath}/connections`, {
     method: "post",

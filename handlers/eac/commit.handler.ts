@@ -282,6 +282,11 @@ function processEaCHandler(
       diff !== undefined
     ) {
       const handled = await callEaCHandler(
+        async (entLookup) => {
+          const eac = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
+
+          return eac.value!;
+        },
         handler,
         commitReq.JWT,
         key,

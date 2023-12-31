@@ -367,6 +367,7 @@ export async function beginEaCDeployments(
 }
 
 export async function loadDeploymentDetails(
+  commitId: string,
   cloud: EaCCloudAsCode,
   deploymentName: string,
   resGroupLookup?: string,
@@ -375,6 +376,10 @@ export async function loadDeploymentDetails(
   Deployment: DeploymentExtended;
   Messages: Record<string, unknown>;
 }> {
+  console.log(
+    `Processing EaC commit ${commitId} Cloud checks for deployment ${deploymentName}`,
+  );
+
   const details = cloud.Details as EaCCloudAzureDetails;
 
   const creds = await loadAzureCloudCredentials(cloud);
@@ -408,6 +413,7 @@ export async function loadDeploymentDetails(
         "Microsoft.Resources/deployments"
     ) {
       const subDeployDetails = await loadDeploymentDetails(
+        commitId,
         cloud,
         nextResource,
         resGroupLookupPassthrough,

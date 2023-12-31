@@ -44,6 +44,11 @@ export async function handleEaCCommitCheckRequest(
   let checkResponses = await Promise.all(
     commitCheckReq.Checks.map(async (check) => {
       const checkResp = await callEaCHandlerCheck(
+        async (entLookup) => {
+          const eac = await denoKv.get<EverythingAsCode>(["EaC", entLookup]);
+
+          return eac.value!;
+        },
         Handlers!,
         commitCheckReq.JWT,
         check,
