@@ -27,6 +27,10 @@ export const handler: Handlers = {
 
       const handlerRequest: EaCHandlerRequest = await req.json();
 
+      console.log(
+        `Processing EaC commit ${handlerRequest.CommitID} Source processes for source ${handlerRequest.Lookup}`,
+      );
+
       const eac: EverythingAsCodeSources = handlerRequest.EaC;
 
       const currentSources = eac.Sources || {};

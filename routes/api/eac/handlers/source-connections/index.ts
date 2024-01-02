@@ -17,6 +17,10 @@ export const handler: Handlers = {
   async POST(req, _ctx: HandlerContext<any, EaCAPIUserState>) {
     const handlerRequest: EaCHandlerRequest = await req.json();
 
+    console.log(
+      `Processing EaC commit ${handlerRequest.CommitID} Source Connection processes for source connection ${handlerRequest.Lookup}`,
+    );
+
     const eac: EverythingAsCodeSources = handlerRequest.EaC;
 
     const currentSrcConns = eac.SourceConnections || {};

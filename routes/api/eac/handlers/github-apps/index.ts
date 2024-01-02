@@ -20,6 +20,10 @@ export const handler: Handlers = {
   async POST(req, _ctx: HandlerContext<any, EaCAPIUserState>) {
     const handlerRequest: EaCHandlerRequest = await req.json();
 
+    console.log(
+      `Processing EaC commit ${handlerRequest.CommitID} GitHub App processes for app ${handlerRequest.Lookup}`,
+    );
+
     const eac: EverythingAsCodeGitHub = handlerRequest.EaC;
 
     const currentGitHubApps = eac.GitHubApps || {};

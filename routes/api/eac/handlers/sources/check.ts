@@ -15,6 +15,10 @@ export const handler: Handlers = {
   async POST(req: Request, _ctx: HandlerContext<any, EaCAPIUserState>) {
     const checkRequest: EaCHandlerCheckRequest = await req.json();
 
+    console.log(
+      `Processing EaC commit ${checkRequest.CommitID} Source checks for source ${checkRequest.CloudLookup}`,
+    );
+
     return respond({
       CorelationID: checkRequest.CorelationID,
       Complete: true,

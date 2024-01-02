@@ -23,6 +23,10 @@ export const handler: Handlers = {
 
       const handlerRequest: EaCHandlerRequest = await req.json();
 
+      console.log(
+        `Processing EaC commit ${handlerRequest.CommitID} IoT processes for IoT ${handlerRequest.Lookup}`,
+      );
+
       const eac: EverythingAsCodeIoT & EverythingAsCodeClouds =
         handlerRequest.EaC;
 
