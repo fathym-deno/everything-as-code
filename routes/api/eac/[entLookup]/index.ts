@@ -55,6 +55,10 @@ export const handler: Handlers = {
       Username: username!,
     };
 
+    console.log(
+      `Updating EaC container for ${eac.EnterpriseLookup} with Commit ID ${commitStatus.ID}.`,
+    );
+
     const commitReq: EaCCommitRequest = {
       CommitID: commitStatus.ID,
       EaC: {
@@ -106,6 +110,10 @@ export const handler: Handlers = {
           commitStatus,
         );
     });
+
+    console.log(
+      `EaC container update for ${eac.EnterpriseLookup} queued with Commit ID ${commitStatus.ID}.`,
+    );
 
     return respond({
       CommitID: commitStatus.ID,

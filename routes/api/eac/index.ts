@@ -40,6 +40,10 @@ export const handler: Handlers = {
       Username: username,
     };
 
+    console.log(
+      `Create EaC container for ${eac.EnterpriseLookup} with Commit ID ${createStatus.ID}.`,
+    );
+
     while (await eacExists(denoKv, createStatus.EnterpriseLookup)) {
       createStatus.EnterpriseLookup = crypto.randomUUID();
     }
@@ -96,6 +100,10 @@ export const handler: Handlers = {
           createStatus,
         );
     });
+
+    console.log(
+      `EaC container creation for ${eac.EnterpriseLookup} queued with Commit ID ${createStatus.ID}.`,
+    );
 
     return respond({
       CommitID: createStatus.ID,

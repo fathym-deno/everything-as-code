@@ -10,6 +10,8 @@ import { handleEaCDeleteRequest } from "../../handlers/eac/delete.handler.ts";
  * This listener set is responsible for the core EaC actions.
  */
 denoKv.listenQueue(async (msg: unknown) => {
+  console.log("Queue message picked up for processing");
+
   if (isEaCCommitCheckRequest(msg)) {
     await handleEaCCommitCheckRequest(msg);
   } else if (isEaCDeleteRequest(msg)) {
