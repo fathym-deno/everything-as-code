@@ -47,7 +47,7 @@ export const handler: Handlers = {
 
       const cloud = handlerRequest.Model as EaCCloudAsCode;
 
-      await finalizeCloudDetails(cloud);
+      await finalizeCloudDetails(handlerRequest.CommitID, cloud);
 
       const deployments = await buildCloudDeployments(
         handlerRequest.CommitID,
