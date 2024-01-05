@@ -11,6 +11,7 @@ import {
   Client as GraphClient,
 } from "npm:@microsoft/microsoft-graph-client";
 import { TokenCredential } from "npm:@azure/identity";
+import {v4 as uuidv4} from 'uuid';
 import {
   loadAzureCloudCredentials,
   loadMainAzureCredentials,
@@ -81,7 +82,14 @@ export async function finalizeCloudDetails(
       !details.ApplicationID &&
       !details.AuthKey
     ) {
-      // TODO:  Create RBAC service principal
+      // Create RBAC service principal
+      const servicePrincipal = {
+        appId: uuidv4()
+      }
+      const rbacSp = await graphClient
+        .api('/servicePrincipals')
+        .post(servicePrincipal);
+   
       // TODO: Set cloud.Details.* values to RBAC svc principal
     }
 
