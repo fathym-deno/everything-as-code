@@ -43,9 +43,12 @@ class TokenProvider implements AuthenticationProvider {
 }
 
 export async function finalizeCloudDetails(
+  commitId: string,
   cloud: EaCCloudAsCode,
 ): Promise<void> {
   if (cloud.Details) {
+    console.log(`Finalizing EaC commit ${commitId} Cloud details`);
+
     const details = cloud.Details as EaCCloudAzureDetails;
 
     // const creds = loadAzureCloudCredentials(cloud);
@@ -115,6 +118,7 @@ export async function buildCloudDeployments(
     const resGroup = cloud.ResourceGroups![resGroupLookup];
 
     const deployment = await buildCloudDeployment(
+      commitId,
       eac,
       cloudLookup,
       resGroupLookup,
@@ -130,12 +134,17 @@ export async function buildCloudDeployments(
 }
 
 export async function buildCloudDeployment(
+  commitId: string,
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
   resGroupLookup: string,
   resGroup: EaCCloudResourceGroupAsCode,
 ): Promise<EaCCloudDeployment | undefined> {
   if (Object.keys(resGroup.Resources || {}).length > 0) {
+    console.log(
+      `Building EaC commit ${commitId} Cloud deployment for ${resGroupLookup}`,
+    );
+
     const resGroupTemplateResources: Record<string, unknown>[] = [];
 
     const useResGroupDetails = resGroup.Details ||
