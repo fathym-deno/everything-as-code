@@ -20,7 +20,7 @@ export const handler: Handlers = {
     const checkRequest: EaCHandlerCloudCheckRequest = await req.json();
 
     console.log(
-      `Processing EaC commit ${checkRequest.CommitID} Cloud checks for cloud ${checkRequest.CloudLookup}`,
+      `Processing EaC commit ${checkRequest.CommitID} Cloud checks`,
     );
 
     try {

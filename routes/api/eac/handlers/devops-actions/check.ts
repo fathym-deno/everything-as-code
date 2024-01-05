@@ -16,7 +16,7 @@ export const handler: Handlers = {
     const checkRequest: EaCHandlerCheckRequest = await req.json();
 
     console.log(
-      `Processing EaC commit ${checkRequest.CommitID} GitHub App checks`,
+      `Processing EaC commit ${checkRequest.CommitID} DevOps Action checks`,
     );
 
     return respond({

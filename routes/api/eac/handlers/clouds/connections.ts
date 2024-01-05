@@ -72,7 +72,9 @@ async function loadCloudResourceGroupsConnections(
   const resClient = new ResourceManagementClient(creds, details.SubscriptionID);
 
   const mappedCalls = resGroupLookups!.map(async (resGroupLookup) => {
-    const resGroupDef = resGroupsDef ? resGroupsDef[resGroupLookup] : {};
+    const resGroupDef = resGroupsDef && resGroupsDef[resGroupLookup]
+      ? resGroupsDef[resGroupLookup]
+      : {};
 
     let resLookups = Object.keys(resGroupDef.Resources || {});
 
@@ -137,6 +139,8 @@ async function loadCloudResourcesConnections(
 
     const resLocations: Record<string, unknown> = {};
 
+    const resPubProfiles: Record<string, unknown> = {};
+
     for (const ar of resAzureResources) {
       try {
         const apiVersion = apiVersions[ar.type!] || "2023-01-01";
@@ -150,6 +154,14 @@ async function loadCloudResourcesConnections(
         );
 
         resLocations[resLookupKey] = ar.location!;
+
+        if (ar.type === "Microsoft.Web/sites") {
+          resPubProfiles[resLookupKey] = await loadResourcePublishProfiles(
+            creds,
+            apiVersion,
+            ar.id!,
+          );
+        }
       } catch (err) {
         console.error(err);
 
@@ -157,7 +169,9 @@ async function loadCloudResourcesConnections(
       }
     }
 
-    const resDef = resourcesDef ? resourcesDef[resLookup] : {};
+    const resDef = resourcesDef && resourcesDef[resLookup]
+      ? resourcesDef[resLookup]
+      : {};
 
     let resResLookups = Object.keys(resDef?.Resources || {});
 
@@ -172,6 +186,7 @@ async function loadCloudResourcesConnections(
       Resource: {
         Keys: resKeys,
         Locations: resLocations,
+        Profiles: resPubProfiles,
         Resources: await loadCloudResourcesConnections(
           creds,
           azureResources,
@@ -193,6 +208,60 @@ async function loadCloudResourcesConnections(
   }, {} as Record<string, EaCCloudResourceAsCode>);
 }
 
+async function loadResourcePublishProfiles(
+  creds: ClientSecretCredential,
+  apiVersion: string,
+  resId: string,
+) {
+  const token = await creds.getToken([
+    "https://management.azure.com//.default",
+  ]);
+
+  // const slotsResponse = await fetch(
+  //   `https://management.azure.com${resId}/slots?api-version=${apiVersion}`,
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token.token}`,
+  //     },
+  //   },
+  // );
+
+  // let slots = await slotsResponse.json();
+
+  const pubProfilesResponse = await fetch(
+    `https://management.azure.com${resId}/publishxml?api-version=${apiVersion}`,
+    {
+      method: "POST",
+      body: JSON.stringify({}),
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  const pubXml = await pubProfilesResponse.text();
+
+  const pubProfiles: Record<string, unknown> = {};
+
+  pubProfiles["_"] = pubXml;
+
+  // if (!keys.error) {
+  //   if (Array.isArray(keys)) {
+  //     keys.forEach((key) => (localKeys[key.keyName] = key.value));
+  //   } else if (keys.value && Array.isArray(keys.value)) {
+  //     (keys.value as Record<string, any>[]).forEach(
+  //       (key) => (localKeys[key.keyName] = key.value || key.primaryKey),
+  //     );
+  //   } else {
+  //     localKeys = keys;
+  //   }
+  // }
+
+  return pubProfiles;
+}
+
 async function loadResourceKeys(
   creds: ClientSecretCredential,
   apiVersion: string,
@@ -205,30 +274,45 @@ async function loadResourceKeys(
   const keyPaths = [
     `https://management.azure.com${resId}/listKeys?api-version=${apiVersion}`,
     `https://management.azure.com${resId}/listConnectionStrings?api-version=${apiVersion}`,
+    `https://management.azure.com${resId}//host/default/listKeys?api-version=${apiVersion}`,
     `https://management.azure.com${resId}/listQueryKeys?api-version=${apiVersion}`,
   ];
 
-  const response = await fetch(keyPaths[0], {
-    method: "POST",
-    body: JSON.stringify({}),
-    headers: {
-      Authorization: `Bearer ${token.token}`,
-    },
-  });
-
-  const keys = await response.json();
-
   let localKeys: Record<string, unknown> = {};
 
-  if (!keys.error) {
-    if (Array.isArray(keys)) {
-      keys.forEach((key) => (localKeys[key.keyName] = key.value));
-    } else if (keys.value && Array.isArray(keys.value)) {
-      (keys.value as Record<string, any>[]).forEach((
-        key,
-      ) => (localKeys[key.keyName] = key.value || key.primaryKey));
-    } else {
-      localKeys = keys;
+  for (const keyPath of keyPaths) {
+    const response = await fetch(keyPath, {
+      method: "POST",
+      body: JSON.stringify({}),
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+      },
+    });
+
+    try {
+      const text = await response.text();
+
+      console.log(text);
+
+      let keys = JSON.parse(text);
+
+      if (!keys.error) {
+        if (Array.isArray(keys)) {
+          keys.forEach((key) => (localKeys[key.keyName] = key.value));
+        } else if (keys.value && Array.isArray(keys.value)) {
+          (keys.value as Record<string, any>[]).forEach(
+            (key) => (localKeys[key.keyName] = key.value || key.primaryKey),
+          );
+        } else {
+          localKeys = keys;
+        }
+      }
+    } catch (e) {
+      e.toString();
+    }
+
+    if (Object.keys(localKeys).length > 0) {
+      break;
     }
   }
 

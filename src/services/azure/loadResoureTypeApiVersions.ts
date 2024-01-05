@@ -17,7 +17,7 @@ export async function loadResoureTypeApiVersions(
       .map((rt) => {
         return {
           type: [providerType, rt.resourceType!].join("/"),
-          apiVersion: rt.defaultApiVersion!,
+          apiVersion: rt.defaultApiVersion || rt.apiVersions![0],
         };
       })!;
 

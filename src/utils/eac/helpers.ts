@@ -175,8 +175,8 @@ export async function callEaCHandlerConnections(
 
     return checkResp;
   } catch (err) {
-    console.log(err);
-    console.log(text);
+    console.error(err);
+    console.error(text);
 
     throw err;
   }
@@ -268,7 +268,9 @@ export async function eacSetSecrets(
 
   const calls = secrets.map((secret) => {
     return new Promise((resolve, reject) => {
-      const secretName = paramCase(`${secretRoot}-${secret}`);
+      const secretName = secretRoot
+        ? paramCase(`${secretRoot}-${secret}`)
+        : paramCase(secret);
 
       let toSecret = toSecrets[secret];
 

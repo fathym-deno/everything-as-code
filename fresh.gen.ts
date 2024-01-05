@@ -21,36 +21,44 @@ import * as $15 from "./routes/api/eac/handlers/clouds/check.ts";
 import * as $16 from "./routes/api/eac/handlers/clouds/connections.ts";
 import * as $17 from "./routes/api/eac/handlers/clouds/helpers.ts";
 import * as $18 from "./routes/api/eac/handlers/clouds/index.ts";
-import * as $19 from "./routes/api/eac/handlers/github-apps/check.ts";
-import * as $20 from "./routes/api/eac/handlers/github-apps/connections.ts";
-import * as $21 from "./routes/api/eac/handlers/github-apps/helpers.ts";
-import * as $22 from "./routes/api/eac/handlers/github-apps/index.ts";
-import * as $23 from "./routes/api/eac/handlers/iot/check.ts";
-import * as $24 from "./routes/api/eac/handlers/iot/connections.ts";
-import * as $25 from "./routes/api/eac/handlers/iot/helpers.ts";
-import * as $26 from "./routes/api/eac/handlers/iot/index.ts";
-import * as $27 from "./routes/api/eac/handlers/source-connections/check.ts";
-import * as $28 from "./routes/api/eac/handlers/source-connections/connections.ts";
-import * as $29 from "./routes/api/eac/handlers/source-connections/helpers.ts";
-import * as $30 from "./routes/api/eac/handlers/source-connections/index.ts";
-import * as $31 from "./routes/api/eac/handlers/sources/check.ts";
-import * as $32 from "./routes/api/eac/handlers/sources/connections.ts";
-import * as $33 from "./routes/api/eac/handlers/sources/helpers.ts";
-import * as $34 from "./routes/api/eac/handlers/sources/index.ts";
-import * as $35 from "./routes/api/eac/index.ts";
-import * as $36 from "./routes/api/eac/jwt.ts";
-import * as $37 from "./routes/api/eac/list.ts";
-import * as $38 from "./routes/api/github/webhooks.ts";
-import * as $39 from "./routes/dashboard/_middleware.tsx";
-import * as $40 from "./routes/dashboard/api/eac/index.ts";
-import * as $41 from "./routes/dashboard/clouds/azure/index.tsx";
-import * as $42 from "./routes/dashboard/clouds/azure/new.tsx";
-import * as $43 from "./routes/dashboard/clouds/calz.tsx";
-import * as $44 from "./routes/dashboard/enterprise/index.tsx";
-import * as $45 from "./routes/dashboard/github-app/index.tsx";
-import * as $46 from "./routes/dashboard/index.tsx";
-import * as $47 from "./routes/dashboard/jwt/index.tsx";
-import * as $48 from "./routes/index.tsx";
+import * as $19 from "./routes/api/eac/handlers/devops-actions/check.ts";
+import * as $20 from "./routes/api/eac/handlers/devops-actions/connections.ts";
+import * as $21 from "./routes/api/eac/handlers/devops-actions/helpers.ts";
+import * as $22 from "./routes/api/eac/handlers/devops-actions/index.ts";
+import * as $23 from "./routes/api/eac/handlers/github-apps/check.ts";
+import * as $24 from "./routes/api/eac/handlers/github-apps/connections.ts";
+import * as $25 from "./routes/api/eac/handlers/github-apps/helpers.ts";
+import * as $26 from "./routes/api/eac/handlers/github-apps/index.ts";
+import * as $27 from "./routes/api/eac/handlers/iot/check.ts";
+import * as $28 from "./routes/api/eac/handlers/iot/connections.ts";
+import * as $29 from "./routes/api/eac/handlers/iot/helpers.ts";
+import * as $30 from "./routes/api/eac/handlers/iot/index.ts";
+import * as $31 from "./routes/api/eac/handlers/secrets/check.ts";
+import * as $32 from "./routes/api/eac/handlers/secrets/connections.ts";
+import * as $33 from "./routes/api/eac/handlers/secrets/helpers.ts";
+import * as $34 from "./routes/api/eac/handlers/secrets/index.ts";
+import * as $35 from "./routes/api/eac/handlers/source-connections/check.ts";
+import * as $36 from "./routes/api/eac/handlers/source-connections/connections.ts";
+import * as $37 from "./routes/api/eac/handlers/source-connections/helpers.ts";
+import * as $38 from "./routes/api/eac/handlers/source-connections/index.ts";
+import * as $39 from "./routes/api/eac/handlers/sources/check.ts";
+import * as $40 from "./routes/api/eac/handlers/sources/connections.ts";
+import * as $41 from "./routes/api/eac/handlers/sources/helpers.ts";
+import * as $42 from "./routes/api/eac/handlers/sources/index.ts";
+import * as $43 from "./routes/api/eac/index.ts";
+import * as $44 from "./routes/api/eac/jwt.ts";
+import * as $45 from "./routes/api/eac/list.ts";
+import * as $46 from "./routes/api/github/webhooks.ts";
+import * as $47 from "./routes/dashboard/_middleware.tsx";
+import * as $48 from "./routes/dashboard/api/eac/index.ts";
+import * as $49 from "./routes/dashboard/clouds/azure/index.tsx";
+import * as $50 from "./routes/dashboard/clouds/azure/new.tsx";
+import * as $51 from "./routes/dashboard/clouds/calz.tsx";
+import * as $52 from "./routes/dashboard/enterprise/index.tsx";
+import * as $53 from "./routes/dashboard/github-app/index.tsx";
+import * as $54 from "./routes/dashboard/index.tsx";
+import * as $55 from "./routes/dashboard/jwt/index.tsx";
+import * as $56 from "./routes/index.tsx";
 import * as $$0 from "./islands/EntepriseManagementItem.tsx";
 
 const manifest = {
@@ -76,36 +84,44 @@ const manifest = {
     "./routes/api/eac/handlers/clouds/connections.ts": $16,
     "./routes/api/eac/handlers/clouds/helpers.ts": $17,
     "./routes/api/eac/handlers/clouds/index.ts": $18,
-    "./routes/api/eac/handlers/github-apps/check.ts": $19,
-    "./routes/api/eac/handlers/github-apps/connections.ts": $20,
-    "./routes/api/eac/handlers/github-apps/helpers.ts": $21,
-    "./routes/api/eac/handlers/github-apps/index.ts": $22,
-    "./routes/api/eac/handlers/iot/check.ts": $23,
-    "./routes/api/eac/handlers/iot/connections.ts": $24,
-    "./routes/api/eac/handlers/iot/helpers.ts": $25,
-    "./routes/api/eac/handlers/iot/index.ts": $26,
-    "./routes/api/eac/handlers/source-connections/check.ts": $27,
-    "./routes/api/eac/handlers/source-connections/connections.ts": $28,
-    "./routes/api/eac/handlers/source-connections/helpers.ts": $29,
-    "./routes/api/eac/handlers/source-connections/index.ts": $30,
-    "./routes/api/eac/handlers/sources/check.ts": $31,
-    "./routes/api/eac/handlers/sources/connections.ts": $32,
-    "./routes/api/eac/handlers/sources/helpers.ts": $33,
-    "./routes/api/eac/handlers/sources/index.ts": $34,
-    "./routes/api/eac/index.ts": $35,
-    "./routes/api/eac/jwt.ts": $36,
-    "./routes/api/eac/list.ts": $37,
-    "./routes/api/github/webhooks.ts": $38,
-    "./routes/dashboard/_middleware.tsx": $39,
-    "./routes/dashboard/api/eac/index.ts": $40,
-    "./routes/dashboard/clouds/azure/index.tsx": $41,
-    "./routes/dashboard/clouds/azure/new.tsx": $42,
-    "./routes/dashboard/clouds/calz.tsx": $43,
-    "./routes/dashboard/enterprise/index.tsx": $44,
-    "./routes/dashboard/github-app/index.tsx": $45,
-    "./routes/dashboard/index.tsx": $46,
-    "./routes/dashboard/jwt/index.tsx": $47,
-    "./routes/index.tsx": $48,
+    "./routes/api/eac/handlers/devops-actions/check.ts": $19,
+    "./routes/api/eac/handlers/devops-actions/connections.ts": $20,
+    "./routes/api/eac/handlers/devops-actions/helpers.ts": $21,
+    "./routes/api/eac/handlers/devops-actions/index.ts": $22,
+    "./routes/api/eac/handlers/github-apps/check.ts": $23,
+    "./routes/api/eac/handlers/github-apps/connections.ts": $24,
+    "./routes/api/eac/handlers/github-apps/helpers.ts": $25,
+    "./routes/api/eac/handlers/github-apps/index.ts": $26,
+    "./routes/api/eac/handlers/iot/check.ts": $27,
+    "./routes/api/eac/handlers/iot/connections.ts": $28,
+    "./routes/api/eac/handlers/iot/helpers.ts": $29,
+    "./routes/api/eac/handlers/iot/index.ts": $30,
+    "./routes/api/eac/handlers/secrets/check.ts": $31,
+    "./routes/api/eac/handlers/secrets/connections.ts": $32,
+    "./routes/api/eac/handlers/secrets/helpers.ts": $33,
+    "./routes/api/eac/handlers/secrets/index.ts": $34,
+    "./routes/api/eac/handlers/source-connections/check.ts": $35,
+    "./routes/api/eac/handlers/source-connections/connections.ts": $36,
+    "./routes/api/eac/handlers/source-connections/helpers.ts": $37,
+    "./routes/api/eac/handlers/source-connections/index.ts": $38,
+    "./routes/api/eac/handlers/sources/check.ts": $39,
+    "./routes/api/eac/handlers/sources/connections.ts": $40,
+    "./routes/api/eac/handlers/sources/helpers.ts": $41,
+    "./routes/api/eac/handlers/sources/index.ts": $42,
+    "./routes/api/eac/index.ts": $43,
+    "./routes/api/eac/jwt.ts": $44,
+    "./routes/api/eac/list.ts": $45,
+    "./routes/api/github/webhooks.ts": $46,
+    "./routes/dashboard/_middleware.tsx": $47,
+    "./routes/dashboard/api/eac/index.ts": $48,
+    "./routes/dashboard/clouds/azure/index.tsx": $49,
+    "./routes/dashboard/clouds/azure/new.tsx": $50,
+    "./routes/dashboard/clouds/calz.tsx": $51,
+    "./routes/dashboard/enterprise/index.tsx": $52,
+    "./routes/dashboard/github-app/index.tsx": $53,
+    "./routes/dashboard/index.tsx": $54,
+    "./routes/dashboard/jwt/index.tsx": $55,
+    "./routes/index.tsx": $56,
   },
   islands: {
     "./islands/EntepriseManagementItem.tsx": $$0,

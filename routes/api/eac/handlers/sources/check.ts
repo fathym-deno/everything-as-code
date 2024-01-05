@@ -16,16 +16,14 @@ export const handler: Handlers = {
     const checkRequest: EaCHandlerCheckRequest = await req.json();
 
     console.log(
-      `Processing EaC commit ${checkRequest.CommitID} Source checks for source ${checkRequest.CloudLookup}`,
+      `Processing EaC commit ${checkRequest.CommitID} Source checks`,
     );
 
     return respond({
       CorelationID: checkRequest.CorelationID,
       Complete: true,
       HasError: false,
-      Messages: {
-        [`Source`]: `Temp message`,
-      },
+      Messages: {},
     } as EaCHandlerCheckResponse);
   },
 };

@@ -79,7 +79,19 @@ export async function handleEaCCommitRequest(commitReq: EaCCommitRequest) {
 
   saveEaC.Handlers = merge(eacHandlers, saveEaC.Handlers || {});
 
-  const diffCalls: Record<number, Promise<void>[]> = {};
+  delete saveEaC.Handlers!.Force;
+
+  if (eacHandlers.Force) {
+    delete eacHandlers.Force;
+
+    const handlerKeys = Object.keys(eacHandlers);
+
+    handlerKeys.forEach((key) => {
+      saveEaC.Handlers![key].Order = eacHandlers[key].Order;
+    });
+  }
+
+  const diffCalls: Record<number, (() => Promise<void>)[]> = {};
 
   let toProcess = { keys: [...diffKeys] };
 
@@ -164,7 +176,7 @@ function configureListenQueueOp(
         versionstamp: undefined,
       };
 
-      op = enqueueAtomicOperation(op, commitCheckReq, 1000 * 1);
+      op = enqueueAtomicOperation(op, commitCheckReq, 1000 * 5);
 
       console.log(`Queuing EaC commit ${commitReq.CommitID} checks`);
     } else if (errors.length > 0) {
@@ -182,7 +194,7 @@ function configureListenQueueOp(
 }
 
 async function processDiffCalls(
-  diffCalls: Record<number, Promise<void>[]>,
+  diffCalls: Record<number, (() => Promise<void>)[]>,
   allChecks: EaCHandlerCheckRequest[],
   errors: EaCHandlerErrorResponse[],
   status: EaCStatus,
@@ -200,7 +212,7 @@ async function processDiffCalls(
       }) for order '${order}'`,
     );
 
-    await Promise.all(diffCalls[order]);
+    await Promise.all(diffCalls[order].map((dc) => dc()));
 
     if (errors.length > 0) {
       status.Processing = EaCStatusProcessingTypes.ERROR;
@@ -231,7 +243,7 @@ function processDiffKey(
   toProcess: { keys: string[] },
   allChecks: EaCHandlerCheckRequest[],
   errors: EaCHandlerErrorResponse[],
-  diffCalls: Record<number, Promise<void>[]>,
+  diffCalls: Record<number, (() => Promise<void>)[]>,
 ): (key: string) => void {
   return (key) => {
     console.log(
@@ -256,7 +268,7 @@ function processDiffKey(
 
       diffCalls[handler.Order] = [
         ...(diffCalls[handler.Order] || []),
-        process(),
+        process,
       ];
     }
   };

@@ -16,16 +16,14 @@ export const handler: Handlers = {
     const checkRequest: EaCHandlerIoTCheckRequest = await req.json();
 
     console.log(
-      `Processing EaC commit ${checkRequest.CommitID} IoT checks for IoT ${checkRequest.CloudLookup}`,
+      `Processing EaC commit ${checkRequest.CommitID} IoT checks`,
     );
 
     return respond({
       CorelationID: checkRequest.CorelationID,
       Complete: true,
       HasError: false,
-      Messages: {
-        [`IoT`]: `Temp message`,
-      },
+      Messages: {},
     } as EaCHandlerCheckResponse);
   },
 };

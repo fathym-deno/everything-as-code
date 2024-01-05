@@ -1,17 +1,13 @@
 import { EaCHandlers } from "../src/api/EaCHandlers.ts";
 
 export const eacHandlers: EaCHandlers = {
-  Artifacts: {
-    APIPath: "http://localhost:5437/api/eac/handlers/artifacts",
-    Order: 500,
-  },
   Clouds: {
     APIPath: "http://localhost:5437/api/eac/handlers/clouds",
     Order: 100,
   },
   DevOpsActions: {
     APIPath: "http://localhost:5437/api/eac/handlers/devops-actions",
-    Order: 500,
+    Order: 400,
   },
   GitHubApps: {
     APIPath: "http://localhost:5437/api/eac/handlers/github-apps",
@@ -19,11 +15,11 @@ export const eacHandlers: EaCHandlers = {
   },
   IoT: {
     APIPath: "http://localhost:5437/api/eac/handlers/iot",
-    Order: 300,
+    Order: 200,
   },
   Secrets: {
     APIPath: "http://localhost:5437/api/eac/handlers/secrets",
-    Order: 200,
+    Order: 300,
   },
   SourceConnections: {
     APIPath: "http://localhost:5437/api/eac/handlers/source-connections",
@@ -31,6 +27,6 @@ export const eacHandlers: EaCHandlers = {
   },
   Sources: {
     APIPath: "http://localhost:5437/api/eac/handlers/sources",
-    Order: 400,
+    Order: 500,
   },
 };

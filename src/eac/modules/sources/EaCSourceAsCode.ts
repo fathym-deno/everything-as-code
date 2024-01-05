@@ -1,8 +1,9 @@
 import { EaCDetails } from "../../EaCDetails.ts";
+import { EaCArtifactAsCode } from "./EaCArtifactAsCode.ts";
 import { EaCSourceDetails } from "./EaCSourceDetails.ts";
 
 export type EaCSourceAsCode = {
-  DevOpsActionTriggerLookups?: string[] | null;
+  Artifacts?: Record<string, EaCArtifactAsCode>;
 
-  SecretLookups?: string[] | null;
+  SecretLookups?: Record<string, string> | null;
 } & EaCDetails<EaCSourceDetails>;

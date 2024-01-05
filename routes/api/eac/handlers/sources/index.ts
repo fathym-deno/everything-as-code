@@ -1,7 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
 import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
-import { ensureSource } from "./helpers.ts";
+import {
+  ensureSource,
+  ensureSourceArtifacts,
+  ensureSourceSecrets,
+} from "./helpers.ts";
 import { EaCAPIUserState } from "../../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerRequest } from "../../../../../src/api/models/EaCHandlerRequest.ts";
 import { EverythingAsCodeSources } from "../../../../../src/eac/modules/sources/EverythingAsCodeSources.ts";
@@ -13,6 +17,7 @@ import { EaCGitHubAppDetails } from "../../../../../src/eac/modules/github/EaCGi
 import { eacGetSecrets } from "../../../../../src/utils/eac/helpers.ts";
 import { loadSecretClient } from "../../../../../src/services/azure/key-vault.ts";
 import { EverythingAsCodeGitHub } from "../../../../../src/eac/modules/github/EverythingAsCodeGitHub.ts";
+import { EverythingAsCode } from "../../../../../src/eac/EverythingAsCode.ts";
 
 export const handler: Handlers = {
   /**
@@ -31,7 +36,8 @@ export const handler: Handlers = {
         `Processing EaC commit ${handlerRequest.CommitID} Source processes for source ${handlerRequest.Lookup}`,
       );
 
-      const eac: EverythingAsCodeSources = handlerRequest.EaC;
+      const eac: EverythingAsCodeSources & EverythingAsCode =
+        handlerRequest.EaC;
 
       const currentSources = eac.Sources || {};
 
@@ -44,13 +50,14 @@ export const handler: Handlers = {
 
       let source = handlerRequest.Model as EaCSourceAsCode;
 
-      if (source.Details) {
-        const sourceConnection = eac
-          .SourceConnections![
-            `${source.Details.Type}://${source.Details.Username!}`
-          ];
-
+      if (source.Details || source.SourceLookups) {
         const parentEaC: EverythingAsCodeGitHub = handlerRequest.ParentEaC!;
+
+        const sourceConnection = eac.SourceConnections![
+          `${(source.Details || current.Details!).Type}://${(
+            source.Details || current.Details!
+          ).Username!}`
+        ];
 
         const gitHubApp =
           parentEaC.GitHubApps![sourceConnection.GitHubAppLookup!];
@@ -72,18 +79,40 @@ export const handler: Handlers = {
           ...secreted,
         } as EaCGitHubAppDetails;
 
-        source = await ensureSource(
+        if (source.Details) {
+          source = await ensureSource(
+            gitHubAppDetails,
+            sourceConnection,
+            sourceLookup,
+            current,
+            source,
+            action,
+          );
+
+          sourceLookup = `${source.Details!.Type}://${
+            source.Details!.Organization
+          }/${source.Details!.Repository}`;
+        }
+
+        const calls: Promise<unknown>[] = [];
+
+        await ensureSourceSecrets(
+          eac,
           gitHubAppDetails,
           sourceConnection,
-          sourceLookup,
           current,
           source,
-          action,
         );
 
-        sourceLookup = `${source.Details!.Type}://${
-          source.Details!.Organization
-        }/${source.Details!.Repository}`;
+        await ensureSourceArtifacts(
+          eac,
+          gitHubAppDetails,
+          sourceConnection,
+          current,
+          source,
+        );
+
+        await Promise.all(calls);
       }
 
       return respond({

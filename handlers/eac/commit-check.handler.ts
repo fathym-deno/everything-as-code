@@ -117,7 +117,7 @@ export async function handleEaCCommitCheckRequest(
         versionstamp: undefined,
       };
 
-      op = enqueueAtomicOperation(op, newCommitCheckReq, 1000 * 5);
+      op = enqueueAtomicOperation(op, newCommitCheckReq, 1000 * 10);
 
       console.log(`Requeuing EaC commit ${commitCheckReq.CommitID} checks`);
     } else if (errors.length > 0) {
