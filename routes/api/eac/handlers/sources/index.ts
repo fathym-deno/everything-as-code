@@ -18,6 +18,7 @@ import { eacGetSecrets } from "../../../../../src/utils/eac/helpers.ts";
 import { loadSecretClient } from "../../../../../src/services/azure/key-vault.ts";
 import { EverythingAsCodeGitHub } from "../../../../../src/eac/modules/github/EverythingAsCodeGitHub.ts";
 import { EverythingAsCode } from "../../../../../src/eac/EverythingAsCode.ts";
+import { sleep } from "../../../../../src/utils/sleep.ts";
 
 export const handler: Handlers = {
   /**
@@ -92,6 +93,8 @@ export const handler: Handlers = {
           sourceLookup = `${source.Details!.Type}://${
             source.Details!.Organization
           }/${source.Details!.Repository}`;
+
+          await sleep(1000);
         }
 
         const calls: Promise<unknown>[] = [];
@@ -103,6 +106,8 @@ export const handler: Handlers = {
           current,
           source,
         );
+
+        await sleep(1000);
 
         await ensureSourceArtifacts(
           eac,

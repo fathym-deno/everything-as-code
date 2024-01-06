@@ -151,6 +151,7 @@ async function loadCloudResourcesConnections(
           creds,
           apiVersion,
           ar.id!,
+          ar.type!,
         );
 
         resLocations[resLookupKey] = ar.location!;
@@ -266,6 +267,7 @@ async function loadResourceKeys(
   creds: ClientSecretCredential,
   apiVersion: string,
   resId: string,
+  resType: string,
 ) {
   const token = await creds.getToken([
     "https://management.azure.com//.default",
@@ -280,7 +282,18 @@ async function loadResourceKeys(
 
   let localKeys: Record<string, unknown> = {};
 
-  for (const keyPath of keyPaths) {
+  const keyPathMaps: Record<string, number> = {
+    "Microsoft.Devices/IotHubs": 0,
+    "Microsoft.Storage/storageAccounts": 0,
+    "Microsoft.OperationalInsights/workspaces": 0,
+    "Microsoft.Web/sites": 2,
+  };
+
+  const keyPathIndex = keyPathMaps[resType];
+
+  if (keyPathIndex >= 0) {
+    const keyPath = keyPaths[keyPathIndex];
+
     const response = await fetch(keyPath, {
       method: "POST",
       body: JSON.stringify({}),
@@ -309,10 +322,6 @@ async function loadResourceKeys(
       }
     } catch (e) {
       e.toString();
-    }
-
-    if (Object.keys(localKeys).length > 0) {
-      break;
     }
   }
 
