@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
 import { EverythingAsCode } from "../../../../src/eac/EverythingAsCode.ts";
