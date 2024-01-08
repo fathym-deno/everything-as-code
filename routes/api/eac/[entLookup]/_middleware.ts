@@ -1,6 +1,6 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
-import { Status } from "$std/http/http_status.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
 import { UserEaCRecord } from "../../../../src/api/UserEaCRecord.ts";
 import { denoKv } from "../../../../configs/deno-kv.config.ts";
@@ -20,7 +20,7 @@ export async function handler(
           `The current JWT does not have access to the enterprise '${entLookup}'.`,
       },
       {
-        status: Status.Unauthorized,
+        status: STATUS_CODE.Unauthorized,
       },
     );
   }
@@ -48,7 +48,7 @@ export async function handler(
         Message: `You do not have access to the enterprise '${entLookup}'.`,
       },
       {
-        status: Status.Unauthorized,
+        status: STATUS_CODE.Unauthorized,
       },
     );
   }

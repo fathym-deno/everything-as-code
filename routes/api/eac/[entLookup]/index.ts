@@ -77,7 +77,7 @@ export const handler: Handlers = {
           Message: "The enterprise lookup must be provided.",
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }
@@ -89,7 +89,7 @@ export const handler: Handlers = {
             "The enterprise must first be created before it can be updated.",
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }
@@ -172,7 +172,7 @@ export const handler: Handlers = {
           Message: "The enterprise lookup must be provided.",
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }
@@ -185,7 +185,7 @@ export const handler: Handlers = {
           }.`,
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }

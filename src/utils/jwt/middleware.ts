@@ -1,7 +1,7 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { JWTConfig } from "./JWTConfig.ts";
-import { Status } from "$std/http/http_status.ts";
 
 export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {
   return async function jwtValidateHandler(
@@ -33,7 +33,7 @@ export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {
 
     if (failureRespBody.HasError) {
       return respond(failureRespBody, {
-        status: Status.Unauthorized,
+        status: STATUS_CODE.Unauthorized,
       });
     }
 

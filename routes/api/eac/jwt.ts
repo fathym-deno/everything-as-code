@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { denoKv } from "../../../configs/deno-kv.config.ts";
 import { jwtConfig } from "../../../configs/jwt.config.ts";
@@ -23,7 +24,7 @@ export const handler: Handlers = {
           Message: `The provided JWT is invalid.`,
         },
         {
-          status: Status.Unauthorized,
+          status: STATUS_CODE.Unauthorized,
         },
       );
     }
@@ -49,7 +50,7 @@ export const handler: Handlers = {
             `You are not authorized to generate a JWT for this enterprise.`,
         },
         {
-          status: Status.Unauthorized,
+          status: STATUS_CODE.Unauthorized,
         },
       );
     }
@@ -68,7 +69,7 @@ export const handler: Handlers = {
             `The requested user ${username} does not have access to the enterprise '${entLookup}'.`,
         },
         {
-          status: Status.Unauthorized,
+          status: STATUS_CODE.Unauthorized,
         },
       );
     }

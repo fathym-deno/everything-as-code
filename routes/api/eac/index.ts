@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { Status } from "$std/http/http_status.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIState } from "../../../src/api/EaCAPIState.ts";
@@ -66,7 +66,7 @@ export const handler: Handlers = {
           Message: "There was an issue creating a new EaC container.",
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }
@@ -78,7 +78,7 @@ export const handler: Handlers = {
             "The name must be provided when creating a new EaC container.",
         },
         {
-          status: Status.BadRequest,
+          status: STATUS_CODE.BadRequest,
         },
       );
     }
