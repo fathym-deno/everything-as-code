@@ -2,131 +2,162 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/_404.tsx";
-import * as $1 from "./routes/_app.tsx";
-import * as $2 from "./routes/_middleware.tsx";
-import * as $3 from "./routes/api/eac/[entLookup]/_middleware.ts";
-import * as $4 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts";
-import * as $5 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
-import * as $6 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
-import * as $7 from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts";
-import * as $8 from "./routes/api/eac/[entLookup]/connections/index.ts";
-import * as $9 from "./routes/api/eac/[entLookup]/index.ts";
-import * as $10 from "./routes/api/eac/[entLookup]/status/[commitId]/index.ts";
-import * as $11 from "./routes/api/eac/[entLookup]/status/current.ts";
-import * as $12 from "./routes/api/eac/[entLookup]/status/index.ts";
-import * as $13 from "./routes/api/eac/[entLookup]/users.ts";
-import * as $14 from "./routes/api/eac/_middleware.ts";
-import * as $15 from "./routes/api/eac/handlers/clouds/check.ts";
-import * as $16 from "./routes/api/eac/handlers/clouds/connections.ts";
-import * as $17 from "./routes/api/eac/handlers/clouds/helpers.ts";
-import * as $18 from "./routes/api/eac/handlers/clouds/index.ts";
-import * as $19 from "./routes/api/eac/handlers/devops-actions/check.ts";
-import * as $20 from "./routes/api/eac/handlers/devops-actions/connections.ts";
-import * as $21 from "./routes/api/eac/handlers/devops-actions/helpers.ts";
-import * as $22 from "./routes/api/eac/handlers/devops-actions/index.ts";
-import * as $23 from "./routes/api/eac/handlers/github-apps/check.ts";
-import * as $24 from "./routes/api/eac/handlers/github-apps/connections.ts";
-import * as $25 from "./routes/api/eac/handlers/github-apps/helpers.ts";
-import * as $26 from "./routes/api/eac/handlers/github-apps/index.ts";
-import * as $27 from "./routes/api/eac/handlers/iot/check.ts";
-import * as $28 from "./routes/api/eac/handlers/iot/connections.ts";
-import * as $29 from "./routes/api/eac/handlers/iot/helpers.ts";
-import * as $30 from "./routes/api/eac/handlers/iot/index.ts";
-import * as $31 from "./routes/api/eac/handlers/secrets/check.ts";
-import * as $32 from "./routes/api/eac/handlers/secrets/connections.ts";
-import * as $33 from "./routes/api/eac/handlers/secrets/helpers.ts";
-import * as $34 from "./routes/api/eac/handlers/secrets/index.ts";
-import * as $35 from "./routes/api/eac/handlers/source-connections/check.ts";
-import * as $36 from "./routes/api/eac/handlers/source-connections/connections.ts";
-import * as $37 from "./routes/api/eac/handlers/source-connections/helpers.ts";
-import * as $38 from "./routes/api/eac/handlers/source-connections/index.ts";
-import * as $39 from "./routes/api/eac/handlers/sources/check.ts";
-import * as $40 from "./routes/api/eac/handlers/sources/connections.ts";
-import * as $41 from "./routes/api/eac/handlers/sources/helpers.ts";
-import * as $42 from "./routes/api/eac/handlers/sources/index.ts";
-import * as $43 from "./routes/api/eac/index.ts";
-import * as $44 from "./routes/api/eac/jwt.ts";
-import * as $45 from "./routes/api/eac/list.ts";
-import * as $46 from "./routes/api/github/webhooks.ts";
-import * as $47 from "./routes/dashboard/_middleware.tsx";
-import * as $48 from "./routes/dashboard/api/eac/index.ts";
-import * as $49 from "./routes/dashboard/clouds/azure/index.tsx";
-import * as $50 from "./routes/dashboard/clouds/azure/new.tsx";
-import * as $51 from "./routes/dashboard/clouds/calz.tsx";
-import * as $52 from "./routes/dashboard/enterprise/index.tsx";
-import * as $53 from "./routes/dashboard/github-app/index.tsx";
-import * as $54 from "./routes/dashboard/index.tsx";
-import * as $55 from "./routes/dashboard/jwt/index.tsx";
-import * as $56 from "./routes/index.tsx";
-import * as $$0 from "./islands/EntepriseManagementItem.tsx";
+import * as $_404 from "./routes/_404.tsx";
+import * as $_app from "./routes/_app.tsx";
+import * as $_middleware from "./routes/_middleware.tsx";
+import * as $api_eac_entLookup_middleware from "./routes/api/eac/[entLookup]/_middleware.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_explorer_db_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_api_versions_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_auth_token_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_locations_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts";
+import * as $api_eac_entLookup_connections_index from "./routes/api/eac/[entLookup]/connections/index.ts";
+import * as $api_eac_entLookup_index from "./routes/api/eac/[entLookup]/index.ts";
+import * as $api_eac_entLookup_status_commitId_index from "./routes/api/eac/[entLookup]/status/[commitId]/index.ts";
+import * as $api_eac_entLookup_status_current from "./routes/api/eac/[entLookup]/status/current.ts";
+import * as $api_eac_entLookup_status_index from "./routes/api/eac/[entLookup]/status/index.ts";
+import * as $api_eac_entLookup_users from "./routes/api/eac/[entLookup]/users.ts";
+import * as $api_eac_middleware from "./routes/api/eac/_middleware.ts";
+import * as $api_eac_handlers_clouds_check from "./routes/api/eac/handlers/clouds/check.ts";
+import * as $api_eac_handlers_clouds_connections from "./routes/api/eac/handlers/clouds/connections.ts";
+import * as $api_eac_handlers_clouds_helpers from "./routes/api/eac/handlers/clouds/helpers.ts";
+import * as $api_eac_handlers_clouds_index from "./routes/api/eac/handlers/clouds/index.ts";
+import * as $api_eac_handlers_devops_actions_check from "./routes/api/eac/handlers/devops-actions/check.ts";
+import * as $api_eac_handlers_devops_actions_connections from "./routes/api/eac/handlers/devops-actions/connections.ts";
+import * as $api_eac_handlers_devops_actions_helpers from "./routes/api/eac/handlers/devops-actions/helpers.ts";
+import * as $api_eac_handlers_devops_actions_index from "./routes/api/eac/handlers/devops-actions/index.ts";
+import * as $api_eac_handlers_github_apps_check from "./routes/api/eac/handlers/github-apps/check.ts";
+import * as $api_eac_handlers_github_apps_connections from "./routes/api/eac/handlers/github-apps/connections.ts";
+import * as $api_eac_handlers_github_apps_helpers from "./routes/api/eac/handlers/github-apps/helpers.ts";
+import * as $api_eac_handlers_github_apps_index from "./routes/api/eac/handlers/github-apps/index.ts";
+import * as $api_eac_handlers_iot_check from "./routes/api/eac/handlers/iot/check.ts";
+import * as $api_eac_handlers_iot_connections from "./routes/api/eac/handlers/iot/connections.ts";
+import * as $api_eac_handlers_iot_helpers from "./routes/api/eac/handlers/iot/helpers.ts";
+import * as $api_eac_handlers_iot_index from "./routes/api/eac/handlers/iot/index.ts";
+import * as $api_eac_handlers_secrets_check from "./routes/api/eac/handlers/secrets/check.ts";
+import * as $api_eac_handlers_secrets_connections from "./routes/api/eac/handlers/secrets/connections.ts";
+import * as $api_eac_handlers_secrets_helpers from "./routes/api/eac/handlers/secrets/helpers.ts";
+import * as $api_eac_handlers_secrets_index from "./routes/api/eac/handlers/secrets/index.ts";
+import * as $api_eac_handlers_source_connections_check from "./routes/api/eac/handlers/source-connections/check.ts";
+import * as $api_eac_handlers_source_connections_connections from "./routes/api/eac/handlers/source-connections/connections.ts";
+import * as $api_eac_handlers_source_connections_helpers from "./routes/api/eac/handlers/source-connections/helpers.ts";
+import * as $api_eac_handlers_source_connections_index from "./routes/api/eac/handlers/source-connections/index.ts";
+import * as $api_eac_handlers_sources_check from "./routes/api/eac/handlers/sources/check.ts";
+import * as $api_eac_handlers_sources_connections from "./routes/api/eac/handlers/sources/connections.ts";
+import * as $api_eac_handlers_sources_helpers from "./routes/api/eac/handlers/sources/helpers.ts";
+import * as $api_eac_handlers_sources_index from "./routes/api/eac/handlers/sources/index.ts";
+import * as $api_eac_index from "./routes/api/eac/index.ts";
+import * as $api_eac_jwt from "./routes/api/eac/jwt.ts";
+import * as $api_eac_list from "./routes/api/eac/list.ts";
+import * as $api_github_webhooks from "./routes/api/github/webhooks.ts";
+import * as $dashboard_middleware from "./routes/dashboard/_middleware.tsx";
+import * as $dashboard_api_eac_index from "./routes/dashboard/api/eac/index.ts";
+import * as $dashboard_clouds_azure_index from "./routes/dashboard/clouds/azure/index.tsx";
+import * as $dashboard_clouds_azure_new from "./routes/dashboard/clouds/azure/new.tsx";
+import * as $dashboard_clouds_calz from "./routes/dashboard/clouds/calz.tsx";
+import * as $dashboard_enterprise_index from "./routes/dashboard/enterprise/index.tsx";
+import * as $dashboard_github_app_index from "./routes/dashboard/github-app/index.tsx";
+import * as $dashboard_index from "./routes/dashboard/index.tsx";
+import * as $dashboard_jwt_index from "./routes/dashboard/jwt/index.tsx";
+import * as $index from "./routes/index.tsx";
+import * as $EntepriseManagementItem from "./islands/EntepriseManagementItem.tsx";
+import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
-    "./routes/_404.tsx": $0,
-    "./routes/_app.tsx": $1,
-    "./routes/_middleware.tsx": $2,
-    "./routes/api/eac/[entLookup]/_middleware.ts": $3,
+    "./routes/_404.tsx": $_404,
+    "./routes/_app.tsx": $_app,
+    "./routes/_middleware.tsx": $_middleware,
+    "./routes/api/eac/[entLookup]/_middleware.ts":
+      $api_eac_entLookup_middleware,
     "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts":
-      $4,
+      $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_explorer_db_index,
     "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts":
-      $5,
-    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts": $6,
-    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts": $7,
-    "./routes/api/eac/[entLookup]/connections/index.ts": $8,
-    "./routes/api/eac/[entLookup]/index.ts": $9,
-    "./routes/api/eac/[entLookup]/status/[commitId]/index.ts": $10,
-    "./routes/api/eac/[entLookup]/status/current.ts": $11,
-    "./routes/api/eac/[entLookup]/status/index.ts": $12,
-    "./routes/api/eac/[entLookup]/users.ts": $13,
-    "./routes/api/eac/_middleware.ts": $14,
-    "./routes/api/eac/handlers/clouds/check.ts": $15,
-    "./routes/api/eac/handlers/clouds/connections.ts": $16,
-    "./routes/api/eac/handlers/clouds/helpers.ts": $17,
-    "./routes/api/eac/handlers/clouds/index.ts": $18,
-    "./routes/api/eac/handlers/devops-actions/check.ts": $19,
-    "./routes/api/eac/handlers/devops-actions/connections.ts": $20,
-    "./routes/api/eac/handlers/devops-actions/helpers.ts": $21,
-    "./routes/api/eac/handlers/devops-actions/index.ts": $22,
-    "./routes/api/eac/handlers/github-apps/check.ts": $23,
-    "./routes/api/eac/handlers/github-apps/connections.ts": $24,
-    "./routes/api/eac/handlers/github-apps/helpers.ts": $25,
-    "./routes/api/eac/handlers/github-apps/index.ts": $26,
-    "./routes/api/eac/handlers/iot/check.ts": $27,
-    "./routes/api/eac/handlers/iot/connections.ts": $28,
-    "./routes/api/eac/handlers/iot/helpers.ts": $29,
-    "./routes/api/eac/handlers/iot/index.ts": $30,
-    "./routes/api/eac/handlers/secrets/check.ts": $31,
-    "./routes/api/eac/handlers/secrets/connections.ts": $32,
-    "./routes/api/eac/handlers/secrets/helpers.ts": $33,
-    "./routes/api/eac/handlers/secrets/index.ts": $34,
-    "./routes/api/eac/handlers/source-connections/check.ts": $35,
-    "./routes/api/eac/handlers/source-connections/connections.ts": $36,
-    "./routes/api/eac/handlers/source-connections/helpers.ts": $37,
-    "./routes/api/eac/handlers/source-connections/index.ts": $38,
-    "./routes/api/eac/handlers/sources/check.ts": $39,
-    "./routes/api/eac/handlers/sources/connections.ts": $40,
-    "./routes/api/eac/handlers/sources/helpers.ts": $41,
-    "./routes/api/eac/handlers/sources/index.ts": $42,
-    "./routes/api/eac/index.ts": $43,
-    "./routes/api/eac/jwt.ts": $44,
-    "./routes/api/eac/list.ts": $45,
-    "./routes/api/github/webhooks.ts": $46,
-    "./routes/dashboard/_middleware.tsx": $47,
-    "./routes/dashboard/api/eac/index.ts": $48,
-    "./routes/dashboard/clouds/azure/index.tsx": $49,
-    "./routes/dashboard/clouds/azure/new.tsx": $50,
-    "./routes/dashboard/clouds/calz.tsx": $51,
-    "./routes/dashboard/enterprise/index.tsx": $52,
-    "./routes/dashboard/github-app/index.tsx": $53,
-    "./routes/dashboard/index.tsx": $54,
-    "./routes/dashboard/jwt/index.tsx": $55,
-    "./routes/index.tsx": $56,
+      $api_eac_entLookup_azure_cloudLookup_api_versions_index,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts":
+      $api_eac_entLookup_azure_cloudLookup_auth_token_index,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts":
+      $api_eac_entLookup_azure_cloudLookup_locations_index,
+    "./routes/api/eac/[entLookup]/connections/index.ts":
+      $api_eac_entLookup_connections_index,
+    "./routes/api/eac/[entLookup]/index.ts": $api_eac_entLookup_index,
+    "./routes/api/eac/[entLookup]/status/[commitId]/index.ts":
+      $api_eac_entLookup_status_commitId_index,
+    "./routes/api/eac/[entLookup]/status/current.ts":
+      $api_eac_entLookup_status_current,
+    "./routes/api/eac/[entLookup]/status/index.ts":
+      $api_eac_entLookup_status_index,
+    "./routes/api/eac/[entLookup]/users.ts": $api_eac_entLookup_users,
+    "./routes/api/eac/_middleware.ts": $api_eac_middleware,
+    "./routes/api/eac/handlers/clouds/check.ts": $api_eac_handlers_clouds_check,
+    "./routes/api/eac/handlers/clouds/connections.ts":
+      $api_eac_handlers_clouds_connections,
+    "./routes/api/eac/handlers/clouds/helpers.ts":
+      $api_eac_handlers_clouds_helpers,
+    "./routes/api/eac/handlers/clouds/index.ts": $api_eac_handlers_clouds_index,
+    "./routes/api/eac/handlers/devops-actions/check.ts":
+      $api_eac_handlers_devops_actions_check,
+    "./routes/api/eac/handlers/devops-actions/connections.ts":
+      $api_eac_handlers_devops_actions_connections,
+    "./routes/api/eac/handlers/devops-actions/helpers.ts":
+      $api_eac_handlers_devops_actions_helpers,
+    "./routes/api/eac/handlers/devops-actions/index.ts":
+      $api_eac_handlers_devops_actions_index,
+    "./routes/api/eac/handlers/github-apps/check.ts":
+      $api_eac_handlers_github_apps_check,
+    "./routes/api/eac/handlers/github-apps/connections.ts":
+      $api_eac_handlers_github_apps_connections,
+    "./routes/api/eac/handlers/github-apps/helpers.ts":
+      $api_eac_handlers_github_apps_helpers,
+    "./routes/api/eac/handlers/github-apps/index.ts":
+      $api_eac_handlers_github_apps_index,
+    "./routes/api/eac/handlers/iot/check.ts": $api_eac_handlers_iot_check,
+    "./routes/api/eac/handlers/iot/connections.ts":
+      $api_eac_handlers_iot_connections,
+    "./routes/api/eac/handlers/iot/helpers.ts": $api_eac_handlers_iot_helpers,
+    "./routes/api/eac/handlers/iot/index.ts": $api_eac_handlers_iot_index,
+    "./routes/api/eac/handlers/secrets/check.ts":
+      $api_eac_handlers_secrets_check,
+    "./routes/api/eac/handlers/secrets/connections.ts":
+      $api_eac_handlers_secrets_connections,
+    "./routes/api/eac/handlers/secrets/helpers.ts":
+      $api_eac_handlers_secrets_helpers,
+    "./routes/api/eac/handlers/secrets/index.ts":
+      $api_eac_handlers_secrets_index,
+    "./routes/api/eac/handlers/source-connections/check.ts":
+      $api_eac_handlers_source_connections_check,
+    "./routes/api/eac/handlers/source-connections/connections.ts":
+      $api_eac_handlers_source_connections_connections,
+    "./routes/api/eac/handlers/source-connections/helpers.ts":
+      $api_eac_handlers_source_connections_helpers,
+    "./routes/api/eac/handlers/source-connections/index.ts":
+      $api_eac_handlers_source_connections_index,
+    "./routes/api/eac/handlers/sources/check.ts":
+      $api_eac_handlers_sources_check,
+    "./routes/api/eac/handlers/sources/connections.ts":
+      $api_eac_handlers_sources_connections,
+    "./routes/api/eac/handlers/sources/helpers.ts":
+      $api_eac_handlers_sources_helpers,
+    "./routes/api/eac/handlers/sources/index.ts":
+      $api_eac_handlers_sources_index,
+    "./routes/api/eac/index.ts": $api_eac_index,
+    "./routes/api/eac/jwt.ts": $api_eac_jwt,
+    "./routes/api/eac/list.ts": $api_eac_list,
+    "./routes/api/github/webhooks.ts": $api_github_webhooks,
+    "./routes/dashboard/_middleware.tsx": $dashboard_middleware,
+    "./routes/dashboard/api/eac/index.ts": $dashboard_api_eac_index,
+    "./routes/dashboard/clouds/azure/index.tsx": $dashboard_clouds_azure_index,
+    "./routes/dashboard/clouds/azure/new.tsx": $dashboard_clouds_azure_new,
+    "./routes/dashboard/clouds/calz.tsx": $dashboard_clouds_calz,
+    "./routes/dashboard/enterprise/index.tsx": $dashboard_enterprise_index,
+    "./routes/dashboard/github-app/index.tsx": $dashboard_github_app_index,
+    "./routes/dashboard/index.tsx": $dashboard_index,
+    "./routes/dashboard/jwt/index.tsx": $dashboard_jwt_index,
+    "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/EntepriseManagementItem.tsx": $$0,
+    "./islands/EntepriseManagementItem.tsx": $EntepriseManagementItem,
   },
   baseUrl: import.meta.url,
-};
+} satisfies Manifest;
 
 export default manifest;
