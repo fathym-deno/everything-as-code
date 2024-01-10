@@ -1,7 +1,7 @@
 {
   "lock": false,
   "tasks": {
-    "build": "deno task build:fmt && deno task build:lint && deno task build:tailwind",
+    "build": "deno task build:fmt && deno task build:lint && deno task build:dev",
     "build:dev": "deno run -A --unstable dev.ts build",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",

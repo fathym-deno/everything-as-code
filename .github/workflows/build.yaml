@@ -97,6 +97,15 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
       
+      - name: Deno Setup
+        uses: denoland/setup-deno@v1.1.0
+        with:
+          deno-version: v1.x.x
+
+      - name: Deno Build
+        run: deno cache --reload dev.ts | 
+          deno task build
+
       - name: Build the Docker image
         uses: docker/build-push-action@v2
         with:
