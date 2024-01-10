@@ -1,11 +1,12 @@
 {
   "lock": false,
   "tasks": {
-    "build": "deno task build:fmt && deno task build:lint",
+    "build": "deno task build:fmt && deno task build:lint && deno task build:tailwind",
     // "build": "deno task build:fmt && deno task build:lint && deno task test",
     "build:dev": "deno run -A --unstable dev.ts build",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
+    "build:tailwind": "deno run -A --unstable tailwind.config.ts build",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "preview": "deno run -A --unstable main.ts",
@@ -37,7 +38,7 @@
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
     "_@fathym/atomic": "../fathym-atomic/mod.ts",
     "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.33/mod.ts",
-    "_@fathym/atomic/": "../fathym-atomic/mod.ts",
+    "_@fathym/atomic/": "../fathym-atomic/",
     "@fathym/atomic/": "https://deno.land/x/fathym_atomic_design_kit@v0.0.33/",
     "@fathym/atomic-icons": "https://deno.land/x/fathym_atomic_icons@v0.0.14/mod.ts",
     "$fathym/atomic-icons": "./build/iconset/icons/_exports.ts",
