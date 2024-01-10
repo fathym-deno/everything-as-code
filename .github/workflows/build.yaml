@@ -47,7 +47,7 @@ jobs:
       - name: Deno Build
         run: deno task build
 
-      - name: Set Version
+      - name: Set Version ${{ steps.mainFormat.outputs.format || steps.prereleaseFormat.outputs.format }}
         id: version
         uses: paulhatch/semantic-version@v5.0.2
         with:
