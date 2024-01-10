@@ -5,7 +5,8 @@ ENV DENO_DEPLOYMENT_ID=${VERSION}
 WORKDIR /app
 
 COPY . .
-RUN deno cache main.ts
+RUN deno cache --reload main.ts
+RUN deno task build
 
 EXPOSE 8000
 
