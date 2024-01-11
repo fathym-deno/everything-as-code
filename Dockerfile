@@ -6,8 +6,6 @@ WORKDIR /app
 
 COPY . .
 RUN deno cache --reload main.ts
-RUN deno task build
-RUN deno run -A --unstable main.ts build
 
 EXPOSE 8000
 
