@@ -1,5 +1,12 @@
 import { create, decode, getNumericDate, verify } from "@djwt";
+import { decodeBase64 } from "$std/encoding/base64.ts";
 import { JWTConfig } from "../src/utils/jwt/JWTConfig.ts";
+
+const jwkEnv = new TextDecoder().decode(
+  decodeBase64(Deno.env.get("SECURE_API_SECRET")!),
+);
+
+const jwk = JSON.parse(jwkEnv || "") as JsonWebKey;
 
 export const jwtConfig: JWTConfig = {
   Algorithm: { name: "HMAC", hash: "SHA-512" } as AlgorithmIdentifier,
@@ -21,7 +28,7 @@ export const jwtConfig: JWTConfig = {
   },
   ExpirationTime: 60 * 60 * 24 * 365 * 5, // 5 years
   Header: "Authorization",
-  JWK: JSON.parse(Deno.env.get("SECURE_API_SECRET") || "") as JsonWebKey,
+  JWK: jwk,
   KeyUsages: ["sign", "verify"] as KeyUsage[],
   LoadToken(req: Request) {
     const jwtHeader = req.headers.get(jwtConfig.Header);
