@@ -47,7 +47,8 @@ jobs:
           deno-version: v1.39.2
 
       - name: Deno Build
-        run: deno task build
+        run: deno cache --reload dev.ts | 
+          deno task build
 
       - name: Set Version ${{ steps.mainFormat.outputs.format || steps.prereleaseFormat.outputs.format }}
         id: version
@@ -97,12 +98,6 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: 'Create env file'
-        run: |
-          touch .env
-          echo SECURE_API_SECRET=${{ secrets.SECURE_API_SECRET }} >> .env
-          cat .env
-      
       - name: Deno Setup
         uses: denoland/setup-deno@v1
         with:
