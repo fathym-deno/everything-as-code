@@ -47,8 +47,7 @@ jobs:
           deno-version: v1.39.2
 
       - name: Deno Build
-        run: deno cache --reload dev.ts | 
-          deno task build
+        run: deno task build
 
       - name: Set Version ${{ steps.mainFormat.outputs.format || steps.prereleaseFormat.outputs.format }}
         id: version
