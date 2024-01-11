@@ -43,7 +43,7 @@ async function currentEaC(
   req: Request,
   ctx: MiddlewareHandlerContext<EverythingAsCodeState>,
 ) {
-  const currentEaC = await fathymDenoKv.get<string>([
+  let currentEaC = await fathymDenoKv.get<string>([
     "User",
     ctx.state.Username!,
     "Current",
@@ -56,6 +56,19 @@ async function currentEaC(
     const eacSvc = await loadEaCSvc(currentEaC.value, ctx.state.Username!);
 
     eac = await eacSvc.Get(currentEaC.value);
+  } else {
+    const eacSvc = await loadEaCSvc("", ctx.state.Username!);
+
+    const eacs = await eacSvc.ListForUser();
+
+    await fathymDenoKv.set([
+      "User",
+      ctx.state.Username!,
+      "Current",
+      "EaC",
+    ], eacs[0].EnterpriseLookup);
+
+    eac = await eacSvc.Get(eacs[0].EnterpriseLookup);
   }
 
   const state: EverythingAsCodeState = {

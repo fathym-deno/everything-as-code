@@ -56,7 +56,7 @@ export const handler: Handlers<EnterprisePageData, EverythingAsCodeState> = {
       ctx.state.Username!,
     );
 
-    const createResp = await eacSvc.Create(newEaC, 60);
+    const createResp = await eacSvc.Create(newEaC, ctx.state.Username!, 60);
 
     const status = await waitForStatus(
       eacSvc,
