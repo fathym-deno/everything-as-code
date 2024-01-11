@@ -2,7 +2,7 @@
   "lock": false,
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task build:dev",
-    "build:dev": "deno run -A --unstable dev.ts build --lock=deno.lock --deno-write",
+    "build:dev": "deno run -A --unstable dev.ts build --allow-env",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
     "build:tailwind": "deno run -A --unstable tailwind.config.ts build",
