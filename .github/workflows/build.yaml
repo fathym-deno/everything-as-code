@@ -98,7 +98,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
       
       - name: Deno Setup
-        uses: denoland/setup-deno@v1.1.0
+        uses: denoland/setup-deno@v1
         with:
           deno-version: v1.39.2
 
