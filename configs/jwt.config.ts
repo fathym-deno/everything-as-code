@@ -2,11 +2,17 @@ import { create, decode, getNumericDate, verify } from "@djwt";
 import { decodeBase64 } from "$std/encoding/base64.ts";
 import { JWTConfig } from "../src/utils/jwt/JWTConfig.ts";
 
-const jwkEnv = new TextDecoder().decode(
-  decodeBase64(Deno.env.get("SECURE_API_SECRET")!),
+const jwkEnv = Deno.env.get("SECURE_API_SECRET")!;
+
+console.log(jwkEnv);
+
+const jwkDecode = new TextDecoder().decode(
+  decodeBase64(jwkEnv),
 );
 
-const jwk = JSON.parse(jwkEnv || "") as JsonWebKey;
+console.log(jwkDecode);
+
+const jwk = JSON.parse(jwkDecode || "") as JsonWebKey;
 
 export const jwtConfig: JWTConfig = {
   Algorithm: { name: "HMAC", hash: "SHA-512" } as AlgorithmIdentifier,
