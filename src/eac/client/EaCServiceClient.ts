@@ -44,10 +44,13 @@ export class EaCServiceClient extends EaCBaseClient {
 
   public async Create<T extends EverythingAsCode>(
     eac: T,
+    username: string,
     processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
-      this.loadClientUrl(`?processingSeconds=${processingSeconds}`),
+      this.loadClientUrl(
+        `?processingSeconds=${processingSeconds}&username=${username}`,
+      ),
       {
         method: "POST",
         headers: this.loadHeaders(),
@@ -110,7 +113,7 @@ export class EaCServiceClient extends EaCBaseClient {
   }
 
   public async JWT(
-    entLookup: string,
+    entLookup: string | undefined,
     username: string,
     expTime?: number,
   ): Promise<{
@@ -118,7 +121,7 @@ export class EaCServiceClient extends EaCBaseClient {
   }> {
     const response = await fetch(
       this.loadClientUrl(
-        `jwt?entLookup=${entLookup}&username=${username}&expTime=${
+        `jwt?entLookup=${entLookup || ""}&username=${username}&expTime=${
           expTime || ""
         }`,
       ),

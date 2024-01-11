@@ -21,9 +21,9 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req, ctx: HandlerContext<any, EaCAPIState>) {
-    const username = ctx.state.Username!;
-
     const url = new URL(req.url);
+
+    const username = url.searchParams.get("username")!;
 
     const processingSeconds = Number.parseInt(
       url.searchParams.get("processingSeconds")!,
@@ -41,7 +41,7 @@ export const handler: Handlers = {
     };
 
     console.log(
-      `Create EaC container for ${eac.EnterpriseLookup} with Commit ID ${createStatus.ID}.`,
+      `Create EaC container for ${eac.EnterpriseLookup} with Commit ID ${createStatus.ID} for user ${createStatus.Username}.`,
     );
 
     while (await eacExists(denoKv, createStatus.EnterpriseLookup)) {
