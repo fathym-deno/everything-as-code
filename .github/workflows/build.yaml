@@ -42,9 +42,9 @@ jobs:
         run: echo 'format=${{ env.MainFormat }}-${{ steps.vars.outputs.currentBranch }}' >> $GITHUB_OUTPUT\
 
       - name: Deno Setup
-        uses: denoland/setup-deno@v1.1.0
+        uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x.x
+          deno-version: v1.39.2
 
       - name: Deno Build
         run: deno task build
@@ -100,7 +100,7 @@ jobs:
       - name: Deno Setup
         uses: denoland/setup-deno@v1.1.0
         with:
-          deno-version: v1.x.x
+          deno-version: v1.39.2
 
       - name: Deno Build
         run: deno cache --reload dev.ts | 
