@@ -96,6 +96,12 @@ jobs:
           login-server: ${{ env.ACR_REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo SECURE_API_SECRET=${{ secrets.SECURE_API_SECRET }} >> .env
+          cat .env
       
       - name: Deno Setup
         uses: denoland/setup-deno@v1
