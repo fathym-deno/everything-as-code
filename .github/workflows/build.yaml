@@ -110,8 +110,7 @@ jobs:
           deno-version: v1.39.2
 
       - name: Deno Build
-        run: deno cache --reload dev.ts | 
-          deno task build
+        run: deno task build
 
       - name: Build the Docker image
         uses: docker/build-push-action@v2
