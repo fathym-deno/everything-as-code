@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { jwtConfig } from "../../../configs/jwt.config.ts";
+import { loadJwtConfig } from "../../../configs/jwt.config.ts";
 import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
 
 interface JWTPageData {
@@ -8,7 +8,7 @@ interface JWTPageData {
 
 export const handler: Handlers<JWTPageData | null, EverythingAsCodeState> = {
   async GET(_req, ctx) {
-    const jwt = await jwtConfig.Create({
+    const jwt = await loadJwtConfig().Create({
       EnterpriseLookup: ctx.state.EaC!.EnterpriseLookup,
       Username: ctx.state.Username,
     });

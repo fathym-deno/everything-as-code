@@ -3,7 +3,7 @@ import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { denoKv } from "../../../configs/deno-kv.config.ts";
-import { jwtConfig } from "../../../configs/jwt.config.ts";
+import { loadJwtConfig } from "../../../configs/jwt.config.ts";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
 import { EaCAPIUserState } from "../../../src/api/EaCAPIUserState.ts";
 import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
@@ -74,7 +74,7 @@ export const handler: Handlers = {
       );
     }
 
-    const jwt = await jwtConfig.Create({
+    const jwt = await loadJwtConfig().Create({
       EnterpriseLookup: entLookup,
       Username: username,
     }, expTime);

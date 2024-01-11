@@ -1,7 +1,7 @@
 import { EaCAzureServiceClient } from "../src/eac/client/EaCAzureServiceClient.ts";
 import { EaCExplorerServiceClient } from "../src/eac/client/EaCExplorerServiceClient.ts";
 import { EaCServiceClient } from "../src/eac/client/EaCServiceClient.ts";
-import { jwtConfig } from "./jwt.config.ts";
+import { loadJwtConfig } from "./jwt.config.ts";
 
 const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
 
@@ -17,7 +17,7 @@ export async function loadEaCSvc(
   username?: string,
 ): Promise<EaCServiceClient> {
   if (username) {
-    eacApiKeyEntLookup = await jwtConfig.Create({
+    eacApiKeyEntLookup = await loadJwtConfig().Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
     }, 60 * 60 * 1);
@@ -40,7 +40,7 @@ export async function loadEaCAzureSvc(
   username?: string,
 ): Promise<EaCAzureServiceClient> {
   if (username) {
-    eacApiKeyEntLookup = await jwtConfig.Create({
+    eacApiKeyEntLookup = await loadJwtConfig().Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
     }, 60 * 60 * 1);
@@ -63,7 +63,7 @@ export async function loadEaCExplorerSvc(
   username?: string,
 ): Promise<EaCExplorerServiceClient> {
   if (username) {
-    eacApiKeyEntLookup = await jwtConfig.Create({
+    eacApiKeyEntLookup = await loadJwtConfig().Create({
       EnterpriseLookup: eacApiKeyEntLookup,
       Username: username!,
     }, 60 * 60 * 1);
