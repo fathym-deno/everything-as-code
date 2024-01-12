@@ -17,11 +17,13 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
-    console.log("Ensuring providers are registered");
-
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const cloudLookup: string = ctx.params.cloudLookup;
+
+    console.log(
+      `Ensuring providers are registered to cloud ${cloudLookup} for enterprise ${entLookup}`,
+    );
 
     const svcDefs: EaCServiceDefinitions = await req.json();
 
@@ -44,14 +46,26 @@ export const handler: Handlers = {
         details.SubscriptionID,
       );
 
-      const svcDefLocationCalls = Object.keys(svcDefs).map(async (sd) => {
-        const provider = await resClient.providers.register(sd);
+      const svcDevLookups = [...new Set(Object.keys(svcDefs))];
 
-        return provider;
-      });
+      const svcDefProviderCalls = svcDevLookups.map(
+        async (sd) => {
+          const provider = await resClient.providers.register(sd);
 
-      await Promise.all<Provider>(svcDefLocationCalls);
+          console.log(
+            `Registered provider ${sd} to cloud ${cloudLookup} for enterprise ${entLookup}`,
+          );
+
+          return provider;
+        },
+      );
+
+      await Promise.all<Provider>(svcDefProviderCalls);
     }
+
+    console.log(
+      `Providers are registered to cloud ${cloudLookup} for enterprise ${entLookup}`,
+    );
 
     return respond({
       Locations: locations,
