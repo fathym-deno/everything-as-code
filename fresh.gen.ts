@@ -10,6 +10,7 @@ import * as $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_explo
 import * as $api_eac_entLookup_azure_cloudLookup_api_versions_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
 import * as $api_eac_entLookup_azure_cloudLookup_auth_token_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
 import * as $api_eac_entLookup_azure_cloudLookup_locations_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_providers_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/providers/index.ts";
 import * as $api_eac_entLookup_connections_index from "./routes/api/eac/[entLookup]/connections/index.ts";
 import * as $api_eac_entLookup_index from "./routes/api/eac/[entLookup]/index.ts";
 import * as $api_eac_entLookup_status_commitId_index from "./routes/api/eac/[entLookup]/status/[commitId]/index.ts";
@@ -77,6 +78,8 @@ const manifest = {
       $api_eac_entLookup_azure_cloudLookup_auth_token_index,
     "./routes/api/eac/[entLookup]/azure/[cloudLookup]/locations/index.ts":
       $api_eac_entLookup_azure_cloudLookup_locations_index,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/providers/index.ts":
+      $api_eac_entLookup_azure_cloudLookup_providers_index,
     "./routes/api/eac/[entLookup]/connections/index.ts":
       $api_eac_entLookup_connections_index,
     "./routes/api/eac/[entLookup]/index.ts": $api_eac_entLookup_index,

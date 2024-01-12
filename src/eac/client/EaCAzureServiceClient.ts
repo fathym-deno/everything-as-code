@@ -46,6 +46,25 @@ export class EaCAzureServiceClient extends EaCBaseClient {
     return await this.json(response, "");
   }
 
+  public async CloudEnsureProviders(
+    entLookup: string,
+    cloudLookup: string,
+    svcDefs: EaCServiceDefinitions,
+  ): Promise<{
+    Locations: Location[];
+  }> {
+    const response = await fetch(
+      this.loadClientUrl(`${entLookup}/azure/${cloudLookup}/providers`),
+      {
+        method: "POST",
+        headers: this.loadHeaders(),
+        body: JSON.stringify(svcDefs),
+      },
+    );
+
+    return await this.json(response);
+  }
+
   public async CloudLocations(
     entLookup: string,
     cloudLookup: string,
