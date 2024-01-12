@@ -17,6 +17,8 @@ export const handler: Handlers = {
    * @returns
    */
   async POST(req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
+    console.log("Ensuring providers are registered");
+
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const cloudLookup: string = ctx.params.cloudLookup;
