@@ -3,8 +3,6 @@ import { EaCExplorerServiceClient } from "../src/eac/client/EaCExplorerServiceCl
 import { EaCServiceClient } from "../src/eac/client/EaCServiceClient.ts";
 import { loadJwtConfig } from "./jwt.config.ts";
 
-const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
-
 export async function loadEaCSvc(eacApiKey: string): Promise<EaCServiceClient>;
 
 export async function loadEaCSvc(
@@ -22,6 +20,8 @@ export async function loadEaCSvc(
       Username: username!,
     }, 60 * 60 * 1);
   }
+
+  const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
 
   return new EaCServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);
 }
@@ -46,6 +46,8 @@ export async function loadEaCAzureSvc(
     }, 60 * 60 * 1);
   }
 
+  const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
+
   return new EaCAzureServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);
 }
 
@@ -68,6 +70,8 @@ export async function loadEaCExplorerSvc(
       Username: username!,
     }, 60 * 60 * 1);
   }
+
+  const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
 
   return new EaCExplorerServiceClient(new URL(eacBaseUrl), eacApiKeyEntLookup);
 }

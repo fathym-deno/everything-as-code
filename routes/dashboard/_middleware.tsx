@@ -61,14 +61,14 @@ async function currentEaC(
 
     const eacs = await eacSvc.ListForUser();
 
-    await fathymDenoKv.set([
-      "User",
-      ctx.state.Username!,
-      "Current",
-      "EaC",
-    ], eacs[0].EnterpriseLookup);
+    if (eacs[0]) {
+      await fathymDenoKv.set(
+        ["User", ctx.state.Username!, "Current", "EaC"],
+        eacs[0].EnterpriseLookup,
+      );
 
-    eac = await eacSvc.Get(eacs[0].EnterpriseLookup);
+      eac = await eacSvc.Get(eacs[0].EnterpriseLookup);
+    }
   }
 
   const state: EverythingAsCodeState = {

@@ -126,6 +126,7 @@ export async function handleEaCCommitCheckRequest(
       console.log(
         `Processed EaC commit ${commitCheckReq.CommitID}, from checks, with errors`,
       );
+      console.log(errors);
     } else {
       let saveEaC = { ...commitCheckReq.EaC };
 
