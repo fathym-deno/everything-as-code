@@ -11,7 +11,7 @@ export const azureFathymOAuth = createAzureOAuth(
 );
 
 export const azureOAuth = createAzureOAuth(
-  "AZURE_FATHYM",
+  "MSAL",
   "http://localhost:5437/signin/callback",
   [
     "https://management.core.windows.net//.default",
