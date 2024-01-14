@@ -1,12 +1,13 @@
+import { decode } from "@djwt";
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { createGitHubOAuthConfig, createHelpers } from "$fresh/oauth";
 import { fathymDenoKv } from "../configs/deno-kv.config.ts";
 import { redirectRequest } from "@fathym/common";
 import { UserGitHubConnection } from "../src/github/UserGitHubConnection.ts";
-import { gitHubOAuth } from "../src/services/github.ts";
+import { azureFathymOAuth } from "../configs/oAuth.config.ts";
 import { EaCSourceConnectionDetails } from "../src/eac/modules/sources/EaCSourceConnectionDetails.ts";
 import { loadMainOctokit } from "../src/services/github/octokit/load.ts";
+import { getCurrentAzureUser } from "./api/eac/handlers/clouds/helpers.ts";
 
 async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
   const url = new URL(req.url);
@@ -23,29 +24,35 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
 
   switch (pathname) {
     case "/signin": {
-      return await gitHubOAuth.signIn(req);
+      return await azureFathymOAuth.signIn(req);
     }
 
     case "/signin/callback": {
-      const { response, tokens, sessionId } = await gitHubOAuth.handleCallback(
-        req,
-      );
+      const { response, tokens, sessionId } = await azureFathymOAuth
+        .handleCallback(
+          req,
+        );
 
       const { accessToken, refreshToken } = tokens;
 
-      const octokit = await loadMainOctokit({
-        Token: accessToken,
-      } as EaCSourceConnectionDetails);
+      const [header, payload, signature] = await decode(accessToken);
 
-      const { data: { login } } = await octokit.rest.users
-        .getAuthenticated();
+      const primaryEmail = (payload as Record<string, string>).emails[0];
 
-      const { data } = await octokit.rest.users
-        .listEmailsForAuthenticatedUser();
+      // const octokit = await loadMainOctokit({
+      //   Token: accessToken,
+      // } as EaCSourceConnectionDetails);
 
-      const primaryEmail = data.find((e) => e.primary);
+      // const {
+      //   data: { login },
+      // } = await octokit.rest.users.getAuthenticated();
 
-      const oldSessionId = await gitHubOAuth.getSessionId(req);
+      // const { data } = await octokit.rest.users
+      //   .listEmailsForAuthenticatedUser();
+
+      // const primaryEmail = data.find((e) => e.primary).email;
+
+      const oldSessionId = await azureFathymOAuth.getSessionId(req);
 
       if (oldSessionId) {
         await fathymDenoKv.delete([
@@ -58,23 +65,23 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
 
       await fathymDenoKv.set(
         ["User", "Session", sessionId!, "Username"],
-        primaryEmail!.email,
+        primaryEmail!,
       );
 
-      await fathymDenoKv.set(
-        ["User", "Session", sessionId!, "GitHub", "GitHubConnection"],
-        {
-          RefreshToken: refreshToken,
-          Token: accessToken,
-          Username: login,
-        } as UserGitHubConnection,
-      );
+      // await fathymDenoKv.set(
+      //   ["User", "Session", sessionId!, "GitHub", "GitHubConnection"],
+      //   {
+      //     RefreshToken: refreshToken,
+      //     Token: accessToken,
+      //     Username: login,
+      //   } as UserGitHubConnection,
+      // );
 
       return response;
     }
 
     case "/signout": {
-      return await gitHubOAuth.signOut(req);
+      return await azureFathymOAuth.signOut(req);
     }
 
     default: {

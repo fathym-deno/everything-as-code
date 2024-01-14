@@ -1,7 +1,7 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { redirectRequest } from "@fathym/common";
 import { fathymDenoKv } from "../../configs/deno-kv.config.ts";
-import { gitHubOAuth } from "../../src/services/github.ts";
+import { azureFathymOAuth } from "../../configs/oAuth.config.ts";
 import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";
 import { UserGitHubConnection } from "../../src/github/UserGitHubConnection.ts";
@@ -15,7 +15,7 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
 
   switch (pathname) {
     default: {
-      const sessionId = await gitHubOAuth.getSessionId(req);
+      const sessionId = await azureFathymOAuth.getSessionId(req);
 
       if (sessionId === undefined) {
         return redirectRequest(`/signin?success_url=${pathname}`);
@@ -106,7 +106,7 @@ async function currentState(
     }
   }
 
-  const sessionId = await gitHubOAuth.getSessionId(req);
+  const sessionId = await azureFathymOAuth.getSessionId(req);
 
   const currentConn = await fathymDenoKv.get<UserGitHubConnection>([
     "User",

@@ -2,7 +2,6 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Action, ActionGroup, Input } from "@fathym/atomic";
 import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
 import { EaCGitHubAppDetails } from "../../../src/eac/modules/github/EaCGitHubAppDetails.ts";
-import { gitHubOAuth } from "../../../src/services/github.ts";
 import { redirectRequest } from "@fathym/common";
 import { loadEaCSvc } from "../../../configs/eac.ts";
 import { waitForStatus } from "../../../src/utils/eac/waitForStatus.ts";

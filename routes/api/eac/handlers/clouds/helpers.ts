@@ -5,6 +5,7 @@ import {
   DeploymentExtended,
   ResourceManagementClient,
 } from "npm:@azure/arm-resources";
+import { AccessToken } from "npm:@azure/identity";
 import {
   AuthenticationProvider,
   AuthenticationProviderOptions,
@@ -42,6 +43,35 @@ class TokenProvider implements AuthenticationProvider {
   }
 }
 
+export async function getCurrentAzureUser(accessToken: string) {
+  // console.log(`Finalizing EaC commit ${commitId} Cloud details`);
+
+  // const creds = loadAzureCloudCredentials(cloud);
+  // const creds = loadMainAzureCredentials();
+
+  const graphClient = GraphClient.initWithMiddleware({
+    authProvider: new TokenProvider(
+      {
+        getToken: async () => {
+          return {
+            token: accessToken,
+          } as AccessToken;
+        },
+      } as TokenCredential,
+      {
+        scopes: [`https://graph.microsoft.com/.default`], //"Application.Read.All"],
+      },
+    ),
+  });
+
+  const me = await graphClient
+    .api("/me")
+    // .select(["id"])
+    .get();
+
+  return me;
+}
+
 export async function finalizeCloudDetails(
   commitId: string,
   cloud: EaCCloudAsCode,
@@ -67,11 +97,7 @@ export async function finalizeCloudDetails(
       ),
     });
 
-    if (
-      cloud.Token &&
-      !details.SubscriptionID &&
-      !details.TenantID
-    ) {
+    if (cloud.Token && !details.SubscriptionID && !details.TenantID) {
       // TODO: Create Subsction
       // TODO: Set cloud.Details.SubscriptionID values to cloud
       // TODO: Set cloud.Details.TenantID values to cloud
