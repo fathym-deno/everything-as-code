@@ -22,7 +22,7 @@ export const handler: Handlers<any, EverythingAsCodeState> = {
 
     const { accessToken, refreshToken, expiresIn } = tokens;
 
-    const expiresAt = now + expiresIn * 1000;
+    const expiresAt = now + expiresIn! * 1000;
 
     const octokit = await loadMainOctokit({
       Token: accessToken,

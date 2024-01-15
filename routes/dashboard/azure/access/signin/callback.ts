@@ -14,7 +14,7 @@ export const handler: Handlers = {
 
     const { accessToken, refreshToken, expiresIn } = tokens;
 
-    const expiresAt = now + expiresIn * 1000;
+    const expiresAt = now + expiresIn! * 1000;
 
     const [header, payload, signature] = await decode(accessToken);
 

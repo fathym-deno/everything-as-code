@@ -43,12 +43,12 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
         ["User", "Current", "Username"],
         {
           Username: primaryEmail!,
-          ExpiresAt: now + (expiresIn * 1000),
+          ExpiresAt: now + (expiresIn! * 1000),
           Token: accessToken,
           RefreshToken: refreshToken,
         } as UserOAuthConnection,
         {
-          expireIn: expiresIn * 1000,
+          expireIn: expiresIn! * 1000,
         },
       );
 
