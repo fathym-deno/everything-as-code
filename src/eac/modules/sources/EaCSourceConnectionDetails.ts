@@ -1,6 +1,8 @@
 import { EaCVertexDetails } from "../../EaCVertexDetails.ts";
 
 export type EaCSourceConnectionDetails = {
+  ExpiresAt: number;
+
   RefreshToken: string;
 
   Token: string;

@@ -6,15 +6,11 @@ import {
 } from "$fresh/oauth";
 
 export function createGitHubOAuth(scopes: string[]) {
-  try {
-    return createHelpers(
-      createGitHubOAuthConfig({
-        scope: scopes,
-      }),
-    );
-  } catch (err) {
-    return {};
-  }
+  return createHelpers(
+    createGitHubOAuthConfig({
+      scope: scopes,
+    }),
+  );
 }
 
 export function createAzureOAuth(

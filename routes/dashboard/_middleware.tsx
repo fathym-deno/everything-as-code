@@ -1,40 +1,38 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { cookieSession } from "$fresh/session";
 import { redirectRequest } from "@fathym/common";
 import { fathymDenoKv } from "../../configs/deno-kv.config.ts";
 import { azureFathymOAuth } from "../../configs/oAuth.config.ts";
 import { EverythingAsCodeState } from "../../src/eac/EverythingAsCodeState.ts";
 import { loadEaCSvc } from "../../configs/eac.ts";
-import { UserGitHubConnection } from "../../src/github/UserGitHubConnection.ts";
-import { cookieSession } from "$fresh/session";
+import {
+  UserOAuthConnection,
+  userOAuthConnExpired,
+} from "../../src/oauth/UserOAuthConnection.ts";
 import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 
 async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
   const url = new URL(req.url);
 
-  const { pathname } = url;
+  const { pathname, search } = url;
 
   switch (pathname) {
     default: {
-      const sessionId = await azureFathymOAuth.getSessionId(req);
+      const currentUsername = await fathymDenoKv.get<UserOAuthConnection>([
+        "User",
+        "Current",
+        "Username",
+      ]);
 
-      if (sessionId === undefined) {
-        return redirectRequest(`/signin?success_url=${pathname}`);
+      if (!userOAuthConnExpired(currentUsername.value)) {
+        ctx.state.Username = currentUsername.value!.Username;
       } else {
-        const currentUsername = await fathymDenoKv.get<string>([
-          "User",
-          "Session",
-          sessionId,
-          "Username",
-        ]);
+        const successUrl = encodeURI(pathname + search);
 
-        if (currentUsername.value) {
-          ctx.state.Username = currentUsername.value!;
-        } else {
-          return redirectRequest(`/signin?success_url=${pathname}`);
-        }
-
-        return ctx.next();
+        return redirectRequest(`/signin?success_url=${successUrl}`);
       }
+
+      return ctx.next();
     }
   }
 }
@@ -43,7 +41,7 @@ async function currentEaC(
   req: Request,
   ctx: MiddlewareHandlerContext<EverythingAsCodeState>,
 ) {
-  let currentEaC = await fathymDenoKv.get<string>([
+  const currentEaC = await fathymDenoKv.get<string>([
     "User",
     ctx.state.Username!,
     "Current",
@@ -106,19 +104,16 @@ async function currentState(
     }
   }
 
-  const sessionId = await azureFathymOAuth.getSessionId(req);
-
-  const currentConn = await fathymDenoKv.get<UserGitHubConnection>([
+  const currentConn = await fathymDenoKv.get<UserOAuthConnection>([
     "User",
-    "Session",
-    sessionId!,
+    "Current",
     "GitHub",
     "GitHubConnection",
   ]);
 
-  if (currentConn.value!) {
+  if (!userOAuthConnExpired(currentConn.value)) {
     state.GitHub = {
-      Username: currentConn.value.Username,
+      Username: currentConn.value!.Username,
     };
   }
 

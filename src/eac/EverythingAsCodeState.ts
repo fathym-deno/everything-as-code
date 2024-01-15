@@ -7,6 +7,8 @@ export type EverythingAsCodeState =
 
     EaC?: FathymEaC;
 
+    EaCJWT?: string;
+
     ResourceGroupLookup?: string;
 
     Username?: string;

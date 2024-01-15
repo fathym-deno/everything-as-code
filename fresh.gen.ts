@@ -52,11 +52,17 @@ import * as $api_eac_list from "./routes/api/eac/list.ts";
 import * as $api_github_webhooks from "./routes/api/github/webhooks.ts";
 import * as $dashboard_middleware from "./routes/dashboard/_middleware.tsx";
 import * as $dashboard_api_eac_index from "./routes/dashboard/api/eac/index.ts";
+import * as $dashboard_azure_access_signin_callback from "./routes/dashboard/azure/access/signin/callback.ts";
+import * as $dashboard_azure_access_signin_index from "./routes/dashboard/azure/access/signin/index.ts";
+import * as $dashboard_azure_access_signout from "./routes/dashboard/azure/access/signout.ts";
 import * as $dashboard_clouds_azure_index from "./routes/dashboard/clouds/azure/index.tsx";
 import * as $dashboard_clouds_azure_new from "./routes/dashboard/clouds/azure/new.tsx";
 import * as $dashboard_clouds_calz from "./routes/dashboard/clouds/calz.tsx";
 import * as $dashboard_enterprise_index from "./routes/dashboard/enterprise/index.tsx";
 import * as $dashboard_github_app_index from "./routes/dashboard/github-app/index.tsx";
+import * as $dashboard_github_access_signin_callback from "./routes/dashboard/github/access/signin/callback.ts";
+import * as $dashboard_github_access_signin_index from "./routes/dashboard/github/access/signin/index.ts";
+import * as $dashboard_github_access_signout from "./routes/dashboard/github/access/signout.ts";
 import * as $dashboard_index from "./routes/dashboard/index.tsx";
 import * as $dashboard_jwt_index from "./routes/dashboard/jwt/index.tsx";
 import * as $index from "./routes/index.tsx";
@@ -148,11 +154,23 @@ const manifest = {
     "./routes/api/github/webhooks.ts": $api_github_webhooks,
     "./routes/dashboard/_middleware.tsx": $dashboard_middleware,
     "./routes/dashboard/api/eac/index.ts": $dashboard_api_eac_index,
+    "./routes/dashboard/azure/access/signin/callback.ts":
+      $dashboard_azure_access_signin_callback,
+    "./routes/dashboard/azure/access/signin/index.ts":
+      $dashboard_azure_access_signin_index,
+    "./routes/dashboard/azure/access/signout.ts":
+      $dashboard_azure_access_signout,
     "./routes/dashboard/clouds/azure/index.tsx": $dashboard_clouds_azure_index,
     "./routes/dashboard/clouds/azure/new.tsx": $dashboard_clouds_azure_new,
     "./routes/dashboard/clouds/calz.tsx": $dashboard_clouds_calz,
     "./routes/dashboard/enterprise/index.tsx": $dashboard_enterprise_index,
     "./routes/dashboard/github-app/index.tsx": $dashboard_github_app_index,
+    "./routes/dashboard/github/access/signin/callback.ts":
+      $dashboard_github_access_signin_callback,
+    "./routes/dashboard/github/access/signin/index.ts":
+      $dashboard_github_access_signin_index,
+    "./routes/dashboard/github/access/signout.ts":
+      $dashboard_github_access_signout,
     "./routes/dashboard/index.tsx": $dashboard_index,
     "./routes/dashboard/jwt/index.tsx": $dashboard_jwt_index,
     "./routes/index.tsx": $index,

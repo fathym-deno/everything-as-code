@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { FreshContext, Handlers } from "$fresh/server.ts";
 import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
@@ -34,7 +34,7 @@ export const handler: Handlers = {
    * @param _ctx
    * @returns
    */
-  async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
+  async POST(req, ctx: FreshContext<any, EaCAPIUserState>) {
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const username = ctx.state.Username;
