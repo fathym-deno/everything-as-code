@@ -8,7 +8,7 @@
     "build:tailwind": "deno run -A --unstable tailwind.config.ts build",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
-    "deploy:pkg": "rimraf _fresh && ftm git \"no fresh\"",
+    "pkg": "rimraf _fresh && ftm git \"no fresh\"",
     "preview": "deno run -A --unstable main.ts",
     "start": "deno run -A --unstable --watch=static/,routes/,configs/,services/,src/ dev.ts",
     "start:relay": "ngrok http 8000",
