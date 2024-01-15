@@ -10,7 +10,10 @@ import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
 import { EverythingAsCodeState } from "../../../src/eac/EverythingAsCodeState.ts";
 import { loadEaCSvc } from "../../../configs/eac.ts";
 import { FathymEaC } from "../../../src/FathymEaC.ts";
-import { waitForStatus } from "../../../src/utils/eac/waitForStatus.ts";
+import {
+  waitForStatus,
+  waitForStatusWithFreshJwt,
+} from "../../../src/utils/eac/waitForStatus.ts";
 import { EaCStatusProcessingTypes } from "../../../src/api/models/EaCStatusProcessingTypes.ts";
 import { denoKv, fathymDenoKv } from "../../../configs/deno-kv.config.ts";
 import { redirectRequest, respond } from "@fathym/common";
@@ -58,10 +61,11 @@ export const handler: Handlers<EnterprisePageData, EverythingAsCodeState> = {
 
     const createResp = await eacSvc.Create(newEaC, ctx.state.Username!, 60);
 
-    const status = await waitForStatus(
+    const status = await waitForStatusWithFreshJwt(
       eacSvc,
       createResp.EnterpriseLookup,
       createResp.CommitID,
+      ctx.state.Username!,
     );
 
     if (status.Processing == EaCStatusProcessingTypes.COMPLETE) {

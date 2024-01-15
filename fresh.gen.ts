@@ -60,9 +60,6 @@ import * as $dashboard_clouds_azure_new from "./routes/dashboard/clouds/azure/ne
 import * as $dashboard_clouds_calz from "./routes/dashboard/clouds/calz.tsx";
 import * as $dashboard_enterprise_index from "./routes/dashboard/enterprise/index.tsx";
 import * as $dashboard_github_app_index from "./routes/dashboard/github-app/index.tsx";
-import * as $dashboard_github_access_signin_callback from "./routes/dashboard/github/access/signin/callback.ts";
-import * as $dashboard_github_access_signin_index from "./routes/dashboard/github/access/signin/index.ts";
-import * as $dashboard_github_access_signout from "./routes/dashboard/github/access/signout.ts";
 import * as $dashboard_index from "./routes/dashboard/index.tsx";
 import * as $dashboard_jwt_index from "./routes/dashboard/jwt/index.tsx";
 import * as $index from "./routes/index.tsx";
@@ -165,12 +162,6 @@ const manifest = {
     "./routes/dashboard/clouds/calz.tsx": $dashboard_clouds_calz,
     "./routes/dashboard/enterprise/index.tsx": $dashboard_enterprise_index,
     "./routes/dashboard/github-app/index.tsx": $dashboard_github_app_index,
-    "./routes/dashboard/github/access/signin/callback.ts":
-      $dashboard_github_access_signin_callback,
-    "./routes/dashboard/github/access/signin/index.ts":
-      $dashboard_github_access_signin_index,
-    "./routes/dashboard/github/access/signout.ts":
-      $dashboard_github_access_signout,
     "./routes/dashboard/index.tsx": $dashboard_index,
     "./routes/dashboard/jwt/index.tsx": $dashboard_jwt_index,
     "./routes/index.tsx": $index,
