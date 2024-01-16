@@ -146,6 +146,8 @@ export function loadMainOctokit(
 ): Promise<Octokit> {
   const appDetails = loadMainGitHubAppDetails();
 
+  console.log(appDetails);
+
   return loadOctokit(appDetails, sourceDetails);
 }
 

@@ -29,7 +29,7 @@ export const handler: Handlers = {
         ExpiresAt: expiresAt,
       } as UserOAuthConnection,
       {
-        expireIn: expiresIn * 1000,
+        expireIn: expiresIn! * 1000,
       },
     );
 

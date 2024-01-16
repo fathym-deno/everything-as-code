@@ -1,16 +1,24 @@
 // deno-lint-ignore-file no-explicit-any
-import { Handlers } from "$fresh/server.ts";
-import { fathymDenoKv } from "../../../../../../configs/deno-kv.config.ts";
+import { FreshContext, Handlers } from "$fresh/server.ts";
 import { loadMainOctokit } from "../../../../../services/github/octokit/load.ts";
 import { EaCSourceConnectionDetails } from "../../../../../eac/modules/sources/EaCSourceConnectionDetails.ts";
 import { UserOAuthConnection } from "../../../../../oauth/UserOAuthConnection.ts";
 import { EverythingAsCodeState } from "../../../../../eac/EverythingAsCodeState.ts";
-import { loadEaCSvc } from "../../../../../../configs/eac.ts";
 import { waitForStatus } from "../../../../../utils/eac/waitForStatus.ts";
 import { OAuthHelpers } from "../../../../../services/oAuth.ts";
+import { EaCServiceClient } from "../../../../../eac/client/EaCServiceClient.ts";
+import { EverythingAsCode } from "../../../../../eac/EverythingAsCode.ts";
+import { EverythingAsCodeSources } from "../../../../../eac/modules/sources/EverythingAsCodeSources.ts";
+import { GitHubAccessPluginState } from "../../GitHubAccessPluginState.ts";
 
-export function establishSigninCallbackRoute(oAuthHandlers: OAuthHelpers) {
-  const handler: Handlers<any, EverythingAsCodeState> = {
+export function establishSigninCallbackRoute<
+  TState extends GitHubAccessPluginState,
+>(
+  oAuthHandlers: OAuthHelpers,
+  denoKv: Deno.Kv,
+  loadEaCSvc: (ctx: FreshContext<TState>) => Promise<EaCServiceClient>,
+) {
+  const handler: Handlers<any, TState> = {
     async GET(req, ctx) {
       const now = Date.now();
 
@@ -28,7 +36,7 @@ export function establishSigninCallbackRoute(oAuthHandlers: OAuthHelpers) {
         data: { login },
       } = await octokit.rest.users.getAuthenticated();
 
-      await fathymDenoKv.set(
+      await denoKv.set(
         ["User", "Current", "GitHub", "GitHubConnection"],
         {
           RefreshToken: refreshToken,
@@ -60,14 +68,11 @@ export function establishSigninCallbackRoute(oAuthHandlers: OAuthHelpers) {
 
       srcConnDetails.ExpiresAt = expiresAt;
 
-      srcConnDetails.Token = accessToken;
-
       srcConnDetails.RefreshToken = refreshToken!;
 
-      const eacSvc = await loadEaCSvc(
-        ctx.state.EaC!.EnterpriseLookup!,
-        ctx.state.Username!,
-      );
+      srcConnDetails.Token = accessToken;
+
+      const eacSvc = await loadEaCSvc(ctx);
 
       const commitResp = await eacSvc.Commit(
         {
@@ -75,6 +80,7 @@ export function establishSigninCallbackRoute(oAuthHandlers: OAuthHelpers) {
           SourceConnections: {
             [srcConnLookup]: {
               Details: srcConnDetails,
+              GitHubAppLookup: Deno.env.get("GITHUB_APP_ID"),
             },
           },
         },
