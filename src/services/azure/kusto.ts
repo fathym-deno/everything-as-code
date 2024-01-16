@@ -68,14 +68,9 @@ export async function loadKustoClient(
 
       const resGroup = cloud.ResourceGroups![resGroupLookup];
 
-      console.log(resLookups);
-      console.log(resGroup);
-
       const resource = resLookups?.reduce((prev, resLookup) => {
         const res = prev.Resources![resLookup];
 
-        console.log(resLookup);
-        console.log(res);
         return res;
       }, resGroup as EaCCloudWithResources) as EaCCloudResourceAsCode;
 
