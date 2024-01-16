@@ -21,7 +21,8 @@ export const handler: Handlers = {
 
     const resGroupLookup: string = ctx.params.resGroupLookup;
 
-    const resLookups: string[] = ctx.params.resLookups.split("|");
+    const resLookups: string[] = decodeURIComponent(ctx.params.resLookups)
+      .split("|");
 
     const db: string = ctx.params.db;
 
