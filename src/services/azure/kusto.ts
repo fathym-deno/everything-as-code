@@ -62,13 +62,14 @@ export async function loadKustoClient(
 
       const eac = await loadEaC!(entLookup);
 
-      console.log(eac);
-
       creds = await loadAzureCloudCredentials(eac, cloudLookup);
 
       const cloud = eac.Clouds![cloudLookup];
 
       const resGroup = cloud.ResourceGroups![resGroupLookup];
+
+      console.log(resLookups);
+      console.log(resGroup);
 
       const resource = resLookups?.reduce((prev, resLookup) => {
         const res = prev.Resources![resLookup];
