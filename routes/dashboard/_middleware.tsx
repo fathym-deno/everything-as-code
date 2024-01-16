@@ -18,18 +18,27 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
 
   switch (pathname) {
     default: {
-      const currentUsername = await fathymDenoKv.get<UserOAuthConnection>([
-        "User",
-        "Current",
-        "Username",
-      ]);
+      const sessionId = await azureFathymOAuth.getSessionId(req);
 
-      if (!userOAuthConnExpired(currentUsername.value)) {
-        ctx.state.Username = currentUsername.value!.Username;
+      const successUrl = encodeURI(pathname + search);
+
+      const notSignedInRedirect = `/signin?success_url=${successUrl}`;
+
+      if (sessionId) {
+        const currentUsername = await fathymDenoKv.get<UserOAuthConnection>([
+          "User",
+          sessionId,
+          "Current",
+          "Username",
+        ]);
+
+        if (!userOAuthConnExpired(currentUsername.value)) {
+          ctx.state.Username = currentUsername.value!.Username;
+        } else {
+          return redirectRequest(notSignedInRedirect);
+        }
       } else {
-        const successUrl = encodeURI(pathname + search);
-
-        return redirectRequest(`/signin?success_url=${successUrl}`);
+        return redirectRequest(notSignedInRedirect);
       }
 
       return ctx.next();
@@ -106,6 +115,7 @@ async function currentState(
 
   const currentConn = await fathymDenoKv.get<UserOAuthConnection>([
     "User",
+    ctx.state.Username!,
     "Current",
     "GitHub",
     "GitHubConnection",

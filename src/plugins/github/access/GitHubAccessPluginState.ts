@@ -3,4 +3,6 @@ import { EverythingAsCodeSources } from "../../../eac/modules/sources/Everything
 
 export type GitHubAccessPluginState = {
   EaC?: EverythingAsCode & EverythingAsCodeSources;
+
+  Username?: string;
 };

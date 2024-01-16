@@ -22,7 +22,10 @@ export function establishSigninCallbackRoute<
     async GET(req, ctx) {
       const now = Date.now();
 
-      const { response, tokens } = await oAuthHandlers.handleCallback(req);
+      const oldSessionId = await oAuthHandlers.getSessionId(req);
+
+      const { response, tokens, sessionId } = await oAuthHandlers
+        .handleCallback(req);
 
       const { accessToken, refreshToken, expiresIn } = tokens;
 
@@ -36,8 +39,31 @@ export function establishSigninCallbackRoute<
         data: { login },
       } = await octokit.rest.users.getAuthenticated();
 
+      if (oldSessionId) {
+        const curUser = await denoKv.get([
+          "User",
+          oldSessionId!,
+          "Current",
+          "Username",
+        ]);
+
+        if (curUser.value) {
+          await denoKv.set(
+            ["User", sessionId, "Current", "Username"],
+            {
+              ...curUser.value,
+            } as UserOAuthConnection,
+            {
+              expireIn: expiresIn! * 1000,
+            },
+          );
+
+          await denoKv.delete(["User", oldSessionId!, "Current", "Username"]);
+        }
+      }
+
       await denoKv.set(
-        ["User", "Current", "GitHub", "GitHubConnection"],
+        ["User", ctx.state.Username!, "Current", "GitHub", "GitHubConnection"],
         {
           RefreshToken: refreshToken,
           Token: accessToken,

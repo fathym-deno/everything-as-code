@@ -1,11 +1,13 @@
+// deno-lint-ignore-file no-explicit-any
 import { decode } from "@djwt";
 import { Handlers } from "$fresh/server.ts";
 import { gitHubOAuth } from "../../../../../configs/oAuth.config.ts";
 import { fathymDenoKv } from "../../../../../configs/deno-kv.config.ts";
 import { UserOAuthConnection } from "../../../../../src/oauth/UserOAuthConnection.ts";
+import { EverythingAsCodeState } from "../../../../../src/eac/EverythingAsCodeState.ts";
 
-export const handler: Handlers = {
-  async GET(req, _ctx) {
+export const handler: Handlers<any, EverythingAsCodeState> = {
+  async GET(req, ctx) {
     const now = Date.now();
 
     const { response, tokens } = await gitHubOAuth.handleCallback(
@@ -21,7 +23,7 @@ export const handler: Handlers = {
     const primaryEmail = (payload as Record<string, string>).emails[0];
 
     await fathymDenoKv.set(
-      ["User", "Current", "Azure", "AzureConnection"],
+      ["User", ctx.state.Username!, "Current", "Azure", "AzureConnection"],
       {
         RefreshToken: refreshToken,
         Token: accessToken,

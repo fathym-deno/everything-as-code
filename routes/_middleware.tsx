@@ -30,6 +30,8 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
     case "/signin/callback": {
       const now = Date.now();
 
+      const oldSessionId = await azureFathymOAuth.getSessionId(req);
+
       const { response, tokens, sessionId } = await azureFathymOAuth
         .handleCallback(req);
 
@@ -40,10 +42,10 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
       const primaryEmail = (payload as Record<string, string>).emails[0];
 
       await fathymDenoKv.set(
-        ["User", "Current", "Username"],
+        ["User", sessionId, "Current", "Username"],
         {
           Username: primaryEmail!,
-          ExpiresAt: now + (expiresIn! * 1000),
+          ExpiresAt: now + expiresIn! * 1000,
           Token: accessToken,
           RefreshToken: refreshToken,
         } as UserOAuthConnection,
@@ -51,6 +53,15 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
           expireIn: expiresIn! * 1000,
         },
       );
+
+      if (oldSessionId) {
+        await fathymDenoKv.delete([
+          "User",
+          oldSessionId,
+          "Current",
+          "Username",
+        ]);
+      }
 
       return response;
     }
