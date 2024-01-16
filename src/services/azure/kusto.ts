@@ -62,6 +62,8 @@ export async function loadKustoClient(
 
       const eac = await loadEaC!(entLookup);
 
+      console.log(eac);
+
       creds = await loadAzureCloudCredentials(eac, cloudLookup);
 
       const cloud = eac.Clouds![cloudLookup];
