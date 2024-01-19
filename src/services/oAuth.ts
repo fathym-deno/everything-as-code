@@ -1,5 +1,6 @@
 import {
-  createAzureOAuthConfig,
+  createAzureADB2COAuthConfig,
+  createAzureADOAuthConfig,
   createGitHubOAuthConfig,
   createHelpers,
   getSessionId,
@@ -29,14 +30,24 @@ export function createGitHubOAuth(scopes: string[]): OAuthHelpers {
   );
 }
 
-export function createAzureOAuth(
-  envPrefix: string,
+export function createAzureADB2COAuth(
   redirectUri: string,
   scopes: string[],
 ): OAuthHelpers {
   return createHelpers(
-    createAzureOAuthConfig({
-      envPrefix,
+    createAzureADB2COAuthConfig({
+      redirectUri,
+      scope: scopes,
+    }),
+  );
+}
+
+export function createAzureADOAuth(
+  redirectUri: string,
+  scopes: string[],
+): OAuthHelpers {
+  return createHelpers(
+    createAzureADOAuthConfig({
       redirectUri,
       scope: scopes,
     }),

@@ -1,21 +1,19 @@
-import { createAzureOAuth, createGitHubOAuth } from "../src/services/oAuth.ts";
+import {
+  createAzureADB2COAuth,
+  createAzureADOAuth,
+  createGitHubOAuth,
+} from "../src/services/oAuth.ts";
 
 const baseUrl = Deno.env.get("BASE_URL")!;
 
 export const gitHubOAuth = createGitHubOAuth(["admin:org", "user:email"]);
 
-export const azureFathymOAuth = createAzureOAuth(
-  "AZURE_FATHYM",
+export const azureFathymOAuth = createAzureADB2COAuth(
   `${baseUrl}/signin/callback`,
-  [
-    "openid",
-  ],
+  ["openid"],
 );
 
-export const azureOAuth = createAzureOAuth(
-  "MSAL",
+export const azureOAuth = createAzureADOAuth(
   `${baseUrl}/signin/callback`,
-  [
-    "https://management.core.windows.net//.default",
-  ],
+  ["https://management.core.windows.net//.default"],
 );
