@@ -67,7 +67,12 @@ async function loadIoTDevicesConnections(
 
   const resGroupName = iot.ResourceGroupLookup!;
 
-  const iotHubName = `${resGroupName}-iot-hub`;
+  const shortName = resGroupName
+    .split("-")
+    .map((p) => p.charAt(0))
+    .join("");
+
+  const iotHubName = `${shortName}-iot-hub`;
 
   const keyName = "iothubowner";
 
