@@ -2,8 +2,8 @@ import { defineConfig, FreshContext } from "$fresh/server.ts";
 import tailwind from "$fresh/plugins/tailwind.ts";
 import { iconSetPlugin } from "@fathym/atomic-icons";
 import { curIconSetGenerateConfig } from "./configs/fathym-atomic-icons.config.ts";
-import { msalPlugin } from "@fathym/msal";
-import { msalPluginConfig } from "./configs/msal.config.ts";
+// import { msalPlugin } from "@fathym/msal";
+// import { msalPluginConfig } from "./configs/msal.config.ts";
 import { gitHubOAuth } from "./configs/oAuth.config.ts";
 import { gitHubAccessPlugin } from "./src/plugins/github/access/github-access.plugin.ts";
 import { fathymDenoKv } from "./configs/deno-kv.config.ts";
@@ -15,7 +15,7 @@ export default defineConfig({
   plugins: [
     tailwind(),
     await iconSetPlugin(curIconSetGenerateConfig),
-    msalPlugin(msalPluginConfig),
+    // msalPlugin(msalPluginConfig),
     gitHubAccessPlugin({
       DenoKV: fathymDenoKv,
       Handlers: gitHubOAuth,

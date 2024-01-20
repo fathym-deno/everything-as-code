@@ -1,9 +1,9 @@
-import { DenoKVNonce } from "./DenoKVNonce.ts";
+// import { DenoKVNonce } from "./DenoKVNonce.ts";
 
-declare global {
-  namespace Deno {
-    interface AtomicOperation {
-      enqueueNonce(msg: DenoKVNonce): Deno.AtomicOperation;
-    }
-  }
-}
+// declare global {
+//   namespace Deno {
+//     interface AtomicOperation {
+//       enqueueNonce(msg: DenoKVNonce): Deno.AtomicOperation;
+//     }
+//   }
+// }
