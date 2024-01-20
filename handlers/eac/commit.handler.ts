@@ -157,6 +157,7 @@ function configureListenQueueOp(
         EnterpriseLookup: entLookup,
         EnterpriseName: saveEaC.Details!.Name!,
         Owner: true,
+        ParentEnterpriseLookup: saveEaC.ParentEnterpriseLookup!,
         Username: commitReq.Username,
       };
 

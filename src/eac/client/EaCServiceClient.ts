@@ -133,10 +133,17 @@ export class EaCServiceClient extends EaCBaseClient {
     return await this.json(response);
   }
 
-  public async ListForUser(): Promise<UserEaCRecord[]> {
-    const response = await fetch(this.loadClientUrl("list"), {
-      headers: this.loadHeaders(),
-    });
+  public async ListForUser(parentEntLookup?: string): Promise<UserEaCRecord[]> {
+    const parentEntLookupQuery = parentEntLookup
+      ? `parentEntLookup=${parentEntLookup}`
+      : "";
+
+    const response = await fetch(
+      this.loadClientUrl(`list?${parentEntLookupQuery}`),
+      {
+        headers: this.loadHeaders(),
+      },
+    );
 
     return await this.json<UserEaCRecord[]>(response, []);
   }

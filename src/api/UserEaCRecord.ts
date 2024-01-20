@@ -5,5 +5,7 @@ export type UserEaCRecord = {
 
   Owner: boolean;
 
+  ParentEnterpriseLookup: string;
+
   Username: string;
 };

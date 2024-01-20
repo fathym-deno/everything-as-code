@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { FreshContext, Handlers } from "$fresh/server.ts";
 import { STATUS_CODE } from "$std/http/status.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../src/api/EaCAPIUserState.ts";
@@ -14,7 +14,7 @@ export const handler: Handlers = {
    * @param ctx
    * @returns
    */
-  async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
+  async GET(_req: Request, ctx: FreshContext<any, EaCAPIUserState>) {
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const eacUserResults = await denoKv.list<UserEaCRecord>({
@@ -38,7 +38,7 @@ export const handler: Handlers = {
    * @param _ctx
    * @returns
    */
-  async POST(req, ctx: HandlerContext<any, EaCAPIUserState>) {
+  async POST(req, ctx: FreshContext<any, EaCAPIUserState>) {
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const userEaCRecord = (await req.json()) as UserEaCRecord;
@@ -82,6 +82,9 @@ export const handler: Handlers = {
     }
 
     userEaCRecord.EnterpriseName = existingEaC.value.Details!.Name!;
+
+    userEaCRecord.ParentEnterpriseLookup = existingEaC.value
+      .ParentEnterpriseLookup!;
 
     await denoKv
       .atomic()
