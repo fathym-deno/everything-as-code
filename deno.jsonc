@@ -33,7 +33,7 @@
   "exclude": [
     "**/_fresh/*"
   ],
-  "nodeModulesDir": true,
+  "nodeModulesDir": false,
   "imports": {
     "$case": "https://deno.land/x/case@2.1.1/mod.ts",
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
