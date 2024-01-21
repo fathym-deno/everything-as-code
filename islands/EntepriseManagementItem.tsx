@@ -10,6 +10,8 @@ import { EaCStatus } from "../src/api/models/EaCStatus.ts";
 import { EaCStatusProcessingTypes } from "../src/api/models/EaCStatusProcessingTypes.ts";
 
 export type EntepriseManagementItemProps = {
+  active: boolean;
+
   enterprise: UserEaCRecord;
 };
 
@@ -71,16 +73,18 @@ export function EntepriseManagementItem(props: EntepriseManagementItemProps) {
   };
 
   return (
-    <div class="flex flex-row justify-center items-center">
-      <h1 class="text-lg">{props.enterprise.EnterpriseName}</h1>
+    <div class="flex flex-row justify-center items-center hover:bg-slate-300 hover:opactity-80">
+      <h1 class="flex-1 text-lg ml-1">{props.enterprise.EnterpriseName}</h1>
 
-      <ActionGroup>
+      <ActionGroup class="flex-none">
         <>
-          <form onSubmit={(e) => setActiveEnterprise(e)}>
-            <Action actionStyle={ActionStyleTypes.Link}>
-              <BeginIcon class="w-6 h-6 text-sky-500" />
-            </Action>
-          </form>
+          {!props.active && (
+            <form onSubmit={(e) => setActiveEnterprise(e)}>
+              <Action actionStyle={ActionStyleTypes.Link}>
+                <BeginIcon class="w-6 h-6 text-sky-500" />
+              </Action>
+            </form>
+          )}
 
           <form onSubmit={(e) => deleteEnterprise(e)}>
             <Action type="submit" actionStyle={ActionStyleTypes.Link}>

@@ -22,12 +22,15 @@ import { EaCStatus } from "../../../src/api/models/EaCStatus.ts";
 import { EverythingAsCode } from "../../../src/eac/EverythingAsCode.ts";
 
 type EnterprisePageData = {
+  currentEaC?: FathymEaC;
+
   enterprises: UserEaCRecord[];
 };
 
 export const handler: Handlers<EnterprisePageData, EverythingAsCodeState> = {
   async GET(_req, ctx) {
     const data: EnterprisePageData = {
+      currentEaC: ctx.state.EaC,
       enterprises: [],
     };
 
@@ -121,10 +124,19 @@ export default function Enterprise({
     <>
       <EaCCreateForm action="" />
 
-      <div>
+      <div class="max-w-sm m-auto">
+        <div class="border-b-[1px] border-dotted border-slate-400 dark:border-slate-700">
+        </div>
+
         {data.enterprises &&
           data.enterprises.map((enterprise) => {
-            return <EntepriseManagementItem enterprise={enterprise} />;
+            return (
+              <EntepriseManagementItem
+                active={data.currentEaC?.EnterpriseLookup ===
+                  enterprise.EnterpriseLookup}
+                enterprise={enterprise}
+              />
+            );
           })}
       </div>
     </>
