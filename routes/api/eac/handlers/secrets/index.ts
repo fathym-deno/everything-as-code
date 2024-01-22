@@ -64,7 +64,7 @@ export const handler: Handlers = {
 
             const conns = await loadConnections(
               eac,
-              handler,
+              handler!,
               ctx.state.JWT!,
               current,
               eac.Clouds!,
