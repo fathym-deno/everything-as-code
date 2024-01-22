@@ -10,7 +10,7 @@ export type EverythingAsCode = {
 
   ParentEnterpriseLookup?: string;
 
-  Secrets?: Record<string, EaCSecretAsCode>;
+  Secrets?: Record<string, EaCSecretAsCode | null>;
 } & EaCDetails<EaCEnterpriseDetails>;
 
 export type EaCDiff = Omit<
