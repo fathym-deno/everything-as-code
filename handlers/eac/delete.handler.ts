@@ -57,12 +57,22 @@ export async function handleEaCDeleteRequest(deleteReq: EaCDeleteRequest) {
     for (const deleteKey in deleteEaCDiff) {
       const deleteEaCDef = deleteEaCDiff[deleteKey] as Record<string, unknown>;
 
-      //TODO: Recursively remove
-      for (const toDelete in deleteEaCDef) {
-        if (deleteEaCDef[toDelete] === null) {
-          delete (eac.value![deleteKey] as any)![toDelete];
+      const deleteFromEaC = (
+        deleteRef: Record<string, any>,
+        deleteFrom: any,
+      ) => {
+        for (const toDelete in deleteRef) {
+          if (deleteRef[toDelete] === null) {
+            delete deleteFrom[toDelete];
+          } else if (deleteRef[toDelete] !== undefined) {
+            if (deleteFrom[toDelete]) {
+              deleteFromEaC(deleteRef[toDelete], deleteFrom[toDelete]);
+            }
+          }
         }
-      }
+      };
+
+      deleteFromEaC(deleteEaCDef, eac.value![deleteKey]);
     }
 
     status.value!.Processing = EaCStatusProcessingTypes.COMPLETE;
