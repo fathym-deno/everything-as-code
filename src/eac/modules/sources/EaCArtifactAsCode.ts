@@ -5,4 +5,6 @@ export type EaCArtifactAsCode = {
   ArtifactLookups?: string[] | null;
 
   DevOpsActionTriggerLookup?: string | null;
+
+  Parameters?: Record<string, unknown>;
 } & EaCDetails<EaCArtifactDetails>;

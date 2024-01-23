@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { merge, respond } from "@fathym/common";
-import jsonpath from "npm:jsonpath";
 import { EaCAPIUserState } from "../../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerRequest } from "../../../../../src/api/models/EaCHandlerRequest.ts";
 import { EaCHandlerResponse } from "../../../../../src/api/models/EaCHandlerResponse.ts";
@@ -15,6 +14,7 @@ import { EaCMetadataBase } from "../../../../../src/eac/EaCMetadataBase.ts";
 import { EverythingAsCodeIoT } from "../../../../../src/eac/modules/iot/EverythingAsCodeIoT.ts";
 import { EaCCloudAsCode } from "../../../../../src/eac/modules/clouds/EaCCloudAsCode.ts";
 import { formatParameters } from "../clouds/helpers.ts";
+import { resolveDynamicValues } from "../../../../../src/utils/eac/resolveDynamicValues.ts";
 
 export const handler: Handlers = {
   /**
@@ -43,44 +43,15 @@ export const handler: Handlers = {
     let secretValue = secretDef.Details?.Value;
 
     if (secretValue && !secretValue.startsWith("$secret:")) {
-      if (secretValue.startsWith("$connections:")) {
-        const eacConnections:
-          & EverythingAsCodeClouds
-          & EverythingAsCodeIoT
-          & EverythingAsCode = {};
+      const resolved = await resolveDynamicValues(
+        {
+          SecretValue: secretValue,
+        },
+        eac,
+        ctx.state.JWT!,
+      );
 
-        const connKeys = ["Clouds", "GitHubApps", "IoT"];
-
-        const connCalls = connKeys.map((key) => {
-          return (async () => {
-            const handler = eac.Handlers![key];
-
-            const lookups = Object.keys(eac[key] || {});
-
-            const current = lookups.reduce((prev, cur) => {
-              prev![cur] = {};
-              return prev;
-            }, {} as Record<string, EaCMetadataBase>);
-
-            const conns = await loadConnections(
-              eac,
-              handler!,
-              ctx.state.JWT!,
-              current,
-              eac.Clouds!,
-              lookups,
-            );
-
-            eacConnections[key] = conns;
-          })();
-        });
-
-        await Promise.all(connCalls);
-
-        const template = secretValue.replace("$connections:", "");
-
-        secretValue = jsonpath.value({ eac: eacConnections }, template);
-      }
+      secretValue = resolved.SecretValue;
 
       const secretClient = await loadSecretClient(
         eac,
