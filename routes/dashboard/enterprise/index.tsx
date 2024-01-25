@@ -3,7 +3,7 @@ import {
   Action,
   ActionGroup,
   ActionStyleTypes,
-  EaCCreateForm,
+  EaCManageForm,
 } from "@fathym/atomic";
 import { BeginIcon, DeleteIcon } from "$fathym/atomic-icons";
 import { UserEaCRecord } from "../../../src/api/UserEaCRecord.ts";
@@ -122,7 +122,7 @@ export default function Enterprise({
 }: PageProps<EnterprisePageData, EverythingAsCodeState>) {
   return (
     <>
-      <EaCCreateForm action="" />
+      <EaCManageForm action="" />
 
       <div class="max-w-sm m-auto">
         <div class="border-b-[1px] border-dotted border-slate-400 dark:border-slate-700">

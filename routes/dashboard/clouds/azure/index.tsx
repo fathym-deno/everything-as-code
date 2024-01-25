@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { CloudConnectForm } from "@fathym/atomic";
+import { EaCManageCloudForm } from "@fathym/atomic";
 import { EverythingAsCodeState } from "../../../../src/eac/EverythingAsCodeState.ts";
 import { FathymEaC } from "../../../../src/FathymEaC.ts";
 import { EaCCloudAzureDetails } from "../../../../src/eac/modules/clouds/EaCCloudAzureDetails.ts";
@@ -67,5 +67,5 @@ export const handler: Handlers<AzurePageData, EverythingAsCodeState> = {
 export default function Azure({
   data,
 }: PageProps<AzurePageData, EverythingAsCodeState>) {
-  return <CloudConnectForm action="" />;
+  return <EaCManageCloudForm action="" />;
 }

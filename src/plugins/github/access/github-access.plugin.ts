@@ -1,10 +1,10 @@
-import { FreshContext, Plugin } from '$fresh/server.ts';
-import { EaCServiceClient } from '../../../eac/client/EaCServiceClient.ts';
-import { OAuthHelpers } from '../../../services/oAuth.ts';
-import { GitHubAccessPluginState } from './GitHubAccessPluginState.ts';
-import { establishSigninCallbackRoute } from './routes/signin/callback.ts';
-import { establishSigninRoute } from './routes/signin/index.ts';
-import { establishSignoutRoute } from './routes/signout.ts';
+import { FreshContext, Plugin } from "$fresh/server.ts";
+import { EaCServiceClient } from "../../../eac/client/EaCServiceClient.ts";
+import { OAuthHelpers } from "../../../services/oAuth.ts";
+import { GitHubAccessPluginState } from "./GitHubAccessPluginState.ts";
+import { establishSigninCallbackRoute } from "./routes/signin/callback.ts";
+import { establishSigninRoute } from "./routes/signin/index.ts";
+import { establishSignoutRoute } from "./routes/signout.ts";
 
 export type GitHubAccessPluginConfig<TState extends GitHubAccessPluginState> = {
   DenoKV: Deno.Kv;
@@ -17,22 +17,22 @@ export type GitHubAccessPluginConfig<TState extends GitHubAccessPluginState> = {
 };
 
 export function gitHubAccessPlugin<TState extends GitHubAccessPluginState>(
-  config: GitHubAccessPluginConfig<TState>
+  config: GitHubAccessPluginConfig<TState>,
 ): Plugin {
-  const rootPath = config.RootPath || '/github/access';
+  const rootPath = config.RootPath || "/github/access";
 
   const signinRoute = establishSigninRoute(config.Handlers);
 
   const signinCallbackRoute = establishSigninCallbackRoute(
     config.Handlers,
     config.DenoKV,
-    config.LoadEaCSvc
+    config.LoadEaCSvc,
   );
 
   const signoutRoute = establishSignoutRoute(config.Handlers);
 
   return {
-    name: 'fathym_github_access',
+    name: "fathym_github_access",
     routes: [
       {
         path: `${rootPath}/signin`,
