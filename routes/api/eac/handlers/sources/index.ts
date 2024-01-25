@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import {
   ensureSource,

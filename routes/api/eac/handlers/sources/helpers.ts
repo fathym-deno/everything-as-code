@@ -115,6 +115,10 @@ export async function ensureSourceArtifacts(
       const artifactDetails = artifact.Details ||
         currentSource.Artifacts![artifactLookup]?.Details!;
 
+      const artifactParameters = artifact.Parameters ||
+        currentSource.Artifacts![artifactLookup]?.Parameters ||
+        {};
+
       const doaLookup = artifact.DevOpsActionTriggerLookup ||
         currentSource.Artifacts![artifactLookup]?.DevOpsActionTriggerLookup!;
 
@@ -122,7 +126,7 @@ export async function ensureSourceArtifacts(
 
       const actionParts: string[] = [];
 
-      for (const templatePath of (doa.Details!.Templates || [])) {
+      for (const templatePath of doa.Details!.Templates || []) {
         const pathParts = templatePath.split("/");
 
         const file = pathParts[pathParts.length - 1];
@@ -132,9 +136,10 @@ export async function ensureSourceArtifacts(
         let templateContents = await templateContentsResp.text();
 
         if (file.startsWith(".hbs.")) {
-          templateContents = Handlebars.compile(templateContents)(
-            artifact.Details,
-          );
+          templateContents = Handlebars.compile(templateContents)({
+            ...artifactDetails,
+            ...artifactParameters,
+          });
         }
 
         actionParts.push(templateContents);
@@ -189,7 +194,7 @@ export async function ensureSourceSecrets(
     const sourceDetails = source.Details || currentSource.Details!;
 
     for (const secretLookup of secretLookups) {
-      const secret = eac.Secrets![source.SecretLookups[secretLookup]];
+      const secret = eac.Secrets![source.SecretLookups[secretLookup]]!;
 
       const secretClient = await loadSecretClient(
         eac,
@@ -198,7 +203,7 @@ export async function ensureSourceSecrets(
       );
 
       const secreted = await eacGetSecrets(secretClient, {
-        Value: secret.Details!.Value,
+        Value: secret.Details!.Value!,
       });
 
       const publicKey = await octokit.rest.actions.getRepoPublicKey({

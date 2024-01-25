@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { HandlerContext, Handlers, Status } from "$fresh/server.ts";
+import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { respond } from "@fathym/common";
 import { EaCAPIUserState } from "../../../../../src/api/EaCAPIUserState.ts";
 import { EaCHandlerRequest } from "../../../../../src/api/models/EaCHandlerRequest.ts";
@@ -68,7 +68,10 @@ export const handler: Handlers = {
 
       const cloudDetails = cloud.Details;
 
-      if (isEaCCloudAzureDetails(cloudDetails)) {
+      if (
+        isEaCCloudAzureDetails(cloudDetails) &&
+        !cloudDetails.AuthKey.startsWith("$secret:")
+      ) {
         const secreted = await eacSetSecrets(secretClient, secretRoot, {
           AuthKey: cloudDetails.AuthKey,
         });
