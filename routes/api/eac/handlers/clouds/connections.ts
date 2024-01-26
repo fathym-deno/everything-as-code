@@ -305,7 +305,7 @@ async function loadResourceKeys(
     try {
       const text = await response.text();
 
-      console.log(text);
+      // console.log(text);
 
       let keys = JSON.parse(text);
 
