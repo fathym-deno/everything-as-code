@@ -23,10 +23,6 @@ export const handler: Handlers = {
   async POST(req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
     const handlerRequest: EaCHandlerConnectionsRequest = await req.json();
 
-    console.log("Processing IoT Connections request:");
-
-    console.log(handlerRequest);
-
     const eac: EverythingAsCodeIoT & EverythingAsCodeClouds =
       handlerRequest.EaC;
 
