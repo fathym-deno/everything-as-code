@@ -1,5 +1,5 @@
 import { type Config } from "tailwindcss";
-import * as unimportant from "npm:tailwindcss-unimportant";
+import unimportant from "npm:tailwindcss-unimportant";
 import { buildTailwindComponentsConfigs } from "@fathym/common";
 import FathymAtomicTailwindComponents from "@fathym/atomic/tailwind.components.ts";
 
