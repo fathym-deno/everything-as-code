@@ -12,7 +12,7 @@ export const handler: Handlers = {
    * @param ctx
    * @returns
    */
-  async GET(_req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
+  async GET(req: Request, ctx: HandlerContext<any, EaCAPIUserState>) {
     const entLookup = ctx.state.UserEaC!.EnterpriseLookup;
 
     const statiResults = await denoKv.list<EaCStatus>({
@@ -25,8 +25,14 @@ export const handler: Handlers = {
       stati.push(status.value!);
     }
 
-    return respond({
-      Stati: stati,
-    });
+    const url = new URL(req.url);
+    
+    const take = Number.parseInt(url.searchParams.get('take') || stati.length.toString());
+
+    const orderedStati = stati.sort(
+      (a, b) => new Date(b.StartTime).getTime() - new Date(a.StartTime).getTime()
+    ).slice(0, take);
+
+    return respond(orderedStati);
   },
 };

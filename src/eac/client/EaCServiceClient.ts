@@ -148,8 +148,10 @@ export class EaCServiceClient extends EaCBaseClient {
     return await this.json<UserEaCRecord[]>(response, []);
   }
 
-  public async ListStati(entLookup: string): Promise<EaCStatus[]> {
-    const response = await fetch(this.loadClientUrl(`${entLookup}/status`), {
+  public async ListStati(entLookup: string, take?: number): Promise<EaCStatus[]> {
+    const takeParam = take ? `take=${take}` : '';
+
+    const response = await fetch(this.loadClientUrl(`${entLookup}/status?${takeParam}`), {
       headers: this.loadHeaders(),
     });
 
