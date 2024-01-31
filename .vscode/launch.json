@@ -15,7 +15,7 @@
         "./deno.jsonc",
         "--inspect-wait",
         "--allow-all",
-        "--unstable"
+        "--unstable-kv"
       ],
       "attachSimplePort": 9229
     }

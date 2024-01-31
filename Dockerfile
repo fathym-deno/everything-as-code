@@ -7,6 +7,6 @@ WORKDIR /app
 COPY . .
 RUN deno cache main.ts
 
-EXPOSE 8000
+EXPOSE 5437
 
-CMD ["run", "-A", "--unstable", "main.ts"]
+CMD ["run", "-A", "--unstable-kv", "main.ts"]

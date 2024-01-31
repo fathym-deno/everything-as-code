@@ -1,9 +1,9 @@
-import { EverythingAsCode } from '../../eac/EverythingAsCode.ts';
-import { UserEaCRecord } from '../../api/UserEaCRecord.ts';
-import { EaCCommitResponse } from '../../api/models/EaCCommitResponse.ts';
-import { EaCStatus } from '../../api/models/EaCStatus.ts';
-import { EaCBaseClient } from './EaCBaseClient.ts';
-import { EaCStatusProcessingTypes } from '../../api/models/EaCStatusProcessingTypes.ts';
+import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
+import { UserEaCRecord } from "../../api/UserEaCRecord.ts";
+import { EaCCommitResponse } from "../../api/models/EaCCommitResponse.ts";
+import { EaCStatus } from "../../api/models/EaCStatus.ts";
+import { EaCBaseClient } from "./EaCBaseClient.ts";
+import { EaCStatusProcessingTypes } from "../../api/models/EaCStatusProcessingTypes.ts";
 
 export class EaCServiceClient extends EaCBaseClient {
   /** */
@@ -14,17 +14,17 @@ export class EaCServiceClient extends EaCBaseClient {
   //#region API Methods
   public async Commit<T extends EverythingAsCode>(
     eac: T,
-    processingSeconds: number
+    processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
       this.loadClientUrl(
-        `${eac.EnterpriseLookup}?processingSeconds=${processingSeconds}`
+        `${eac.EnterpriseLookup}?processingSeconds=${processingSeconds}`,
       ),
       {
-        method: 'POST',
+        method: "POST",
         headers: this.loadHeaders(),
         body: JSON.stringify(eac),
-      }
+      },
     );
 
     return await this.json(response);
@@ -34,10 +34,10 @@ export class EaCServiceClient extends EaCBaseClient {
     const response = await fetch(
       this.loadClientUrl(`${eac.EnterpriseLookup}/connections`),
       {
-        method: 'POST',
+        method: "POST",
         headers: this.loadHeaders(),
         body: JSON.stringify(eac),
-      }
+      },
     );
 
     return await this.json(response);
@@ -46,17 +46,17 @@ export class EaCServiceClient extends EaCBaseClient {
   public async Create<T extends EverythingAsCode>(
     eac: T,
     username: string,
-    processingSeconds: number
+    processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
       this.loadClientUrl(
-        `?processingSeconds=${processingSeconds}&username=${username}`
+        `?processingSeconds=${processingSeconds}&username=${username}`,
       ),
       {
-        method: 'POST',
+        method: "POST",
         headers: this.loadHeaders(),
         body: JSON.stringify(eac),
-      }
+      },
     );
 
     return await this.json(response);
@@ -67,7 +67,7 @@ export class EaCServiceClient extends EaCBaseClient {
       this.loadClientUrl(`${entLookup}/status/current`),
       {
         headers: this.loadHeaders(),
-      }
+      },
     );
 
     return await this.json(response);
@@ -76,17 +76,17 @@ export class EaCServiceClient extends EaCBaseClient {
   public async Delete(
     eac: EverythingAsCode,
     archive: boolean,
-    processingSeconds: number
+    processingSeconds: number,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(
       this.loadClientUrl(
-        `${eac.EnterpriseLookup}?archive=${archive}&processingSeconds=${processingSeconds}`
+        `${eac.EnterpriseLookup}?archive=${archive}&processingSeconds=${processingSeconds}`,
       ),
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: this.loadHeaders(),
         body: JSON.stringify(eac),
-      }
+      },
     );
 
     return await this.json(response);
@@ -102,10 +102,10 @@ export class EaCServiceClient extends EaCBaseClient {
 
   public async InviteUser(
     entLookup: string,
-    userEaC: UserEaCRecord
+    userEaC: UserEaCRecord,
   ): Promise<EaCCommitResponse> {
     const response = await fetch(this.loadClientUrl(`${entLookup}/user`), {
-      method: 'POST',
+      method: "POST",
       headers: this.loadHeaders(),
       body: JSON.stringify(userEaC),
     });
@@ -116,19 +116,19 @@ export class EaCServiceClient extends EaCBaseClient {
   public async JWT(
     entLookup: string | undefined,
     username: string,
-    expTime?: number
+    expTime?: number,
   ): Promise<{
     Token: string;
   }> {
     const response = await fetch(
       this.loadClientUrl(
-        `jwt?entLookup=${entLookup || ''}&username=${username}&expTime=${
-          expTime || ''
-        }`
+        `jwt?entLookup=${entLookup || ""}&username=${username}&expTime=${
+          expTime || ""
+        }`,
       ),
       {
         headers: this.loadHeaders(),
-      }
+      },
     );
 
     return await this.json(response);
@@ -137,13 +137,13 @@ export class EaCServiceClient extends EaCBaseClient {
   public async ListForUser(parentEntLookup?: string): Promise<UserEaCRecord[]> {
     const parentEntLookupQuery = parentEntLookup
       ? `parentEntLookup=${parentEntLookup}`
-      : '';
+      : "";
 
     const response = await fetch(
       this.loadClientUrl(`list?${parentEntLookupQuery}`),
       {
         headers: this.loadHeaders(),
-      }
+      },
     );
 
     return await this.json<UserEaCRecord[]>(response, []);
@@ -152,22 +152,23 @@ export class EaCServiceClient extends EaCBaseClient {
   public async ListStati(
     entLookup: string,
     take?: number,
-    statusTypes?: EaCStatusProcessingTypes[]
+    statusTypes?: EaCStatusProcessingTypes[],
   ): Promise<EaCStatus[]> {
-    const takeParam = take ? `take=${take}` : '';
+    const takeParam = take ? `take=${take}` : "";
 
-    const statusTypeParams =
-      statusTypes
-        ?.map((st) => {
-          return `statusType=${st}`;
-        })
-        .join('&') || '';
+    const statusTypeParams = statusTypes
+      ?.map((st) => {
+        return `statusType=${st}`;
+      })
+      .join("&") || "";
 
     const response = await fetch(
-      this.loadClientUrl(`${entLookup}/status?${takeParam}&${statusTypeParams}`),
+      this.loadClientUrl(
+        `${entLookup}/status?${takeParam}&${statusTypeParams}`,
+      ),
       {
         headers: this.loadHeaders(),
-      }
+      },
     );
 
     return await this.json<EaCStatus[]>(response, []);
@@ -186,7 +187,7 @@ export class EaCServiceClient extends EaCBaseClient {
       this.loadClientUrl(`${entLookup}/status/${commitId}`),
       {
         headers: this.loadHeaders(),
-      }
+      },
     );
 
     return await this.json(response);

@@ -2,25 +2,22 @@
   "lock": false,
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task build:dev",
-    "build:dev": "deno run -A --unstable dev.build.ts build",
+    "build:dev": "deno run -A --unstable-kv dev.build.ts build",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
-    "build:tailwind": "deno run -A --unstable tailwind.config.ts build",
+    "build:tailwind": "deno run -A --unstable-kv tailwind.config.ts build",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "pkg": "npx rimraf _fresh && ftm git \"no fresh\"",
-    "preview": "deno run -A --unstable main.ts",
-    "start": "deno run -A --unstable --watch=static/,routes/,configs/,services/,src/ dev.ts",
+    "preview": "deno run -A --unstable-kv main.ts",
+    "start": "deno run -A --unstable-kv --watch=static/,routes/,configs/,services/,src/ dev.ts",
     "start:relay": "ngrok http 8000",
-    "test": "deno test -A --unstable --allow-env .env tests/tests.ts --coverage=cov",
+    "test": "deno test -A --unstable-kv --allow-env .env tests/tests.ts --coverage=cov",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
   },
   "lint": {
     "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ],
+      "tags": ["fresh", "recommended"],
       "exclude": [
         "no-unused-vars",
         "ban-unused-ignore",
@@ -30,22 +27,20 @@
       ]
     }
   },
-  "exclude": [
-    "**/_fresh/*"
-  ],
+  "exclude": ["**/_fresh/*"],
   "nodeModulesDir": false,
   "imports": {
     "$case": "https://deno.land/x/case@2.1.1/mod.ts",
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
     "_@fathym/atomic": "../fathym-atomic/mod.ts",
-    "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.66/mod.ts",
+    "@fathym/atomic": "https://deno.land/x/fathym_atomic_design_kit@v0.0.75/mod.ts",
     "_@fathym/atomic/": "../fathym-atomic/",
-    "@fathym/atomic/": "https://deno.land/x/fathym_atomic_design_kit@v0.0.66/",
+    "@fathym/atomic/": "https://deno.land/x/fathym_atomic_design_kit@v0.0.75/",
     "@fathym/atomic-icons": "https://deno.land/x/fathym_atomic_icons@v0.0.15/mod.ts",
     "$fathym/atomic-icons": "./build/iconset/icons/_exports.ts",
     "@fathym/atomic-icons/browser": "https://deno.land/x/fathym_atomic_icons@v0.0.15/browser.ts",
     "@fathym/common": "https://deno.land/x/fathym_common@v0.0.134/mod.ts",
-    "$fresh/": "https://deno.land/x/fresh@1.6.1/",
+    "$fresh/": "https://deno.land/x/fresh@1.6.3/",
     "$fresh/session": "https://deno.land/x/fresh_session@0.2.2/mod.ts",
     "__$fresh/oauth": "../../fathym-deno/deno_kv_oauth/mod.ts",
     "_$fresh/oauth": "https://deno.land/x/deno_kv_oauth@v0.10.0/mod.ts",
@@ -73,10 +68,7 @@
     "tailwindcss/": "npm:/tailwindcss@3.3.5/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.3.5/plugin.js"
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact"
-  },
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "unusedImports": {
     "__@fathym/msal": "../../fathym-deno/msal/mod.ts",
     "@fathym/msal": "https://deno.land/x/msal@v0.0.24/mod.ts"
