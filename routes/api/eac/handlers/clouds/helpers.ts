@@ -1,5 +1,6 @@
 import Handlebars from "@handlebars";
 import { merge } from "@fathym/common";
+import { BillingManagementClient } from "npm:@azure/arm-billing";
 import {
   Deployment,
   DeploymentExtended,
@@ -98,6 +99,14 @@ export async function finalizeCloudDetails(
     });
 
     if (cloud.Token && !details.SubscriptionID && !details.TenantID) {
+      const creds = await loadAzureCloudCredentials(cloud);
+
+      const subscriptionId = "00000000-0000-0000-0000-000000000000";
+
+      const billingClient = new BillingManagementClient(creds, subscriptionId);
+
+      const billingAccounts = await billingClient.billingAccounts.list();
+
       // TODO: Create Subsction
       // TODO: Set cloud.Details.SubscriptionID values to cloud
       // TODO: Set cloud.Details.TenantID values to cloud
