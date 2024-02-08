@@ -27,9 +27,7 @@ export const handler: Handlers = {
       userEaCRecords.push(userEaCRecord.value);
     }
 
-    return respond({
-      Users: userEaCRecords,
-    });
+    return respond(userEaCRecords);
   },
 
   /**

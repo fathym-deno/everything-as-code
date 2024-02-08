@@ -104,7 +104,7 @@ export class EaCServiceClient extends EaCBaseClient {
     entLookup: string,
     userEaC: UserEaCRecord,
   ): Promise<EaCCommitResponse> {
-    const response = await fetch(this.loadClientUrl(`${entLookup}/user`), {
+    const response = await fetch(this.loadClientUrl(`${entLookup}/users`), {
       method: "POST",
       headers: this.loadHeaders(),
       body: JSON.stringify(userEaC),
