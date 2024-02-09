@@ -32,9 +32,6 @@ export function loadJwtConfig(): JWTConfig {
     JWK: jwk,
     KeyUsages: ["sign", "verify"] as KeyUsage[],
     LoadToken(req: Request) {
-      for (const key of req.headers.keys()) {
-        console.log(key);
-      }
       let jwtHeader = req.headers.get(this.Header);
 
       if (!jwtHeader) {
