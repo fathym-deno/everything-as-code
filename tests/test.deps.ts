@@ -30,3 +30,4 @@ export { ChatOpenAI, OpenAI, OpenAIEmbeddings } from 'npm:@langchain/openai';
 export { RunnableWithMessageHistory } from "npm:@langchain/core/runnables";
 export { ChatMessageHistory } from "npm:langchain/stores/message/in_memory";
 export { delay } from '$std/async/delay.ts';
+import "npm:pdf-parse";
