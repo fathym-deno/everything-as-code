@@ -1,6 +1,6 @@
 // import { awaitAllCallbacks, AzureChatOpenAI } from '../test.deps.ts';
-import * as parse from "pdf-parse";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import * as parse from "npm:pdf-parse";
+import { PDFLoader } from "npm:langchain/document_loaders/fs/pdf";
 
 Deno.test('Workshop Bench', async (t) => {
 //   const model = new AzureChatOpenAI({
@@ -12,11 +12,13 @@ Deno.test('Workshop Bench', async (t) => {
 //   });
 
   await t.step('Invoke Test', async () => {
-    const loader = new PDFLoader("./training/azure/data-explorer/azure-data-explorer.pdf");
-    
+    const loader = new PDFLoader("./training/azure/data-explorer/azure-data-explorer.pdf", {
+      splitPages: false,
+    });
+        
     const docs = await loader.load();
-
-    console.log({ docs });
+    
+    console.log(docs);
   });
 
   // await awaitAllCallbacks();
