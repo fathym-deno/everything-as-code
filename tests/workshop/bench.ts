@@ -10,7 +10,7 @@ Deno.test('Workshop Bench', async (t) => {
   });
 
   await t.step('Invoke Test', async () => {
-    const loader = new PDFLoader("src/document_loaders/example_data/example.pdf");
+    const loader = new PDFLoader("../../training/azure/data-explorer/azure-data-explorer.pdf");
     
     const docs = await loader.load();
 
