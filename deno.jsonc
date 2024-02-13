@@ -30,6 +30,12 @@
   "exclude": ["**/_fresh/*"],
   "nodeModulesDir": false,
   "imports": {
+    "langchain": "npm:/langchain@0.0.203",
+    "langchain/": "npm:/langchain@0.0.203/",
+    "dotenv/config": "npm:/dotenv/config",
+    "ignore": "npm:/ignore",
+    "pdf-parse": "npm:/pdf-parse",
+    "ml-distance": "npm:/ml-distance",
     "$case": "https://deno.land/x/case@2.1.1/mod.ts",
     "@djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
     "_@fathym/atomic": "../fathym-atomic/mod.ts",

@@ -1,4 +1,6 @@
-import { awaitAllCallbacks, AzureChatOpenAI, PDFLoader } from '../test.deps.ts';
+import { awaitAllCallbacks, AzureChatOpenAI } from '../test.deps.ts';
+import * as parse from "pdf-parse";
+import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 
 Deno.test('Workshop Bench', async (t) => {
 //   const model = new AzureChatOpenAI({
