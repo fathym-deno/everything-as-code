@@ -1,25 +1,26 @@
-import { MiddlewareHandlerContext } from '$fresh/server.ts';
-import { STATUS_CODE } from '$std/http/status.ts';
-import { respond } from '@fathym/common';
-import { JWTConfig } from './JWTConfig.ts';
+import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { STATUS_CODE } from "$std/http/status.ts";
+import { respond } from "@fathym/common";
+import { JWTConfig } from "./JWTConfig.ts";
 
 export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {
   return async function jwtValidateHandler(
     req: Request,
-    ctx: MiddlewareHandlerContext
+    ctx: MiddlewareHandlerContext,
   ) {
-    if (req.method !== 'OPTIONS') {
+    if (req.method !== "OPTIONS") {
       const jwtToken = jwtConfig.LoadToken(req);
 
-      const failureRespBody = { HasError: false, Message: '' };
+      const failureRespBody = { HasError: false, Message: "" };
 
       if (!jwtToken) {
-        failureRespBody.Message = `A JWT token is required, provide it in the '${jwtConfig.Header}' header in the format '${jwtConfig.Schema} {token}'.`;
+        failureRespBody.Message =
+          `A JWT token is required, provide it in the '${jwtConfig.Header}' header in the format '${jwtConfig.Schema} {token}'.`;
       }
 
       try {
         if (!(await jwtConfig.Verify(jwtToken!))) {
-          failureRespBody.Message = 'The provided token is invalid.';
+          failureRespBody.Message = "The provided token is invalid.";
 
           failureRespBody.HasError = true;
         }
