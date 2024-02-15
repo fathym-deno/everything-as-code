@@ -1,12 +1,10 @@
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { STATUS_CODE } from "$std/http/status.ts";
-import { respond } from "@fathym/common";
+import { FreshContext, respond, STATUS_CODE } from "../../src.deps.ts";
 import { JWTConfig } from "./JWTConfig.ts";
 
 export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {
   return async function jwtValidateHandler(
     req: Request,
-    ctx: MiddlewareHandlerContext,
+    ctx: FreshContext,
   ) {
     if (req.method !== "OPTIONS") {
       const jwtToken = jwtConfig.LoadToken(req);

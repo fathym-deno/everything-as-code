@@ -1,4 +1,4 @@
-import { Handlers } from "$fresh/server.ts";
+import { Handlers } from "../../../../../src.deps.ts";
 import { OAuthHelpers } from "../../../../../services/oAuth.ts";
 
 export function establishSigninRoute(oAuthHandlers: OAuthHelpers) {
