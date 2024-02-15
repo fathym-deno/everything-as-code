@@ -1,4 +1,5 @@
-import { FreshContext, respond, STATUS_CODE } from "../../src.deps.ts";
+import { respond } from "../../src.deps.ts";
+import { FreshContext, STATUS_CODE } from "$fresh/server.ts";
 import { JWTConfig } from "./JWTConfig.ts";
 
 export function buildJwtValidationHandler<TPayload>(jwtConfig: JWTConfig) {

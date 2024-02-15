@@ -1,4 +1,4 @@
-import { FreshContext, Plugin } from "../../../src.deps.ts";
+import { FreshContext, Plugin } from "$fresh/server.ts";
 import { EaCServiceClient } from "../../../eac/client/EaCServiceClient.ts";
 import { OAuthHelpers } from "../../../services/oAuth.ts";
 import { GitHubAccessPluginState } from "./GitHubAccessPluginState.ts";
