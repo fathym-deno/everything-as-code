@@ -1,5 +1,4 @@
-import { create, decode, getNumericDate, verify } from "@djwt";
-import { decodeBase64 } from "$std/encoding/base64.ts";
+import { decodeBase64, djwt } from "../src/src.deps.ts";
 import { JWTConfig } from "../src/utils/jwt/JWTConfig.ts";
 
 export function loadJwtConfig(): JWTConfig {
@@ -12,9 +11,9 @@ export function loadJwtConfig(): JWTConfig {
   return {
     Algorithm: { name: "HMAC", hash: "SHA-512" } as AlgorithmIdentifier,
     async Create(data: Record<string, unknown>, expTime?: number) {
-      const jwt = await create(
+      const jwt = await djwt.create(
         { alg: "HS512", typ: "JWT" },
-        { exp: getNumericDate(expTime || this.ExpirationTime), ...data },
+        { exp: djwt.getNumericDate(expTime || this.ExpirationTime), ...data },
         await this.SecretKey(),
       );
 
@@ -23,7 +22,7 @@ export function loadJwtConfig(): JWTConfig {
     async Decode<T>(
       token: string,
     ): Promise<[header: unknown, payload: T, signature: Uint8Array]> {
-      const [header, payload, signature] = await decode(token);
+      const [header, payload, signature] = await djwt.decode(token);
 
       return [header, payload as T, signature];
     },
@@ -56,7 +55,7 @@ export function loadJwtConfig(): JWTConfig {
     Schema: "Bearer",
     Type: "JWT",
     async Verify(token: string) {
-      const verified = await verify(token, await this.SecretKey());
+      const verified = await djwt.verify(token, await this.SecretKey());
 
       return verified;
     },

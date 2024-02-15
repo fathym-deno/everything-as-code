@@ -7,6 +7,8 @@ export {
   AzureOpenAI,
   AzureOpenAIEmbeddings,
 } from "npm:@langchain/azure-openai";
+export { createStuffDocumentsChain } from "npm:langchain/chains/combine_documents";
+export { createRetrievalChain } from "npm:langchain/chains/retrieval";
 export {
   AzureAISearchQueryType,
   AzureAISearchVectorStore,

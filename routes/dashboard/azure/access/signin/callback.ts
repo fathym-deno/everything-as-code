@@ -1,10 +1,10 @@
 // deno-lint-ignore-file no-explicit-any
-import { decode } from "@djwt";
 import { Handlers } from "$fresh/server.ts";
 import { gitHubOAuth } from "../../../../../configs/oAuth.config.ts";
 import { fathymDenoKv } from "../../../../../configs/deno-kv.config.ts";
 import { UserOAuthConnection } from "../../../../../src/oauth/UserOAuthConnection.ts";
 import { EverythingAsCodeState } from "../../../../../src/eac/EverythingAsCodeState.ts";
+import { loadJwtConfig } from "../../../../../configs/jwt.config.ts";
 
 export const handler: Handlers<any, EverythingAsCodeState> = {
   async GET(req, ctx) {
@@ -18,7 +18,9 @@ export const handler: Handlers<any, EverythingAsCodeState> = {
 
     const expiresAt = now + expiresIn! * 1000;
 
-    const [header, payload, signature] = await decode(accessToken);
+    const jwtConfig = loadJwtConfig();
+
+    const [header, payload, signature] = await jwtConfig.Decode(accessToken);
 
     const primaryEmail = (payload as Record<string, string>).emails[0];
 

@@ -1,4 +1,3 @@
-import { decode } from "@djwt";
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { fathymDenoKv } from "../configs/deno-kv.config.ts";
@@ -8,6 +7,7 @@ import { azureFathymOAuth } from "../configs/oAuth.config.ts";
 import { EaCSourceConnectionDetails } from "../src/eac/modules/sources/EaCSourceConnectionDetails.ts";
 import { loadMainOctokit } from "../src/services/github/octokit/load.ts";
 import { getCurrentAzureUser } from "./api/eac/handlers/clouds/helpers.ts";
+import { loadJwtConfig } from "../configs/jwt.config.ts";
 
 async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
   const url = new URL(req.url);
@@ -37,7 +37,9 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
 
       const { accessToken, refreshToken, expiresIn } = tokens;
 
-      const [header, payload, signature] = await decode(accessToken);
+      const jwtConfig = loadJwtConfig();
+
+      const [header, payload, signature] = await jwtConfig.Decode(accessToken);
 
       const primaryEmail = (payload as Record<string, string>).emails[0];
 

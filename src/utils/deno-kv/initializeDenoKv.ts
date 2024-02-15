@@ -1,5 +1,5 @@
 import { existsSync } from "@fathym/common";
-import { dirname } from "$std/path/mod.ts";
+import { path } from "../../src.deps.ts"
 
 export async function initializeDenoKv(denoKvPath?: string) {
   console.log(`Initializing DenoKV at ${denoKvPath}`);
@@ -7,7 +7,7 @@ export async function initializeDenoKv(denoKvPath?: string) {
   if (
     denoKvPath && !denoKvPath.startsWith("https") && !existsSync(denoKvPath)
   ) {
-    const denoKvDir = dirname(denoKvPath);
+    const denoKvDir = path.dirname(denoKvPath);
 
     if (denoKvDir && !existsSync(denoKvDir)) {
       console.log(`Ensuring DenoKV directory ${denoKvDir}`);

@@ -1,4 +1,4 @@
-import { Payload } from "@djwt";
+import { djwt } from "../../src.deps.ts";
 
 export type JWTConfig = {
   Algorithm: AlgorithmIdentifier;
@@ -25,5 +25,5 @@ export type JWTConfig = {
 
   Type: "JWT";
 
-  Verify: (token: string) => Promise<Payload>;
+  Verify: (token: string) => Promise<djwt.Payload>;
 };
