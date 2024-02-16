@@ -31,8 +31,8 @@ export function createGitHubOAuth(scopes: string[]): OAuthHelpers {
 }
 
 export function createAzureADB2COAuth(
-  redirectUri: string,
   scopes: string[],
+  redirectUri?: string,
 ): OAuthHelpers {
   return createHelpers(
     createAzureAdb2cOAuthConfig({
@@ -43,8 +43,8 @@ export function createAzureADB2COAuth(
 }
 
 export function createAzureADOAuth(
-  redirectUri: string,
   scopes: string[],
+  redirectUri?: string,
 ): OAuthHelpers {
   return createHelpers(
     createAzureAdOAuthConfig({
