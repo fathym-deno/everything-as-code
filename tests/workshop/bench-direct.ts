@@ -4,18 +4,18 @@ import {
   AzureChatOpenAI,
   AzureOpenAIEmbeddings,
   ChatPromptTemplate,
-  PDFLoader,
-  RecursiveCharacterTextSplitter,
   createRetrievalChain,
   createStuffDocumentsChain,
-} from '../test.deps.ts';
+  PDFLoader,
+  RecursiveCharacterTextSplitter,
+} from "../test.deps.ts";
 
 try {
   const generateVectorStore = false;
 
   const embeddings = new AzureOpenAIEmbeddings({
     azureOpenAIEmbeddingsApiDeploymentName: Deno.env.get(
-      'AZURE_OPENAI_API_EMBEDDING_DEPLOYMENT_NAME'
+      "AZURE_OPENAI_API_EMBEDDING_DEPLOYMENT_NAME",
     ),
   });
 
@@ -27,10 +27,10 @@ try {
 
   if (generateVectorStore) {
     const loader = new PDFLoader(
-      './training/azure/data-explorer/azure-data-explorer.pdf',
+      "./training/azure/data-explorer/azure-data-explorer.pdf",
       {
         // splitPages: false,
-      }
+      },
     );
 
     const docs = await loader.load();
@@ -44,11 +44,11 @@ try {
     const kqlDocs = docs.filter(
       (doc) =>
         doc.metadata.loc.pageNumber >= kqlOverviewStartPage &&
-        doc.metadata.loc.pageNumber <= kqlOverviewEndPage
+        doc.metadata.loc.pageNumber <= kqlOverviewEndPage,
     );
 
     console.log(
-      `Loaded document with ${kqlDocs.length} total pages of KQL information`
+      `Loaded document with ${kqlDocs.length} total pages of KQL information`,
     );
 
     const splitter = new RecursiveCharacterTextSplitter();
@@ -56,7 +56,7 @@ try {
     const docOutput = await splitter.splitDocuments(docs);
 
     console.log(
-      `Generated ${docOutput.length} split documents for vector store.`
+      `Generated ${docOutput.length} split documents for vector store.`,
     );
 
     const docsToAdd = docOutput; //.slice(1000, 1250);
@@ -65,13 +65,13 @@ try {
 
     console.log(`Generated vector store with ${docsToAdd.length} documents`);
 
-    const resultOne = await vectorStore.similaritySearch('Tumbling Window', 5);
+    const resultOne = await vectorStore.similaritySearch("Tumbling Window", 5);
 
     console.log(JSON.stringify(resultOne, null, 2));
   }
 
   const model = new AzureChatOpenAI({
-    modelName: 'gpt-4',
+    modelName: "gpt-4",
     temperature: 0.7,
     // maxTokens: 1000,
     maxRetries: 5,
@@ -80,22 +80,22 @@ try {
 
   const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
     [
-      'system',
-      'You are an expert data engineer, data scientist, and will help the user create a KQL query. You will provide only the KQL query in your responses. Keeping in mind the following context:\n\n{context}',
+      "system",
+      "You are an expert data engineer, data scientist, and will help the user create a KQL query. You will provide only the KQL query in your responses. Keeping in mind the following context:\n\n{context}",
     ],
     [
-      'ai',
+      "ai",
       "Hello, i'm here to help you with your KQL query. What is your table schema",
     ],
-    ['human', 'The table schema is {tableSchema}'],
-    ['ai', 'Do you have an example of what your data is?'],
-    ['human', 'Here is an example of my data for each device: {payload}'],
-    ['ai', 'What DeviceIDs will we be working with?'],
-    ['human', '{deviceIds}'],
-    ['human', 'Can you provide me with some KQL queries to use?'],
-    ['ai', '{examples}'],
-    ['ai', 'I will keep these queries in mind, what would you like help with?'],
-    ['human', '{input}'],
+    ["human", "The table schema is {tableSchema}"],
+    ["ai", "Do you have an example of what your data is?"],
+    ["human", "Here is an example of my data for each device: {payload}"],
+    ["ai", "What DeviceIDs will we be working with?"],
+    ["human", "{deviceIds}"],
+    ["human", "Can you provide me with some KQL queries to use?"],
+    ["ai", "{examples}"],
+    ["ai", "I will keep these queries in mind, what would you like help with?"],
+    ["human", "{input}"],
     // ['ai', `{query1}`],
     // [
     //   'human',
@@ -145,11 +145,12 @@ try {
   // });
 
   const question =
-    'Write a KQL that uses the SensorMetadata.BatteryPercentage to predict when the device battery will die';
+    "Write a KQL that uses the SensorMetadata.BatteryPercentage to predict when the device battery will die";
 
   const response = await chain.stream({
     input: question,
-    tableSchema: `{"Name":"Devices","OrderedColumns":[{"Name":"DeviceID","Type":"System.String","CslType":"string"},{"Name":"EnqueuedTime","Type":"System.DateTime","CslType":"datetime"},{"Name":"MessageID","Type":"System.String","CslType":"string"},{"Name":"RawData","Type":"System.Object","CslType":"dynamic"}]}`,
+    tableSchema:
+      `{"Name":"Devices","OrderedColumns":[{"Name":"DeviceID","Type":"System.String","CslType":"string"},{"Name":"EnqueuedTime","Type":"System.DateTime","CslType":"datetime"},{"Name":"MessageID","Type":"System.String","CslType":"string"},{"Name":"RawData","Type":"System.Object","CslType":"dynamic"}]}`,
     deviceIds: `['cytondevice','emotibit']`,
     examples: `let deviceIds = dynamic(['cytondevice','emotibit']);
     Devices
@@ -158,15 +159,15 @@ try {
     | take 100`,
     rawDataFormat: `{ [deviceId]: [rawDataExample] }`,
     payload: JSON.stringify({
-      DeviceID: 'emotibit',
-      EnqueuedTime: '2024-02-14T16:50:10.2360000Z',
-      MessageID: '',
+      DeviceID: "emotibit",
+      EnqueuedTime: "2024-02-14T16:50:10.2360000Z",
+      MessageID: "",
       RawData: {
-        'iothub-connection-device-id': 'emotibit',
-        'iothub-enqueuedtime': '2024-02-14T16:50:10.2360000Z',
-        DeviceID: 'TrevorsEmotibit',
-        DeviceType: 'emotibit',
-        DeviceData: { Timestamp: '1707929407' },
+        "iothub-connection-device-id": "emotibit",
+        "iothub-enqueuedtime": "2024-02-14T16:50:10.2360000Z",
+        DeviceID: "TrevorsEmotibit",
+        DeviceType: "emotibit",
+        DeviceData: { Timestamp: "1707929407" },
         SensorReadings: {
           EA: [
             { Data: 0.030175863, Millis: 0 },
@@ -199,8 +200,8 @@ try {
         },
         SensorMetadata: {
           BatteryPercentage: 99,
-          MACAddress: '58:f4:cc:7e:dc:0c',
-          EmotibitVersion: 'V01b',
+          MACAddress: "58:f4:cc:7e:dc:0c",
+          EmotibitVersion: "V01b",
         },
       },
     }),
@@ -344,7 +345,7 @@ try {
     // clientRequestId: Kusto.Web.KWE.Query;a60f2e74-cb47-4fb1-9aaa-250927ed457f;04e5a088-a5f8-4ecf-b7b9-d86a5ca35f1a`,
   });
 
-  console.log('Chain response:');
+  console.log("Chain response:");
   // console.log(response.answer);
 
   for await (const { answer } of response) {

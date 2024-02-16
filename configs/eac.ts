@@ -3,6 +3,8 @@ import { EaCExplorerServiceClient } from "../src/eac/client/EaCExplorerServiceCl
 import { EaCServiceClient } from "../src/eac/client/EaCServiceClient.ts";
 import { loadJwtConfig } from "./jwt.config.ts";
 
+export async function loadEaCSvc(): Promise<EaCServiceClient>;
+
 export async function loadEaCSvc(eacApiKey: string): Promise<EaCServiceClient>;
 
 export async function loadEaCSvc(
@@ -11,14 +13,21 @@ export async function loadEaCSvc(
 ): Promise<EaCServiceClient>;
 
 export async function loadEaCSvc(
-  eacApiKeyEntLookup: string,
+  eacApiKeyEntLookup?: string,
   username?: string,
 ): Promise<EaCServiceClient> {
+  if (!eacApiKeyEntLookup) {
+    eacApiKeyEntLookup = Deno.env.get("EAC_API_KEY")!;
+  }
+
   if (username) {
-    eacApiKeyEntLookup = await loadJwtConfig().Create({
-      EnterpriseLookup: eacApiKeyEntLookup,
-      Username: username!,
-    }, 60 * 60 * 1);
+    eacApiKeyEntLookup = await loadJwtConfig().Create(
+      {
+        EnterpriseLookup: eacApiKeyEntLookup,
+        Username: username!,
+      },
+      60 * 60 * 1,
+    );
   }
 
   const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
@@ -40,10 +49,13 @@ export async function loadEaCAzureSvc(
   username?: string,
 ): Promise<EaCAzureServiceClient> {
   if (username) {
-    eacApiKeyEntLookup = await loadJwtConfig().Create({
-      EnterpriseLookup: eacApiKeyEntLookup,
-      Username: username!,
-    }, 60 * 60 * 1);
+    eacApiKeyEntLookup = await loadJwtConfig().Create(
+      {
+        EnterpriseLookup: eacApiKeyEntLookup,
+        Username: username!,
+      },
+      60 * 60 * 1,
+    );
   }
 
   const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;
@@ -65,10 +77,13 @@ export async function loadEaCExplorerSvc(
   username?: string,
 ): Promise<EaCExplorerServiceClient> {
   if (username) {
-    eacApiKeyEntLookup = await loadJwtConfig().Create({
-      EnterpriseLookup: eacApiKeyEntLookup,
-      Username: username!,
-    }, 60 * 60 * 1);
+    eacApiKeyEntLookup = await loadJwtConfig().Create(
+      {
+        EnterpriseLookup: eacApiKeyEntLookup,
+        Username: username!,
+      },
+      60 * 60 * 1,
+    );
   }
 
   const eacBaseUrl = Deno.env.get("EAC_API_BASE_URL")!;

@@ -1,4 +1,4 @@
-import { EaCVertexDetails } from '../../EaCVertexDetails.ts';
+import { EaCVertexDetails } from "../../EaCVertexDetails.ts";
 
 export type EaCProjectDetails = {
   Favicon?: string;
@@ -7,7 +7,7 @@ export type EaCProjectDetails = {
 } & EaCVertexDetails;
 
 export function isEaCProjectDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCProjectDetails {
   const projDetails = details as EaCProjectDetails;
 

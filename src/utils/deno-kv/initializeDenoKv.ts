@@ -1,4 +1,4 @@
-import { path, existsSync } from "../../src.deps.ts"
+import { existsSync, path } from "../../src.deps.ts";
 
 export async function initializeDenoKv(denoKvPath?: string) {
   console.log(`Initializing DenoKV at ${denoKvPath}`);

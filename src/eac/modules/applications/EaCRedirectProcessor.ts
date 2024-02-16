@@ -1,4 +1,4 @@
-import { isEaCProcessor, EaCProcessor } from './EaCProcessor.ts';
+import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCRedirectProcessor = {
   Permanent?: boolean;
@@ -9,13 +9,13 @@ export type EaCRedirectProcessor = {
 } & EaCProcessor;
 
 export function isEaCRedirectProcessor(
-  details: unknown
+  details: unknown,
 ): details is EaCRedirectProcessor {
   const proc = details as EaCRedirectProcessor;
 
   return (
     isEaCProcessor(proc) &&
     proc.Redirect !== undefined &&
-    typeof proc.Redirect === 'string'
+    typeof proc.Redirect === "string"
   );
 }

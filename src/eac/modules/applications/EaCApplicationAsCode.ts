@@ -1,16 +1,16 @@
-import { EaCDetails } from '../../EaCDetails.ts';
+import { EaCDetails } from "../../EaCDetails.ts";
 import {
   EaCApplicationDetails,
   isEaCApplicationDetails,
-} from './EaCApplicationDetails.ts';
-import { EaCProcessor } from './EaCProcessor.ts';
+} from "./EaCApplicationDetails.ts";
+import { EaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCApplicationAsCode = {
   Processor: EaCProcessor;
 } & EaCDetails<EaCApplicationDetails>;
 
 export function isEaCApplicationAsCode(
-  eac: unknown
+  eac: unknown,
 ): eac is EaCApplicationAsCode {
   const app = eac as EaCApplicationAsCode;
 
