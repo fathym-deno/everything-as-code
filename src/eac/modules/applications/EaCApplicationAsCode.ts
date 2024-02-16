@@ -1,22 +1,23 @@
-import { EaCCloudDetails, isEaCCloudDetails } from "./EaCCloudDetails.js";
-import { EaCLandingZoneAsCode } from "./EaCLandingZoneAsCode.ts";
-import { EaCCloudResourceGroupAsCode } from "./EaCCloudResourceGroupAsCode.ts";
-import { EaCDetails } from "../../EaCDetails.js";
+import { EaCDetails } from '../../EaCDetails.ts';
+import {
+  EaCApplicationDetails,
+  isEaCApplicationDetails,
+} from './EaCApplicationDetails.ts';
+import { EaCProcessor } from './EaCProcessor.ts';
 
-export type EaCCloudAsCode = {
-  LandingZones?: Record<string, EaCLandingZoneAsCode>;
+export type EaCApplicationAsCode = {
+  Processor: EaCProcessor;
+} & EaCDetails<EaCApplicationDetails>;
 
-  ResourceGroups?: Record<string, EaCCloudResourceGroupAsCode>;
-} & EaCDetails<EaCCloudDetails>;
-
-export function isEaCCloudAsCode(
-  eac: unknown,
-): eac is EaCCloudAsCode {
-  const cloud = eac as EaCCloudAsCode;
+export function isEaCApplicationAsCode(
+  eac: unknown
+): eac is EaCApplicationAsCode {
+  const app = eac as EaCApplicationAsCode;
 
   return (
-    cloud &&
-    cloud.Details !== undefined &&
-    isEaCCloudDetails(cloud.Details)
+    app &&
+    app.Details !== undefined &&
+    isEaCApplicationDetails(app.Details) &&
+    app.Processor !== undefined
   );
 }

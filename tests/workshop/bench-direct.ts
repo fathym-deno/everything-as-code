@@ -144,9 +144,10 @@ try {
   //   tableSchema: `{"Name":"Devices","OrderedColumns":[{"Name":"DeviceID","Type":"System.String","CslType":"string"},{"Name":"EnqueuedTime","Type":"System.DateTime","CslType":"datetime"},{"Name":"MessageID","Type":"System.String","CslType":"string"},{"Name":"RawData","Type":"System.Object","CslType":"dynamic"}]}`,
   // });
 
-  const question = 'Write a KQL that uses the SensorMetadata.BatteryPercentage to predict when the device battery will die';
+  const question =
+    'Write a KQL that uses the SensorMetadata.BatteryPercentage to predict when the device battery will die';
 
-  const response = await chain.invoke({
+  const response = await chain.stream({
     input: question,
     tableSchema: `{"Name":"Devices","OrderedColumns":[{"Name":"DeviceID","Type":"System.String","CslType":"string"},{"Name":"EnqueuedTime","Type":"System.DateTime","CslType":"datetime"},{"Name":"MessageID","Type":"System.String","CslType":"string"},{"Name":"RawData","Type":"System.Object","CslType":"dynamic"}]}`,
     deviceIds: `['cytondevice','emotibit']`,
@@ -344,7 +345,11 @@ try {
   });
 
   console.log('Chain response:');
-  console.log(response.answer);
+  // console.log(response.answer);
+
+  for await (const { answer } of response) {
+    console.log(answer);
+  }
 } catch (e) {
   console.error(e);
   Deno.exit(1);

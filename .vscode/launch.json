@@ -6,20 +6,32 @@
       "name": "Launch Program",
       "type": "node",
       // "program": "${workspaceFolder}/tests/tests.ts",
-      // "program": "${workspaceFolder}/tests/workshop/bench-direct.ts",
       "program": "${workspaceFolder}/main.ts",
       // "program": "${workspaceFolder}/dev.ts",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "C:\\ProgramData\\chocolatey\\lib\\deno\\deno.EXE",
+      "runtimeExecutable": "deno.exe",
       "runtimeArgs": [
         "run",
         "--config",
         "./deno.jsonc",
         "--inspect-wait",
-        "--allow-all",
         "--unstable-kv"
-      ],
-      "attachSimplePort": 9229
+      ]
+    },
+    {
+      "request": "launch",
+      "name": "Bench Direct Program",
+      "type": "node",
+      "program": "${workspaceFolder}/tests/workshop/bench-direct.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "deno.exe",
+      "runtimeArgs": [
+        "run",
+        "--config",
+        "./deno.jsonc",
+        "--inspect-wait",
+        "--unstable-kv"
+      ]
     }
   ]
 }
