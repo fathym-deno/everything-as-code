@@ -1,7 +1,7 @@
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCRedirectProcessor = {
-  Permanent?: boolean;
+  Permanent: boolean;
 
   PreserveMethod: boolean;
 

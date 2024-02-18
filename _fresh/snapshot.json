@@ -1,0 +1,31 @@
+{
+  "build_id": "6707f1fc2eb994eb9534e5b56663bddb8e77e0ea",
+  "files": {
+    "main.js": [
+      "chunk-JEA2PLXP.js",
+      "chunk-OLUNBRMC.js",
+      "chunk-DQW7DUIU.js"
+    ],
+    "deserializer.js": [
+      "chunk-DQW7DUIU.js"
+    ],
+    "signals.js": [
+      "chunk-TYAFB7HT.js",
+      "chunk-OLUNBRMC.js",
+      "chunk-DQW7DUIU.js"
+    ],
+    "island-enteprisemanagementitem.js": [
+      "chunk-JEA2PLXP.js",
+      "chunk-TYAFB7HT.js",
+      "chunk-OLUNBRMC.js",
+      "chunk-DQW7DUIU.js"
+    ],
+    "chunk-JEA2PLXP.js": [],
+    "chunk-TYAFB7HT.js": [
+      "chunk-OLUNBRMC.js"
+    ],
+    "chunk-OLUNBRMC.js": [],
+    "chunk-DQW7DUIU.js": [],
+    "metafile.json": []
+  }
+}

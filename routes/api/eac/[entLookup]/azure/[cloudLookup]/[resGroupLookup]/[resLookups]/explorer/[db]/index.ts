@@ -50,6 +50,8 @@ export const handler: Handlers = {
 
     kustoClient.ensureOpen();
 
+    console.log(explorerReq);
+
     const dataSetResp = await kustoClient.execute(db, explorerReq.Query);
 
     return respond(JSON.stringify(dataSetResp));

@@ -26,13 +26,19 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
     case "/signin": {
       const host = req.headers.get("x-forwarded-host") || url.host;
 
-      const proto = req.headers.get("x-forwarded-proto") || url.protocol;
+      let proto = req.headers.get("x-forwarded-proto") || url.protocol;
 
-      return await azureFathymOAuth.signIn(req, {
+      if (!proto.endsWith(":")) {
+        proto += ":";
+      }
+
+      const resp = await azureFathymOAuth.signIn(req, {
         urlParams: {
           redirect_uri: `${proto}//${host}/signin/callback`,
         },
       });
+
+      return resp;
     }
 
     case "/signin/callback": {
