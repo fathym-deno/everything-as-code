@@ -35,10 +35,10 @@ async function loggedInCheck(req: Request, ctx: MiddlewareHandlerContext) {
         if (!userOAuthConnExpired(currentUsername.value)) {
           ctx.state.Username = currentUsername.value!.Username;
         } else {
-          return redirectRequest(notSignedInRedirect);
+          return redirectRequest(notSignedInRedirect, false, false);
         }
       } else {
-        return redirectRequest(notSignedInRedirect);
+        return redirectRequest(notSignedInRedirect, false, false);
       }
 
       return ctx.next();

@@ -7,6 +7,8 @@ export type EaCProjectAsCode = {
   ApplicationLookups: Record<string, EaCApplicationLookupConfiguration>;
 
   LookupConfigs: Record<string, EaCProjectLookupConfiguration>;
+
+  ModifierLookups?: string[];
 } & EaCDetails<EaCProjectDetails>;
 
 export function isEaCProjectAsCode(eac: unknown): eac is EaCProjectAsCode {

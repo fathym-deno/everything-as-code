@@ -19,9 +19,9 @@ export type EaCAIRAGChatProcessor = {
 
   ModelName: string;
 
-  SearchEndpoint: string;
+  SearchEndpoint?: string;
 
-  SearchAPIKey: string;
+  SearchAPIKey?: string;
 
   UseSSEFormat: boolean;
 } & EaCProcessor;

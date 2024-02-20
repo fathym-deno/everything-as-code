@@ -6,6 +6,8 @@ import {
 import { EaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCApplicationAsCode = {
+  ModifierLookups?: string[];
+
   Processor: EaCProcessor;
 } & EaCDetails<EaCApplicationDetails>;
 
