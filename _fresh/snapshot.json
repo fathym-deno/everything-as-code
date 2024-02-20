@@ -1,8 +1,8 @@
 {
-  "build_id": "2adf711784d58dc5601fb5218a5a12fca19f2613",
+  "build_id": "f545347e7599111424f9317b8d06fcc9cbb290bd",
   "files": {
     "main.js": [
-      "chunk-ITGV5PA2.js",
+      "chunk-2JCF6HWY.js",
       "chunk-OLUNBRMC.js",
       "chunk-DQW7DUIU.js"
     ],
@@ -15,12 +15,12 @@
       "chunk-DQW7DUIU.js"
     ],
     "island-enteprisemanagementitem.js": [
-      "chunk-ITGV5PA2.js",
+      "chunk-2JCF6HWY.js",
       "chunk-TYAFB7HT.js",
       "chunk-OLUNBRMC.js",
       "chunk-DQW7DUIU.js"
     ],
-    "chunk-ITGV5PA2.js": [],
+    "chunk-2JCF6HWY.js": [],
     "chunk-TYAFB7HT.js": [
       "chunk-OLUNBRMC.js"
     ],
