@@ -8,4 +8,6 @@ export type EaCApplicationLookupConfiguration = {
   PathPattern: string;
 
   Priority: number;
+
+  UserAgentRegex?: string;
 };
