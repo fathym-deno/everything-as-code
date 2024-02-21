@@ -4,6 +4,8 @@ import {
 } from './EaCDatabaseDetails.ts';
 
 export type EaCDenoKVDatabaseDetails = {
+  DenoKVPath?: string;
+  
   Type: 'DenoKV';
 } & EaCDatabaseDetails;
 
