@@ -38,7 +38,7 @@
     "@fathym/atomic-icons": "https://deno.land/x/fathym_atomic_icons@v0.0.17/mod.ts",
     "$fathym/atomic-icons": "./build/iconset/icons/_exports.ts",
     "@fathym/atomic-icons/browser": "https://deno.land/x/fathym_atomic_icons@v0.0.17/browser.ts",
-    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.152S/mod.ts",
+    "@fathym/common": "https://deno.land/x/fathym_common@v0.0.153/mod.ts",
     "$fresh/": "https://deno.land/x/fresh@1.6.3/",
     "$fresh/session": "https://deno.land/x/fresh_session@0.2.2/mod.ts",
     "__$fresh/oauth": "../../fathym-deno/deno_kv_oauth/mod.ts",
