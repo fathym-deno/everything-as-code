@@ -7,6 +7,8 @@ export type EaCDenoKVCacheModifierDetails = {
   CacheSeconds: number;
 
   DenoKVDatabaseLookup: string;
+
+  PathFilterRegex?: string;
 } & EaCModifierDetails;
 
 export function isEaCDenoKVCacheModifierDetails(
