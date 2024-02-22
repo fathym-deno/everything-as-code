@@ -1,5 +1,7 @@
 export type EaCProcessor = {
-  CacheControl?: string;
+  CacheControl?: Record<string, string>;
+
+  ForceCache?: boolean;
 };
 
 export function isEaCProcessor(details: unknown): details is EaCProcessor {
