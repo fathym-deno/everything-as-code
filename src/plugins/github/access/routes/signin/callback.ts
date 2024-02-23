@@ -5,7 +5,7 @@ import { EaCSourceConnectionDetails } from "../../../../../eac/modules/sources/E
 import { UserOAuthConnection } from "../../../../../oauth/UserOAuthConnection.ts";
 import { EverythingAsCodeState } from "../../../../../eac/EverythingAsCodeState.ts";
 import { waitForStatus } from "../../../../../utils/eac/waitForStatus.ts";
-import { OAuthHelpers } from "../../../../../services/oAuth.ts";
+import { OAuthHelpers } from "@fathym/common";
 import { EaCServiceClient } from "../../../../../eac/client/EaCServiceClient.ts";
 import { EverythingAsCode } from "../../../../../eac/EverythingAsCode.ts";
 import { EverythingAsCodeSources } from "../../../../../eac/modules/sources/EverythingAsCodeSources.ts";

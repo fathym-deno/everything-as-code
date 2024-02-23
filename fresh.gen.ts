@@ -6,6 +6,7 @@ import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.tsx";
 import * as $api_eac_entLookup_middleware from "./routes/api/eac/[entLookup]/_middleware.ts";
+import * as $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_data_lake_fileSystem_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/data-lake/[fileSystem]/index.ts";
 import * as $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_explorer_db_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts";
 import * as $api_eac_entLookup_azure_cloudLookup_api_versions_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts";
 import * as $api_eac_entLookup_azure_cloudLookup_auth_token_index from "./routes/api/eac/[entLookup]/azure/[cloudLookup]/auth-token/index.ts";
@@ -73,6 +74,8 @@ const manifest = {
     "./routes/_middleware.tsx": $_middleware,
     "./routes/api/eac/[entLookup]/_middleware.ts":
       $api_eac_entLookup_middleware,
+    "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/data-lake/[fileSystem]/index.ts":
+      $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_data_lake_fileSystem_index,
     "./routes/api/eac/[entLookup]/azure/[cloudLookup]/[resGroupLookup]/[resLookups]/explorer/[db]/index.ts":
       $api_eac_entLookup_azure_cloudLookup_resGroupLookup_resLookups_explorer_db_index,
     "./routes/api/eac/[entLookup]/azure/[cloudLookup]/api-versions/index.ts":

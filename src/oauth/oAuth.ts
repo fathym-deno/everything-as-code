@@ -1,4 +1,4 @@
-import { OAuthHelpers } from "@fathym/common";
+import { OAuthHelpers } from "../src.deps.ts";
 import {
   createAzureAdb2cOAuthConfig,
   createAzureAdOAuthConfig,

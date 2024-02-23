@@ -2,7 +2,7 @@ import {
   createAzureADB2COAuth,
   createAzureADOAuth,
   createGitHubOAuth,
-} from "../src/services/oAuth.ts";
+} from "../src/oauth/oAuth.ts";
 
 const baseUrl = Deno.env.get("BASE_URL")!;
 

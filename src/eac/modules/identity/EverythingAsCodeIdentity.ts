@@ -5,7 +5,7 @@ export type EverythingAsCodeIdentity = {
   Providers?: Record<string, EaCProviderAsCode>;
 } & EaCMetadataBase;
 
-export function isEverythingAsCodeDatabases(
+export function isEverythingAsCodeIdentity(
   eac: unknown,
 ): eac is EverythingAsCodeIdentity {
   const idEaC = eac as EverythingAsCodeIdentity;
