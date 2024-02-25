@@ -1,8 +1,8 @@
-import { AzureAISearchQueryType } from '../../../src.deps.ts';
+import { AzureAISearchQueryType } from "../../../src.deps.ts";
 import {
   EaCVectorStoreDetails,
   isEaCVectorStoreDetails,
-} from './EaCVectorStoreDetails.ts';
+} from "./EaCVectorStoreDetails.ts";
 
 export type EaCAzureSearchAIVectorStoreDetails = {
   APIKey: string;
@@ -13,15 +13,15 @@ export type EaCAzureSearchAIVectorStoreDetails = {
 } & EaCVectorStoreDetails;
 
 export function isEaCAzureSearchAIVectorStoreDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCAzureSearchAIVectorStoreDetails {
   const vsDetails = details as EaCAzureSearchAIVectorStoreDetails;
 
   return (
     isEaCVectorStoreDetails(vsDetails) &&
     vsDetails.APIKey !== undefined &&
-    typeof vsDetails.APIKey === 'string' &&
+    typeof vsDetails.APIKey === "string" &&
     vsDetails.Endpoint !== undefined &&
-    typeof vsDetails.Endpoint === 'string'
+    typeof vsDetails.Endpoint === "string"
   );
 }
