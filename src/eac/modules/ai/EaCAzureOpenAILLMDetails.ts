@@ -16,8 +16,12 @@ export function isEaCAzureOpenAILLMDetails(
 
   return (
     isEaCLLMDetails(llmDetails) &&
+    llmDetails.APIKey !== undefined &&
+    typeof llmDetails.APIKey === "string" &&
     llmDetails.DeploymentName !== undefined &&
     typeof llmDetails.DeploymentName === "string" &&
+    llmDetails.Endpoint !== undefined &&
+    typeof llmDetails.Endpoint === "string" &&
     llmDetails.ModelName !== undefined &&
     typeof llmDetails.ModelName === "string"
   );

@@ -1,7 +1,14 @@
+// deno-lint-ignore-file no-explicit-any
 import { BaseMessagePromptTemplateLike } from "../../../src.deps.ts";
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
-export type EaCAIRAGChatProcessor = {
+export type EaCAIChatProcessor = {
+  AILookup: string;
+
+  DefaultInput?: any;
+
+  DefaultRAGInput?: any;
+
   LLMLookup: string;
 
   EmbeddingsLookup: string;
@@ -13,10 +20,10 @@ export type EaCAIRAGChatProcessor = {
   VectorStoreLookup: string;
 } & EaCProcessor;
 
-export function isEaCAIRAGChatProcessor(
+export function isEaCAIChatProcessor(
   details: unknown,
-): details is EaCAIRAGChatProcessor {
-  const proc = details as EaCAIRAGChatProcessor;
+): details is EaCAIChatProcessor {
+  const proc = details as EaCAIChatProcessor;
 
   return (
     isEaCProcessor(proc) &&

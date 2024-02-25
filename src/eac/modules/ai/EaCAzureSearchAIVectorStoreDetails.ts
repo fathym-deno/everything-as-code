@@ -1,25 +1,27 @@
-import { OpenAIBaseInput } from "../../../src.deps.ts";
+import { AzureAISearchQueryType } from '../../../src.deps.ts';
 import {
   EaCVectorStoreDetails,
   isEaCVectorStoreDetails,
-} from "./EaCVectorStoreDetails.ts";
+} from './EaCVectorStoreDetails.ts';
 
 export type EaCAzureSearchAIVectorStoreDetails = {
   APIKey: string;
 
   Endpoint: string;
+
+  QueryType: AzureAISearchQueryType;
 } & EaCVectorStoreDetails;
 
 export function isEaCAzureSearchAIVectorStoreDetails(
-  details: unknown,
+  details: unknown
 ): details is EaCAzureSearchAIVectorStoreDetails {
-  const llmDetails = details as EaCAzureSearchAIVectorStoreDetails;
+  const vsDetails = details as EaCAzureSearchAIVectorStoreDetails;
 
   return (
-    isEaCVectorStoreDetails(llmDetails) &&
-    llmDetails.APIKey !== undefined &&
-    typeof llmDetails.APIKey === "string" &&
-    llmDetails.Endpoint !== undefined &&
-    typeof llmDetails.Endpoint === "string"
+    isEaCVectorStoreDetails(vsDetails) &&
+    vsDetails.APIKey !== undefined &&
+    typeof vsDetails.APIKey === 'string' &&
+    vsDetails.Endpoint !== undefined &&
+    typeof vsDetails.Endpoint === 'string'
   );
 }

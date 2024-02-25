@@ -10,4 +10,5 @@ export * from "./EaCLLMAsCode.ts";
 export * from "./EaCLLMDetails.ts";
 export * from "./EaCVectorStoreAsCode.ts";
 export * from "./EaCVectorStoreDetails.ts";
+export * from "./EaCWatsonXLLMDetails.ts";
 export * from "./EverythingAsCodeAI.ts";
