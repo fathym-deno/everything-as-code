@@ -1,6 +1,5 @@
-import { merge, paramCase } from "../../src.deps.ts";
+import { paramCase } from "../../src.deps.ts";
 import { SecretClient } from "npm:@azure/keyvault-secrets";
-import { hasKvEntry, waitOnProcessing } from "../deno-kv/helpers.ts";
 import {
   EaCCloudAzureDetails,
   isEaCCloudAzureDetails,
