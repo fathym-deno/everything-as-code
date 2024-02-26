@@ -1,7 +1,11 @@
 import "$std/dotenv/load.ts";
 import * as parse from "npm:pdf-parse";
 import * as azureSearch from "npm:@azure/search-documents";
-export { assert, assertEquals } from "$std/testing/asserts.ts";
+export {
+  assert,
+  assertEquals,
+} from "https://deno.land/std@0.216.0/testing/asserts.ts";
+export { delay } from "https://deno.land/std@0.216.0/async/delay.ts";
 export {
   AzureChatOpenAI,
   AzureOpenAI,
@@ -39,4 +43,3 @@ export { RunnableWithMessageHistory } from "npm:@langchain/core/runnables";
 export { ChatMessageHistory } from "npm:langchain/stores/message/in_memory";
 export { RecursiveCharacterTextSplitter } from "npm:langchain/text_splitter";
 export { MemoryVectorStore } from "npm:langchain/vectorstores/memory";
-export { delay } from "$std/async/delay.ts";

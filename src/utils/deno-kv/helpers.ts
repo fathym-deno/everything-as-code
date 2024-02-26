@@ -1,4 +1,3 @@
-import { sleep } from "../sleep.ts";
 import { AtomicOperationHandler } from "./AtomicOperationHandler.ts";
 import { DenoKVNonce } from "./DenoKVNonce.ts";
 
@@ -68,23 +67,4 @@ export async function listenQueueAtomic(
   atomic = atomicOpHandler(atomic);
 
   return await atomic.commit();
-}
-
-export async function waitOnProcessing<T>(
-  denoKv: Deno.Kv,
-  key: Deno.KvKey,
-  msg: T,
-  owner: string,
-  handler: (msg: T) => Promise<void>,
-  sleepFor = 250,
-) {
-  const processing = await denoKv.get<string>(key);
-
-  if (processing.value && processing.value !== owner) {
-    await sleep(sleepFor);
-
-    await handler(msg);
-  }
-
-  await denoKv.set(key, owner);
 }

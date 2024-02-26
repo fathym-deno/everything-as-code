@@ -1,7 +1,6 @@
 import { Octokit } from "../../../src.deps.ts";
 import { EaCSourceDetails } from "../../../eac/modules/sources/EaCSourceDetails.ts";
 import { Branch, NewRepository, Repository } from "./types.ts";
-import { sleep } from "../../../utils/sleep.ts";
 
 export async function configureBranchProtection(
   octokit: Octokit,
@@ -39,7 +38,7 @@ export async function configureBranchProtection(
     },
   });
 
-  await sleep(1000);
+  await delay(1000);
 
   await octokit.rest.repos.update({
     owner: owner,
