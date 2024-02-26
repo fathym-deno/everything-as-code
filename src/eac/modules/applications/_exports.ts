@@ -13,6 +13,7 @@ export * from "./EaCModifierDetails.ts";
 export * from "./EaCNPMDistributedFileSystem.ts";
 export * from "./EaCOAuthModifierDetails.ts";
 export * from "./EaCOAuthProcessor.ts";
+export * from "./EaCPreactAppProcessor.ts";
 export * from "./EaCProcessor.ts";
 export * from "./EaCProjectAsCode.ts";
 export * from "./EaCProjectDetails.ts";
