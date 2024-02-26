@@ -1,4 +1,4 @@
-import { Octokit } from "@octokit";
+import { Octokit } from "../../../src.deps.ts";
 import { EaCSourceDetails } from "../../../eac/modules/sources/EaCSourceDetails.ts";
 import { Branch, NewRepository, Repository } from "./types.ts";
 import { sleep } from "../../../utils/sleep.ts";

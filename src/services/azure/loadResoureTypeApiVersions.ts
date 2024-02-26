@@ -1,4 +1,4 @@
-import { merge } from "@fathym/common";
+import { merge } from "../../src.deps.ts";
 import { ResourceManagementClient } from "npm:@azure/arm-resources";
 
 export async function loadResoureTypeApiVersions(

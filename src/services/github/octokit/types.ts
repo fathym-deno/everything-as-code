@@ -1,5 +1,4 @@
-import { components } from "@octokit/openapi-types";
-import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import { components, RestEndpointMethodTypes } from "../../../src.deps.ts";
 
 export type ShortBranch = components["schemas"]["short-branch"];
 

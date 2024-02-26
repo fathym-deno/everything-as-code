@@ -1,8 +1,11 @@
-import { App, Octokit } from "@octokit";
-import { OctokitOptions } from "@octokit/core/types";
-import { createOAuthUserAuth } from "@octokit/auth-oauth-user";
-import { createAppAuth } from "@octokit/auth-app";
-import { createTokenAuth } from "@octokit/auth-token";
+import {
+  App,
+  createAppAuth,
+  createOAuthUserAuth,
+  createTokenAuth,
+  Octokit,
+  OctokitOptions,
+} from "../../../src.deps.ts";
 import {
   EaCSourceConnectionDetails,
   isEaCSourceConnectionDetails,

@@ -1,4 +1,4 @@
-import { EaCHandlers } from "../api/EaCHandlers.ts";
+import { EaCHandlers } from "./EaCHandlers.ts";
 import { EaCDetails } from "./EaCDetails.ts";
 import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
 import { EaCSecretAsCode } from "./EaCSecretAsCode.ts";
