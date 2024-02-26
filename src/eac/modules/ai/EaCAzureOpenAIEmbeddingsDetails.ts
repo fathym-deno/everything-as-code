@@ -1,4 +1,3 @@
-import { OpenAIBaseInput } from "../../../src.deps.ts";
 import {
   EaCEmbeddingsDetails,
   isEaCEmbeddingsDetails,

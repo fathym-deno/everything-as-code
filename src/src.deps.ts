@@ -6,7 +6,9 @@ export * from "https://deno.land/x/fathym_common@v0.0.158/mod.ts";
 export * from "https://raw.githubusercontent.com/fathym-deno/deno_kv_oauth/main/mod.ts";
 export * from "https://deno.land/x/case@2.1.1/mod.ts";
 
+export { type OpenAIBaseInput } from "npm:@langchain/azure-openai";
 export { AzureAISearchQueryType } from "npm:@langchain/community/vectorstores/azure_aisearch";
+export { type BaseMessagePromptTemplateLike } from "npm:@langchain/core/prompts";
 
 export * from "https://esm.sh/octokit@3.1.2?dts";
 export * from "https://esm.sh/v135/@octokit/core@v5.0.2/dist-types/types.d.ts";
