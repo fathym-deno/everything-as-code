@@ -7,3 +7,4 @@
 denoKv/
 # Fresh build directory
 node_modules/
+cov/
