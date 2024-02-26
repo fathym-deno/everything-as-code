@@ -2,12 +2,12 @@
   "lock": false,
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task build:mod",
-    "build:mod": "deno run -A --unstable-kv mod.ts build",
+    "build:mod": "deno run -A mod.ts build",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
-    "test": "deno test -A --unstable-kv --allow-env .env tests/tests.ts --coverage=cov"
+    "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov"
   },
   "lint": {
     "rules": {
@@ -25,8 +25,5 @@
   "nodeModulesDir": false,
   "imports": {},
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
-  "unusedImports": {
-    "__@fathym/msal": "../../fathym-deno/msal/mod.ts",
-    "@fathym/msal": "https://deno.land/x/msal@v0.0.24/mod.ts"
-  }
+  "unstable": ["kv"]
 }
