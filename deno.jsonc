@@ -24,6 +24,5 @@
   "exclude": ["**/_fresh/*"],
   "nodeModulesDir": false,
   "imports": {},
-  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "unstable": ["kv"]
 }
