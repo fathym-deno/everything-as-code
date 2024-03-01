@@ -7,7 +7,7 @@ export type EaCRemoteDistributedFileSystem = {
   RemoteRoot: string;
 } & EaCDistributedFileSystem<"Remote">;
 
-export function isEaCLocalDistributedFileSystem(
+export function isEaCRemoteDistributedFileSystem(
   dfs: unknown,
 ): dfs is EaCRemoteDistributedFileSystem {
   const x = dfs as EaCRemoteDistributedFileSystem;
