@@ -1,7 +1,7 @@
 import {
   EaCModifierDetails,
   isEaCModifierDetails,
-} from "./EaCModifierDetails.ts";
+} from "./EaCModifierDetails.js";
 
 export type EaCMarkdownToHtmlModifierDetails =
   & {}
