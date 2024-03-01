@@ -1,11 +1,16 @@
-export type EaCProcessor = {
+export type EaCProcessor<TType = unknown> = {
   CacheControl?: Record<string, string>;
 
   ForceCache?: boolean;
+
+  Type: TType;
 };
 
-export function isEaCProcessor(details: unknown): details is EaCProcessor {
-  const proc = details as EaCProcessor;
+export function isEaCProcessor<TType = unknown>(
+  type: TType,
+  proc: unknown,
+): proc is EaCProcessor {
+  const x = proc as EaCProcessor;
 
-  return !!proc;
+  return x && (!type || x.Type === type);
 }

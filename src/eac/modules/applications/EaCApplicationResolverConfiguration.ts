@@ -1,4 +1,4 @@
-export type EaCApplicationLookupConfiguration = {
+export type EaCApplicationResolverConfiguration = {
   AllowedMethods?: string[];
 
   IsPrivate?: boolean;

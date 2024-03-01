@@ -5,16 +5,16 @@ import {
 
 export type EaCKeepAliveModifierDetails = {
   KeepAlivePath: string;
-} & EaCModifierDetails;
+} & EaCModifierDetails<"KeepAlive">;
 
 export function isEaCKeepAliveModifierDetails(
   details: unknown,
 ): details is EaCKeepAliveModifierDetails {
-  const kvDetails = details as EaCKeepAliveModifierDetails;
+  const x = details as EaCKeepAliveModifierDetails;
 
   return (
-    isEaCModifierDetails(kvDetails) &&
-    kvDetails.KeepAlivePath !== undefined &&
-    typeof kvDetails.KeepAlivePath === "string"
+    isEaCModifierDetails("KeepAlive", x) &&
+    x.KeepAlivePath !== undefined &&
+    typeof x.KeepAlivePath === "string"
   );
 }

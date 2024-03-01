@@ -1,11 +1,14 @@
-export type EaCDistributedFileSystem = {
+export type EaCDistributedFileSystem<TType = unknown> = {
   DefaultFile?: string;
+
+  Type: TType;
 };
 
-export function isEaCDistributedFileSystem(
-  details: unknown,
-): details is EaCDistributedFileSystem {
-  const dfs = details as EaCDistributedFileSystem;
+export function isEaCDistributedFileSystem<TType = unknown>(
+  type: TType,
+  dfs: unknown,
+): dfs is EaCDistributedFileSystem<TType> {
+  const x = dfs as EaCDistributedFileSystem<TType>;
 
-  return !!dfs;
+  return x && (!type || x.Type === type);
 }

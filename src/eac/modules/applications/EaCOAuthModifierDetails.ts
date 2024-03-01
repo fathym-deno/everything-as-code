@@ -7,18 +7,18 @@ export type EaCOAuthModifierDetails = {
   ProviderLookup: string;
 
   SignInPath: string;
-} & EaCModifierDetails;
+} & EaCModifierDetails<"OAuth">;
 
 export function isEaCOAuthModifierDetails(
   details: unknown,
 ): details is EaCOAuthModifierDetails {
-  const kvDetails = details as EaCOAuthModifierDetails;
+  const x = details as EaCOAuthModifierDetails;
 
   return (
-    isEaCModifierDetails(kvDetails) &&
-    kvDetails.ProviderLookup !== undefined &&
-    typeof kvDetails.ProviderLookup === "string" &&
-    kvDetails.SignInPath !== undefined &&
-    typeof kvDetails.SignInPath === "string"
+    isEaCModifierDetails("OAuth", x) &&
+    x.ProviderLookup !== undefined &&
+    typeof x.ProviderLookup === "string" &&
+    x.SignInPath !== undefined &&
+    typeof x.SignInPath === "string"
   );
 }

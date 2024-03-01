@@ -1,17 +1,14 @@
 import { EaCVertexDetails } from "../../EaCVertexDetails.ts";
 
-export type EaCModifierDetails = {
-  Priority: number;
+export type EaCModifierDetails<TType = unknown> = {
+  Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCModifierDetails(
+export function isEaCModifierDetails<TType = unknown>(
+  type: TType,
   details: unknown,
 ): details is EaCModifierDetails {
-  const modDetails = details as EaCModifierDetails;
+  const x = details as EaCModifierDetails;
 
-  return (
-    modDetails &&
-    modDetails.Priority !== undefined &&
-    typeof modDetails.Priority === "number"
-  );
+  return x && (!type || x.Type === type);
 }

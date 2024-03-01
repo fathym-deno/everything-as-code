@@ -6,16 +6,16 @@ export type EaCRedirectProcessor = {
   PreserveMethod: boolean;
 
   Redirect: string;
-} & EaCProcessor;
+} & EaCProcessor<"Redirect">;
 
 export function isEaCRedirectProcessor(
-  details: unknown,
-): details is EaCRedirectProcessor {
-  const proc = details as EaCRedirectProcessor;
+  proc: unknown,
+): proc is EaCRedirectProcessor {
+  const x = proc as EaCRedirectProcessor;
 
   return (
-    isEaCProcessor(proc) &&
-    proc.Redirect !== undefined &&
-    typeof proc.Redirect === "string"
+    isEaCProcessor("Redirect", x) &&
+    x.Redirect !== undefined &&
+    typeof x.Redirect === "string"
   );
 }

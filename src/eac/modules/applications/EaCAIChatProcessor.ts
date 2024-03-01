@@ -11,14 +11,14 @@ export type EaCAIChatProcessor = {
 
   LLMLookup: string;
 
-  EmbeddingsLookup: string;
+  EmbeddingsLookup?: string;
 
   Messages: BaseMessagePromptTemplateLike[];
 
   UseSSEFormat: boolean;
 
-  VectorStoreLookup: string;
-} & EaCProcessor;
+  VectorStoreLookup?: string;
+} & EaCProcessor<"AIChat">;
 
 export function isEaCAIChatProcessor(
   details: unknown,
@@ -26,12 +26,8 @@ export function isEaCAIChatProcessor(
   const proc = details as EaCAIChatProcessor;
 
   return (
-    isEaCProcessor(proc) &&
+    isEaCProcessor("AIChat", proc) &&
     proc.LLMLookup !== undefined &&
-    typeof proc.LLMLookup === "string" &&
-    proc.EmbeddingsLookup !== undefined &&
-    typeof proc.EmbeddingsLookup === "string" &&
-    proc.VectorStoreLookup !== undefined &&
-    typeof proc.VectorStoreLookup === "string"
+    typeof proc.LLMLookup === "string"
   );
 }

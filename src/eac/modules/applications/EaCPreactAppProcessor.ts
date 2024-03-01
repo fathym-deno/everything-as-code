@@ -2,16 +2,16 @@ import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCPreactAppProcessor = {
   AppRoot: string;
-} & EaCProcessor;
+} & EaCProcessor<"PreactApp">;
 
 export function isEaCPreactAppProcessor(
-  details: unknown,
-): details is EaCPreactAppProcessor {
-  const proc = details as EaCPreactAppProcessor;
+  proc: unknown,
+): proc is EaCPreactAppProcessor {
+  const x = proc as EaCPreactAppProcessor;
 
   return (
-    isEaCProcessor(proc) &&
-    proc.AppRoot !== undefined &&
-    typeof proc.AppRoot === "string"
+    isEaCProcessor("PreactApp", x) &&
+    x.AppRoot !== undefined &&
+    typeof x.AppRoot === "string"
   );
 }

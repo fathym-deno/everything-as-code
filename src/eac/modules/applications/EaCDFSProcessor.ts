@@ -6,15 +6,11 @@ import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCDFSProcessor = {
   DFS: EaCDistributedFileSystem;
-} & EaCProcessor;
+} & EaCProcessor<"DFS">;
 
-export function isEaCDFSProcessor(
-  details: unknown,
-): details is EaCDFSProcessor {
-  const proc = details as EaCDFSProcessor;
+export function isEaCDFSProcessor(proc: unknown): proc is EaCDFSProcessor {
+  const x = proc as EaCDFSProcessor;
 
-  return (
-    isEaCProcessor(proc) &&
-    isEaCDistributedFileSystem(proc.DFS)
-  );
+  return isEaCProcessor("DFS", x) &&
+    isEaCDistributedFileSystem(undefined, x.DFS);
 }

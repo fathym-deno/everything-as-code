@@ -2,16 +2,14 @@ import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCOAuthProcessor = {
   ProviderLookup: string;
-} & EaCProcessor;
+} & EaCProcessor<"OAuth">;
 
-export function isEaCOAuthProcessor(
-  details: unknown,
-): details is EaCOAuthProcessor {
-  const proc = details as EaCOAuthProcessor;
+export function isEaCOAuthProcessor(proc: unknown): proc is EaCOAuthProcessor {
+  const x = proc as EaCOAuthProcessor;
 
   return (
-    isEaCProcessor(proc) &&
-    proc.ProviderLookup !== undefined &&
-    typeof proc.ProviderLookup === "string"
+    isEaCProcessor("OAuth", x) &&
+    x.ProviderLookup !== undefined &&
+    typeof x.ProviderLookup === "string"
   );
 }

@@ -7,18 +7,18 @@ export type EaCNPMDistributedFileSystem = {
   Package: string;
 
   Version: string;
-} & EaCDistributedFileSystem;
+} & EaCDistributedFileSystem<"NPM">;
 
 export function isEaCNPMDistributedFileSystem(
-  details: unknown,
-): details is EaCNPMDistributedFileSystem {
-  const proc = details as EaCNPMDistributedFileSystem;
+  dfs: unknown,
+): dfs is EaCNPMDistributedFileSystem {
+  const x = dfs as EaCNPMDistributedFileSystem;
 
   return (
-    isEaCDistributedFileSystem(proc) &&
-    proc.Package !== undefined &&
-    typeof proc.Package === "string" &&
-    proc.Version !== undefined &&
-    typeof proc.Version === "string"
+    isEaCDistributedFileSystem("NPM", x) &&
+    x.Package !== undefined &&
+    typeof x.Package === "string" &&
+    x.Version !== undefined &&
+    typeof x.Version === "string"
   );
 }

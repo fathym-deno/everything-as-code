@@ -1,14 +1,15 @@
 import { EaCDetails } from "../../EaCDetails.ts";
 import { EaCProjectDetails, isEaCProjectDetails } from "./EaCProjectDetails.ts";
-import { EaCApplicationLookupConfiguration } from "./EaCApplicationLookupConfiguration.ts";
-import { EaCProjectLookupConfiguration } from "./EaCProjectLookupConfiguration.ts";
+import { EaCApplicationResolverConfiguration } from "./EaCApplicationResolverConfiguration.ts";
+import { EaCProjectResolverConfiguration } from "./EaCProjectResolverConfiguration.ts";
+import { EaCModifierResolverConfiguration } from "./EaCModifierResolverConfiguration.ts";
 
 export type EaCProjectAsCode = {
-  ApplicationLookups: Record<string, EaCApplicationLookupConfiguration>;
+  ApplicationResolvers: Record<string, EaCApplicationResolverConfiguration>;
 
-  LookupConfigs: Record<string, EaCProjectLookupConfiguration>;
+  ModifierResolvers?: Record<string, EaCModifierResolverConfiguration>;
 
-  ModifierLookups?: string[];
+  ResolverConfigs: Record<string, EaCProjectResolverConfiguration>;
 } & EaCDetails<EaCProjectDetails>;
 
 export function isEaCProjectAsCode(eac: unknown): eac is EaCProjectAsCode {
@@ -18,7 +19,7 @@ export function isEaCProjectAsCode(eac: unknown): eac is EaCProjectAsCode {
     proj &&
     proj.Details !== undefined &&
     isEaCProjectDetails(proj.Details) &&
-    proj.ApplicationLookups !== undefined &&
-    proj.LookupConfigs !== undefined
+    proj.ApplicationResolvers !== undefined &&
+    proj.ResolverConfigs !== undefined
   );
 }

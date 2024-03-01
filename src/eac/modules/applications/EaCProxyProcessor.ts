@@ -4,16 +4,14 @@ export type EaCProxyProcessor = {
   ProxyRoot: string;
 
   RedirectMode?: "error" | "follow" | "manual";
-} & EaCProcessor;
+} & EaCProcessor<"Proxy">;
 
-export function isEaCProxyProcessor(
-  details: unknown,
-): details is EaCProxyProcessor {
-  const proc = details as EaCProxyProcessor;
+export function isEaCProxyProcessor(proc: unknown): proc is EaCProxyProcessor {
+  const x = proc as EaCProxyProcessor;
 
   return (
-    isEaCProcessor(proc) &&
-    proc.ProxyRoot !== undefined &&
-    typeof proc.ProxyRoot === "string"
+    isEaCProcessor("Proxy", x) &&
+    x.ProxyRoot !== undefined &&
+    typeof x.ProxyRoot === "string"
   );
 }

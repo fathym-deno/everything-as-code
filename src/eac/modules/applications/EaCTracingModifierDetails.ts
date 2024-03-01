@@ -1,3 +1,4 @@
+import { XML_ATTRKEY } from "../../../../../../../../AppData/Local/deno/npm/registry.npmjs.org/@azure/core-client/1.8.0/types/latest/core-client.d.ts";
 import {
   EaCModifierDetails,
   isEaCModifierDetails,
@@ -7,18 +8,18 @@ export type EaCTracingModifierDetails = {
   TraceRequest: boolean;
 
   TraceResponse: boolean;
-} & EaCModifierDetails;
+} & EaCModifierDetails<"Tracing">;
 
 export function isEaCTracingModifierDetails(
   details: unknown,
 ): details is EaCTracingModifierDetails {
-  const kvDetails = details as EaCTracingModifierDetails;
+  const x = details as EaCTracingModifierDetails;
 
   return (
-    isEaCModifierDetails(kvDetails) &&
-    kvDetails.TraceRequest !== undefined &&
-    typeof kvDetails.TraceRequest === "boolean" &&
-    kvDetails.TraceResponse !== undefined &&
-    typeof kvDetails.TraceResponse === "boolean"
+    isEaCModifierDetails("Tracing", x) &&
+    x.TraceRequest !== undefined &&
+    typeof x.TraceRequest === "boolean" &&
+    x.TraceResponse !== undefined &&
+    typeof x.TraceResponse === "boolean"
   );
 }

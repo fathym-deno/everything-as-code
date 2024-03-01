@@ -5,16 +5,16 @@ import {
 
 export type EaCLocalDistributedFileSystem = {
   FileRoot: string;
-} & EaCDistributedFileSystem;
+} & EaCDistributedFileSystem<"Local">;
 
 export function isEaCLocalDistributedFileSystem(
-  details: unknown,
-): details is EaCLocalDistributedFileSystem {
-  const dfs = details as EaCLocalDistributedFileSystem;
+  dfs: unknown,
+): dfs is EaCLocalDistributedFileSystem {
+  const x = dfs as EaCLocalDistributedFileSystem;
 
   return (
-    isEaCDistributedFileSystem(dfs) &&
-    dfs.FileRoot !== undefined &&
-    typeof dfs.FileRoot === "string"
+    isEaCDistributedFileSystem("Local", x) &&
+    x.FileRoot !== undefined &&
+    typeof x.FileRoot === "string"
   );
 }

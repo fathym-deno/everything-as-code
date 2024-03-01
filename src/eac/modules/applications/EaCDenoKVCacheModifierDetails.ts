@@ -9,18 +9,18 @@ export type EaCDenoKVCacheModifierDetails = {
   DenoKVDatabaseLookup: string;
 
   PathFilterRegex?: string;
-} & EaCModifierDetails;
+} & EaCModifierDetails<"DenoKVCache">;
 
 export function isEaCDenoKVCacheModifierDetails(
   details: unknown,
 ): details is EaCDenoKVCacheModifierDetails {
-  const kvDetails = details as EaCDenoKVCacheModifierDetails;
+  const x = details as EaCDenoKVCacheModifierDetails;
 
   return (
-    isEaCModifierDetails(kvDetails) &&
-    kvDetails.CacheSeconds !== undefined &&
-    typeof kvDetails.CacheSeconds === "number" &&
-    kvDetails.DenoKVDatabaseLookup !== undefined &&
-    typeof kvDetails.DenoKVDatabaseLookup === "string"
+    isEaCModifierDetails("DenoKVCache", x) &&
+    x.CacheSeconds !== undefined &&
+    typeof x.CacheSeconds === "number" &&
+    x.DenoKVDatabaseLookup !== undefined &&
+    typeof x.DenoKVDatabaseLookup === "string"
   );
 }

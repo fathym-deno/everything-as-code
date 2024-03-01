@@ -9,12 +9,13 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno.exe",
       "runtimeArgs": [
-        "run",
+        "test",
+        "-A",
         "--config",
         "./deno.jsonc",
-        "--inspect-wait",
-        "--unstable-kv"
-      ]
+        "--inspect-wait"
+      ],
+      "attachSimplePort": 9229
     },
     {
       "request": "launch",

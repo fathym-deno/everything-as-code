@@ -3,10 +3,11 @@ import {
   EaCApplicationDetails,
   isEaCApplicationDetails,
 } from "./EaCApplicationDetails.ts";
+import { EaCModifierResolverConfiguration } from "./EaCModifierResolverConfiguration.ts";
 import { EaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCApplicationAsCode = {
-  ModifierLookups?: string[];
+  ModifierResolvers?: Record<string, EaCModifierResolverConfiguration>;
 
   Processor: EaCProcessor;
 } & EaCDetails<EaCApplicationDetails>;
