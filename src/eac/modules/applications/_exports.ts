@@ -21,5 +21,6 @@ export * from "./EaCProjectAsCode.ts";
 export * from "./EaCProjectDetails.ts";
 export * from "./EaCProxyProcessor.ts";
 export * from "./EaCRedirectProcessor.ts";
+export * from "./EaCRemoteDistributedFileSystem.ts";
 export * from "./EaCTracingModifierDetails.ts";
 export * from "./EverythingAsCodeApplications.ts";
