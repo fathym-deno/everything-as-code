@@ -5,9 +5,7 @@ import {
 
 export type EaCDenoKVDatabaseDetails = {
   DenoKVPath?: string;
-
-  Type: "DenoKV";
-} & EaCDatabaseDetails;
+} & EaCDatabaseDetails<"DenoKV">;
 
 export function isEaCDenoKVDatabaseDetails(
   details: unknown,
@@ -15,7 +13,7 @@ export function isEaCDenoKVDatabaseDetails(
   const kvDetails = details as EaCDenoKVDatabaseDetails;
 
   return (
-    isEaCDatabaseDetails(kvDetails) &&
+    isEaCDatabaseDetails("DenoKV", kvDetails) &&
     kvDetails.Type !== undefined &&
     kvDetails.Type === "DenoKV"
   );

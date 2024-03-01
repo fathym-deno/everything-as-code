@@ -24,6 +24,7 @@
   "exclude": ["**/_fresh/*"],
   "nodeModulesDir": false,
   "imports": {
+    // Used to deal with issues in underlying npm:@azure/* imports
     "@azure/abort-controller": "npm:@azure/abort-controller",
     "@azure/core-auth": "npm:@azure/core-auth",
     "@azure/core-rest-pipeline": "npm:@azure/core-rest-pipeline",
