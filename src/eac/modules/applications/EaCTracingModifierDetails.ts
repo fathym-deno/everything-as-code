@@ -1,4 +1,3 @@
-import { XML_ATTRKEY } from "../../../../../../../../AppData/Local/deno/npm/registry.npmjs.org/@azure/core-client/1.8.0/types/latest/core-client.d.ts";
 import {
   EaCModifierDetails,
   isEaCModifierDetails,
