@@ -11,6 +11,7 @@ export * from "./EaCLocalDistributedFileSystem.ts";
 export * from "./EaCMarkdownToHtmlModifierDetails.ts";
 export * from "./EaCModifierAsCode.ts";
 export * from "./EaCModifierDetails.ts";
+export * from "./EaCModifierResolverConfiguration.ts";
 export * from "./EaCNPMDistributedFileSystem.ts";
 export * from "./EaCOAuthModifierDetails.ts";
 export * from "./EaCOAuthProcessor.ts";
