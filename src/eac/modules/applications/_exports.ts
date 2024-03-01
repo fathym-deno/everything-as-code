@@ -3,6 +3,7 @@ export * from "./EaCAIChatProcessor.ts";
 export * from "./EaCApplicationAsCode.ts";
 export * from "./EaCApplicationDetails.ts";
 export * from "./EaCApplicationResolverConfiguration.ts";
+export * from "./EaCBaseHREFModifierDetails.ts";
 export * from "./EaCDenoKVCacheModifierDetails.ts";
 export * from "./EaCDFSProcessor.ts";
 export * from "./EaCDistributedFileSystem.ts";
