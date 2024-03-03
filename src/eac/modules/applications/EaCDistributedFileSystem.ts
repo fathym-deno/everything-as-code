@@ -1,4 +1,8 @@
 export type EaCDistributedFileSystem<TType = unknown> = {
+  CacheDBLookup?: string;
+
+  CacheSeconds?: number;
+
   DefaultFile?: string;
 
   Extensions?: string[];

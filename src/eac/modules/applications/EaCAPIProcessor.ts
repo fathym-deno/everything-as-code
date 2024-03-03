@@ -5,6 +5,8 @@ import {
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCAPIProcessor = {
+  DefaultContentType?: string;
+
   DFS: EaCDistributedFileSystem;
 } & EaCProcessor<"API">;
 
