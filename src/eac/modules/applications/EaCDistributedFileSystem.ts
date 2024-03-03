@@ -1,7 +1,11 @@
 export type EaCDistributedFileSystem<TType = unknown> = {
   DefaultFile?: string;
 
+  Extensions?: string[];
+
   Type: TType;
+
+  UseCascading?: boolean;
 };
 
 export function isEaCDistributedFileSystem<TType = unknown>(

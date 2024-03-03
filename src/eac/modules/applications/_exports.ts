@@ -1,5 +1,6 @@
 export * from "./models/_exports.ts";
 export * from "./EaCAIChatProcessor.ts";
+export * from "./EaCAPIProcessor.ts";
 export * from "./EaCApplicationAsCode.ts";
 export * from "./EaCApplicationDetails.ts";
 export * from "./EaCApplicationResolverConfiguration.ts";
