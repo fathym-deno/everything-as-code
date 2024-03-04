@@ -8,6 +8,7 @@ export * from "./EaCBaseHREFModifierDetails.ts";
 export * from "./EaCDenoKVCacheModifierDetails.ts";
 export * from "./EaCDFSProcessor.ts";
 export * from "./EaCDistributedFileSystem.ts";
+export * from "./EaCJWTValidationModifierDetails.ts";
 export * from "./EaCKeepAliveModifierDetails.ts";
 export * from "./EaCLocalDistributedFileSystem.ts";
 export * from "./EaCMarkdownToHTMLModifierDetails.ts";
