@@ -9,5 +9,6 @@ export type EaCModifierAsCode = {} & EaCDetails<EaCModifierDetails>;
 export function isEaCModifierAsCode(eac: unknown): eac is EaCModifierAsCode {
   const mod = eac as EaCModifierAsCode;
 
-  return mod && mod.Details !== undefined && isEaCModifierDetails(mod.Details);
+  return mod && mod.Details !== undefined &&
+    isEaCModifierDetails(undefined, mod.Details);
 }
