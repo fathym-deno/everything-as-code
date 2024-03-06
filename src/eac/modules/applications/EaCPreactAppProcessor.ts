@@ -1,7 +1,11 @@
+import {
+  EaCDistributedFileSystem,
+  isEaCDistributedFileSystem,
+} from "./EaCDistributedFileSystem.ts";
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCPreactAppProcessor = {
-  AppRoot: string;
+  DFS: EaCDistributedFileSystem;
 } & EaCProcessor<"PreactApp">;
 
 export function isEaCPreactAppProcessor(
@@ -11,7 +15,6 @@ export function isEaCPreactAppProcessor(
 
   return (
     isEaCProcessor("PreactApp", x) &&
-    x.AppRoot !== undefined &&
-    typeof x.AppRoot === "string"
+    isEaCDistributedFileSystem(undefined, x.DFS)
   );
 }
