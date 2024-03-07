@@ -7,7 +7,7 @@ export type EaCDenoKVDistributedFileSystem = {
   DatabaseLookup: string;
 } & EaCDistributedFileSystem<"DenoKV">;
 
-export function isEaCNPMDistributedFileSystem(
+export function isEaCDenoKVDistributedFileSystem(
   dfs: unknown,
 ): dfs is EaCDenoKVDistributedFileSystem {
   const x = dfs as EaCDenoKVDistributedFileSystem;
