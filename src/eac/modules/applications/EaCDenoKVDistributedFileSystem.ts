@@ -5,6 +5,8 @@ import {
 
 export type EaCDenoKVDistributedFileSystem = {
   DatabaseLookup: string;
+
+  FileRoot: string;
 } & EaCDistributedFileSystem<"DenoKV">;
 
 export function isEaCDenoKVDistributedFileSystem(
@@ -15,6 +17,8 @@ export function isEaCDenoKVDistributedFileSystem(
   return (
     isEaCDistributedFileSystem("DenoKV", x) &&
     x.DatabaseLookup !== undefined &&
-    typeof x.DatabaseLookup === "string"
+    typeof x.DatabaseLookup === "string" &&
+    x.FileRoot !== undefined &&
+    typeof x.FileRoot === "string"
   );
 }
