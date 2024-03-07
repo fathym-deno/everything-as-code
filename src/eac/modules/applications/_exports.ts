@@ -6,6 +6,7 @@ export * from "./EaCApplicationDetails.ts";
 export * from "./EaCApplicationResolverConfiguration.ts";
 export * from "./EaCBaseHREFModifierDetails.ts";
 export * from "./EaCDenoKVCacheModifierDetails.ts";
+export * from "./EaCDenoKVDistributedFileSystem.ts";
 export * from "./EaCDFSProcessor.ts";
 export * from "./EaCDistributedFileSystem.ts";
 export * from "./EaCJWTValidationModifierDetails.ts";
