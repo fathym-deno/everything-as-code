@@ -5,9 +5,11 @@ import {
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCPreactAppProcessor = {
-  BundleDFS: EaCDistributedFileSystem;
+  App: EaCDistributedFileSystem;
 
-  DFS: EaCDistributedFileSystem;
+  Bundle: EaCDistributedFileSystem;
+
+  Components?: EaCDistributedFileSystem[];
 } & EaCProcessor<"PreactApp">;
 
 export function isEaCPreactAppProcessor(
@@ -17,7 +19,7 @@ export function isEaCPreactAppProcessor(
 
   return (
     isEaCProcessor("PreactApp", x) &&
-    isEaCDistributedFileSystem(undefined, x.BundleDFS) &&
-    isEaCDistributedFileSystem(undefined, x.DFS)
+    isEaCDistributedFileSystem(undefined, x.App) &&
+    isEaCDistributedFileSystem(undefined, x.Bundle)
   );
 }
