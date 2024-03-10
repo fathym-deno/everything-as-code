@@ -17,23 +17,7 @@ Deno.test("EaCDFSProcessor Tests", async (t) => {
   await t.step("Type Guard Check - Local - True", () => {
     const details: EaCDFSProcessor = {
       Type: "DFS",
-      DFS: {
-        Type: "Local",
-        FileRoot: "./",
-      } as EaCLocalDistributedFileSystem,
-    };
-
-    assertEquals(isEaCDFSProcessor(details), true);
-    assertEquals(isEaCLocalDistributedFileSystem(details.DFS), true);
-  });
-
-  await t.step("Type Guard Check - Remote - True", () => {
-    const details: EaCDFSProcessor = {
-      Type: "DFS",
-      DFS: {
-        Type: "Remote",
-        RemoteRoot: "https://example.com",
-      } as EaCRemoteDistributedFileSystem,
+      DFSLookup: "Test",
     };
 
     assertEquals(isEaCDFSProcessor(details), true);
@@ -45,17 +29,5 @@ Deno.test("EaCDFSProcessor Tests", async (t) => {
     };
 
     assertEquals(isEaCDFSProcessor(details), false);
-  });
-
-  await t.step("Type Guard Check - Remote - NPM - false", async () => {
-    const details: EaCDFSProcessor = {
-      Type: "DFS",
-      DFS: {
-        Type: "SomethingElse",
-      },
-    };
-
-    assertEquals(isEaCDFSProcessor(details), true);
-    assertEquals(isEaCNPMDistributedFileSystem(details), false);
   });
 });
