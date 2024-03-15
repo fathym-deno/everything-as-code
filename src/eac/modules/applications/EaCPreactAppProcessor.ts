@@ -7,7 +7,7 @@ import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 export type EaCPreactAppProcessor = {
   AppDFSLookup: string;
 
-  BundleDFSLookup: string;
+  // BundleDFSLookup?: string;
 
   ComponentDFSLookups?: string[];
 } & EaCProcessor<"PreactApp">;
@@ -20,8 +20,6 @@ export function isEaCPreactAppProcessor(
   return (
     isEaCProcessor("PreactApp", x) &&
     x.AppDFSLookup !== undefined &&
-    typeof x.AppDFSLookup === "string" &&
-    x.BundleDFSLookup !== undefined &&
-    typeof x.BundleDFSLookup === "string"
+    typeof x.AppDFSLookup === "string"
   );
 }
