@@ -9,7 +9,7 @@ export type EaCPreactAppProcessor = {
 
   // BundleDFSLookup?: string;
 
-  ComponentDFSLookups?: string[];
+  ComponentDFSLookups?: [string, string[]][];
 } & EaCProcessor<"PreactApp">;
 
 export function isEaCPreactAppProcessor(
