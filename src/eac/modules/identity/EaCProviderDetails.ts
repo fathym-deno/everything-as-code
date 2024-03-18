@@ -5,6 +5,8 @@ export type EaCProviderDetails = {
 
   ClientSecret: string;
 
+  IsPrimary?: boolean;
+
   Scopes: string[];
 } & EaCVertexDetails;
 

@@ -9,6 +9,7 @@ export * from "./EaCDenoKVCacheModifierDetails.ts";
 export * from "./EaCDenoKVDistributedFileSystem.ts";
 export * from "./EaCDFSProcessor.ts";
 export * from "./EaCDistributedFileSystem.ts";
+export * from "./EaCESMDistributedFileSystem.ts";
 export * from "./EaCJWTValidationModifierDetails.ts";
 export * from "./EaCKeepAliveModifierDetails.ts";
 export * from "./EaCLocalDistributedFileSystem.ts";
