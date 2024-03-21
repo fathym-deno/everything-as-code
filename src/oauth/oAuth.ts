@@ -3,8 +3,8 @@ import {
   createAzureAdOAuthConfig,
   createGitHubOAuthConfig,
   createHelpers,
+  OAuthHelpers,
 } from "../deno.deps.ts";
-import { OAuthHelpers } from "../src.deps.ts";
 
 export function createGitHubOAuth(scopes: string[]): OAuthHelpers {
   return createHelpers(
