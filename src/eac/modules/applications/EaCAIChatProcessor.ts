@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { BaseMessagePromptTemplateLike } from "../../../src.deps.ts";
+import { BaseMessagePromptTemplateLike } from "../../../langchain.deps.ts";
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCAIChatProcessor = {

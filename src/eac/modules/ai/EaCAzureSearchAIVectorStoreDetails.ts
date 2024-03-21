@@ -1,4 +1,4 @@
-import { AzureAISearchQueryType } from "../../../src.deps.ts";
+import { AzureAISearchQueryType } from "../../../langchain.deps.ts";
 import {
   EaCVectorStoreDetails,
   isEaCVectorStoreDetails,
