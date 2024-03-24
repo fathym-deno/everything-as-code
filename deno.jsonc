@@ -1,5 +1,4 @@
 {
-  "lock": false,
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task build:mod",
     "build:mod": "deno run -A mod.ts build",
