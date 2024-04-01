@@ -25,37 +25,37 @@ import {
   isEverythingAsCodeClouds,
 } from "../../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { SecretClient } from "npm:@azure/keyvault-secrets";
+import { EaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
+import { isEaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
 
 const EaCOctokit = Octokit; //.plugin(paginateGraphql);
-
-export async function loadOctokit(
-  sourceDetails: EaCSourceConnectionDetails,
-): Promise<Octokit>;
-
-export async function loadOctokit(
-  gitHubAppDetails: EaCGitHubAppDetails,
-  sourceDetails?: EaCSourceConnectionDetails,
-): Promise<Octokit>;
-
-export async function loadOctokit(
-  eac: EverythingAsCodeClouds,
-  gitHubApp: EaCGitHubAppAsCode,
-): Promise<Octokit>;
-
-export async function loadOctokit(
-  eac: EverythingAsCodeClouds,
-  gitHubApp: EaCGitHubAppAsCode,
-  sourceDetails: EaCSourceConnectionDetails,
-): Promise<Octokit>;
 
 export async function loadOctokit(token: string): Promise<Octokit>;
 
 export async function loadOctokit(
-  detailsEaCToken:
+  providerDetails: EaCGitHubAppProviderDetails,
+  sourceDetails: EaCSourceConnectionDetails,
+): Promise<Octokit>;
+
+export async function loadOctokit(
+  providerDetails: EaCGitHubAppProviderDetails,
+  gitHubAppDetails: EaCGitHubAppDetails,
+  sourceDetails: EaCSourceConnectionDetails,
+): Promise<Octokit>;
+
+export async function loadOctokit(
+  providerDetails: EaCGitHubAppProviderDetails,
+  eac: EverythingAsCodeClouds,
+  gitHubApp: EaCGitHubAppAsCode,
+  sourceDetails?: EaCSourceConnectionDetails,
+): Promise<Octokit>;
+
+export async function loadOctokit(
+  tokenProviderDetails: EaCGitHubAppProviderDetails | string,
+  detailsEaC?:
     | EaCSourceConnectionDetails
     | EaCGitHubAppDetails
-    | EverythingAsCodeClouds
-    | string,
+    | EverythingAsCodeClouds,
   sourceDetailsGitHubApp?: EaCSourceConnectionDetails | EaCGitHubAppAsCode,
   sourceDetails?: EaCSourceConnectionDetails,
 ): Promise<Octokit> {
@@ -63,59 +63,61 @@ export async function loadOctokit(
 
   let secretClientLoader: Promise<SecretClient> | undefined = undefined;
 
-  if (
-    isEverythingAsCodeClouds(detailsEaCToken) &&
-    isEaCGitHubAppAsCode(sourceDetailsGitHubApp)
-  ) {
-    const cloudLookup = sourceDetailsGitHubApp.CloudLookup!;
+  if (isEaCGitHubAppProviderDetails(tokenProviderDetails)) {
+    if (
+      isEverythingAsCodeClouds(detailsEaC) &&
+      isEaCGitHubAppAsCode(sourceDetailsGitHubApp)
+    ) {
+      const cloudLookup = sourceDetailsGitHubApp.CloudLookup!;
 
-    const keyVaultLookup = sourceDetailsGitHubApp.KeyVaultLookup!;
+      const keyVaultLookup = sourceDetailsGitHubApp.KeyVaultLookup!;
 
-    secretClientLoader = loadSecretClient(
-      detailsEaCToken,
-      cloudLookup,
-      keyVaultLookup,
-    );
-
-    detailsEaCToken = sourceDetailsGitHubApp!.Details as EaCGitHubAppDetails;
-  } else if (isEaCGitHubAppDetails(detailsEaCToken)) {
-    secretClientLoader = loadMainSecretClient();
-
-    sourceDetails = sourceDetailsGitHubApp as EaCSourceConnectionDetails;
-  }
-
-  if (isEaCSourceConnectionDetails(detailsEaCToken)) {
-    octokitConfig.authStrategy = createOAuthUserAuth;
-
-    octokitConfig.auth = {
-      clientId: Deno.env.get("GITHUB_CLIENT_ID")!,
-      clientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
-      clientType: "oauth-app",
-      token: detailsEaCToken.Token,
-    };
-  } else if (isEaCGitHubAppDetails(detailsEaCToken)) {
-    octokitConfig.authStrategy = createAppAuth;
-
-    let privateKey = detailsEaCToken.PrivateKey;
-
-    if (privateKey.startsWith("$secret:")) {
-      const secretClient = await secretClientLoader!;
-
-      const privateKeySecret = await secretClient.getSecret(
-        privateKey.replace("$secret:", ""),
+      secretClientLoader = loadSecretClient(
+        detailsEaC,
+        cloudLookup,
+        keyVaultLookup,
       );
 
-      privateKey = privateKeySecret.value!;
+      detailsEaC = sourceDetailsGitHubApp!.Details as EaCGitHubAppDetails;
+    } else if (isEaCGitHubAppDetails(detailsEaC)) {
+      secretClientLoader = loadMainSecretClient();
+
+      sourceDetails = sourceDetailsGitHubApp as EaCSourceConnectionDetails;
     }
 
-    octokitConfig.auth = {
-      appId: detailsEaCToken.AppID,
-      privateKey: privateKey,
-      clientId: detailsEaCToken.ClientID,
-      clientSecret: detailsEaCToken.ClientSecret,
-    };
-  } else if (typeof detailsEaCToken === "string") {
-    octokitConfig.auth = detailsEaCToken;
+    if (isEaCSourceConnectionDetails(detailsEaC)) {
+      octokitConfig.authStrategy = createOAuthUserAuth;
+
+      octokitConfig.auth = {
+        clientId: tokenProviderDetails.ClientID!,
+        clientSecret: tokenProviderDetails.ClientSecret!,
+        clientType: "oauth-app",
+        token: detailsEaC.Token,
+      };
+    } else if (isEaCGitHubAppDetails(detailsEaC)) {
+      octokitConfig.authStrategy = createAppAuth;
+
+      let privateKey = tokenProviderDetails.PrivateKey;
+
+      if (privateKey.startsWith("$secret:")) {
+        const secretClient = await secretClientLoader!;
+
+        const privateKeySecret = await secretClient.getSecret(
+          privateKey.replace("$secret:", ""),
+        );
+
+        privateKey = privateKeySecret.value!;
+      }
+
+      octokitConfig.auth = {
+        appId: tokenProviderDetails.AppID,
+        privateKey: privateKey,
+        clientId: tokenProviderDetails.ClientID,
+        clientSecret: tokenProviderDetails.ClientSecret,
+      };
+    }
+  } else {
+    octokitConfig.auth = tokenProviderDetails;
   }
 
   let octokit = new EaCOctokit(octokitConfig);
@@ -136,28 +138,28 @@ export async function loadOctokit(
   return octokit;
 }
 
-export function loadMainOctokit(): Promise<Octokit>;
+// export function loadMainOctokit(): Promise<Octokit>;
 
-export function loadMainOctokit(
-  sourceDetails: EaCSourceConnectionDetails,
-): Promise<Octokit>;
+// export function loadMainOctokit(
+//   sourceDetails: EaCSourceConnectionDetails,
+// ): Promise<Octokit>;
 
-export function loadMainOctokit(
-  sourceDetails?: EaCSourceConnectionDetails,
-): Promise<Octokit> {
-  const appDetails = loadMainGitHubAppDetails();
+// export function loadMainOctokit(
+//   sourceDetails?: EaCSourceConnectionDetails,
+// ): Promise<Octokit> {
+//   const appDetails = loadMainGitHubAppDetails();
 
-  console.log(appDetails);
+//   console.log(appDetails);
 
-  return loadOctokit(appDetails, sourceDetails);
-}
+//   return loadOctokit(appDetails, sourceDetails);
+// }
 
-export function loadMainGitHubAppDetails(): EaCGitHubAppDetails {
-  return {
-    AppID: Deno.env.get("GITHUB_APP_ID")!,
-    ClientID: Deno.env.get("GITHUB_CLIENT_ID")!,
-    ClientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
-    PrivateKey: Deno.env.get("GITHUB_PRIVATE_KEY")!,
-    WebhooksSecret: Deno.env.get("GITHUB_WEBHOOKS_SECRET")!,
-  };
-}
+// export function loadMainGitHubAppDetails(): EaCGitHubAppDetails {
+//   return {
+//     AppID: Deno.env.get("GITHUB_APP_ID")!,
+//     ClientID: Deno.env.get("GITHUB_CLIENT_ID")!,
+//     ClientSecret: Deno.env.get("GITHUB_CLIENT_SECRET")!,
+//     PrivateKey: Deno.env.get("GITHUB_PRIVATE_KEY")!,
+//     WebhooksSecret: Deno.env.get("GITHUB_WEBHOOKS_SECRET")!,
+//   };
+// }
