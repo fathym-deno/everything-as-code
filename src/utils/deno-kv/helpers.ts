@@ -17,19 +17,30 @@ export async function hasKvEntry(
 }
 
 export async function enqueueAtomic(
-  denoKv: Deno.Kv,
+  queueKv: Deno.Kv,
   msg: DenoKVNonce,
   atomicOpHandler?: AtomicOperationHandler,
+  opKv?: Deno.Kv,
 ): Promise<Deno.KvCommitResult | Deno.KvCommitError> {
   msg.nonce = crypto.randomUUID();
 
-  let op = enqueueAtomicOperation(denoKv.atomic(), msg);
-
-  if (atomicOpHandler) {
-    op = atomicOpHandler(op);
+  if (!opKv) {
+    opKv = queueKv;
   }
 
-  return await op.commit();
+  let atomic = enqueueAtomicOperation(queueKv.atomic(), msg);
+
+  if (atomicOpHandler) {
+    if (opKv !== queueKv) {
+      const opAtomic = atomicOpHandler(opKv.atomic());
+
+      await opAtomic.commit();
+    } else {
+      atomic = atomicOpHandler(atomic);
+    }
+  }
+
+  return await atomic.commit();
 }
 
 export function enqueueAtomicOperation(
@@ -48,23 +59,34 @@ export function enqueueAtomicOperation(
 }
 
 export async function listenQueueAtomic(
-  denoKv: Deno.Kv,
+  queueKv: Deno.Kv,
   msg: DenoKVNonce,
   atomicOpHandler: AtomicOperationHandler,
+  opKv?: Deno.Kv,
 ) {
   if (!msg.nonce) {
     throw new Error(`The message is required to have a nonce value.`);
   }
 
-  const nonce = await denoKv.get<DenoKVNonce>(["nonces", msg.nonce]);
+  if (!opKv) {
+    opKv = queueKv;
+  }
 
-  let atomic = denoKv
+  const nonce = await queueKv.get<DenoKVNonce>(["nonces", msg.nonce]);
+
+  let atomic = queueKv
     .atomic()
     .check({ key: nonce.key, versionstamp: nonce.versionstamp })
     .delete(nonce.key)
     .sum(["processed_count"], 1n);
 
-  atomic = atomicOpHandler(atomic);
+  if (opKv !== queueKv) {
+    const opAtomic = atomicOpHandler(opKv.atomic());
+
+    await opAtomic.commit();
+  } else {
+    atomic = atomicOpHandler(atomic);
+  }
 
   return await atomic.commit();
 }
