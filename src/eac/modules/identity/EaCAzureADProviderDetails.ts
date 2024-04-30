@@ -10,11 +10,11 @@ export type EaCAzureADProviderDetails = {
 export function isEaCAzureADProviderDetails(
   details: unknown,
 ): details is EaCAzureADProviderDetails {
-  const adPrvdrDetails = details as EaCAzureADProviderDetails;
+  const prvdrDetails = details as EaCAzureADProviderDetails;
 
   return (
-    isEaCProviderDetails(adPrvdrDetails) &&
-    adPrvdrDetails.TenantID !== undefined &&
-    typeof adPrvdrDetails.TenantID === "string"
+    isEaCProviderDetails(prvdrDetails) &&
+    prvdrDetails.TenantID !== undefined &&
+    typeof prvdrDetails.TenantID === "string"
   );
 }
