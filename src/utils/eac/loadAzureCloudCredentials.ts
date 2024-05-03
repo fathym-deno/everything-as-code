@@ -1,4 +1,8 @@
-import { ClientSecretCredential, TokenCredential } from "npm:@azure/identity";
+import {
+  AccessToken,
+  ClientSecretCredential,
+  TokenCredential,
+} from "npm:@azure/identity";
 import { ConfidentialClientApplication } from "npm:@azure/msal-node";
 import {
   EaCCloudAsCode,
@@ -9,7 +13,6 @@ import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCod
 import { deconstructCloudDetailsSecrets } from "./helpers.ts";
 import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
-import { AccessToken } from "../../../../../../../AppData/Local/deno/npm/registry.npmjs.org/@azure/core-auth/1.7.2/dist/esm/index.d.ts";
 
 export async function loadAzureCredentialsForToken(
   token: string,
