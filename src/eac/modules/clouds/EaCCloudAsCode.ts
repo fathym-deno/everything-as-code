@@ -9,7 +9,7 @@ export type EaCCloudAsCode = {
 
   ResourceGroups?: Record<string, EaCCloudResourceGroupAsCode>;
 
-  RoleAssignments?: Record<string, EaCCloudRoleAssignment>;
+  RoleAssignments?: Record<string, EaCCloudRoleAssignment[]>;
 } & EaCDetails<EaCCloudDetails>;
 
 export function isEaCCloudAsCode(eac: unknown): eac is EaCCloudAsCode {
