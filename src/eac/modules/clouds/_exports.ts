@@ -6,6 +6,7 @@ export * from "./EaCCloudResourceDetails.ts";
 export * from "./EaCCloudResourceFormatDetails.ts";
 export * from "./EaCCloudResourceGroupAsCode.ts";
 export * from "./EaCCloudResourceGroupDetails.ts";
+export * from "./EaCCloudRoleAssignment.ts";
 export * from "./EaCCloudWithResources.ts";
 export * from "./EaCLandingZoneAsCode.ts";
 export * from "./EaCLandingZoneDetails.ts";
