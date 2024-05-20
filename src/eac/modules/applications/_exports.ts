@@ -28,6 +28,8 @@ export * from "./EaCProxyProcessor.ts";
 export * from "./EaCRedirectProcessor.ts";
 export * from "./EaCRemoteDistributedFileSystem.ts";
 export * from "./EaCResponseProcessor.ts";
+export * from "./EaCStripeModifierDetails.ts";
+export * from "./EaCStripeProcessor.ts";
 export * from "./EaCTailwindProcessor.ts";
 export * from "./EaCTracingModifierDetails.ts";
 export * from "./EverythingAsCodeApplications.ts";
