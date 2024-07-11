@@ -1,7 +1,3 @@
-import {
-  EaCDistributedFileSystem,
-  isEaCDistributedFileSystem,
-} from "./EaCDistributedFileSystem.ts";
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCAPIProcessor = {

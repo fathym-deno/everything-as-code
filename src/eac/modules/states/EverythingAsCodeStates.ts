@@ -1,15 +1,12 @@
-import { EaCMetadataBase } from "../../EaCMetadataBase.ts";
 import { EaCStateEntityAsCode } from "./EaCStateEntityAsCode.ts";
 import { EaCStateAsCode } from "./EaCStateAsCode.ts";
-import { EaCDistributedFileSystem } from "../applications/EaCDistributedFileSystem.ts";
+import { EverythingAsCodeDFS } from "../dfs/EverythingAsCodeDFS.ts";
 
 export type EverythingAsCodeStates = {
-  DFS?: Record<string, EaCDistributedFileSystem>;
-
   StateEntities?: Record<string, EaCStateEntityAsCode>;
 
   States?: Record<string, EaCStateAsCode>;
-} & EaCMetadataBase;
+} & EverythingAsCodeDFS;
 
 export function isEverythingAsCodeStates(
   eac: unknown,

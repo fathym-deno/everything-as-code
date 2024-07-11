@@ -1,6 +1,8 @@
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 export type EaCProxyProcessor = {
+  Headers?: Record<string, string>;
+
   ProxyRoot: string;
 
   RedirectMode?: "error" | "follow" | "manual";
