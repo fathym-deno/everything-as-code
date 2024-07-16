@@ -10,6 +10,8 @@ export type EaCDistributedFileSystem<TType = unknown> = {
   Type: TType;
 
   UseCascading?: boolean;
+
+  WorkerPath?: string;
 };
 
 export function isEaCDistributedFileSystem<TType = unknown>(
