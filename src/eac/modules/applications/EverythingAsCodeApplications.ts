@@ -4,11 +4,11 @@ import { EaCModifierAsCode } from "./EaCModifierAsCode.ts";
 import { EaCProjectAsCode } from "./EaCProjectAsCode.ts";
 
 export type EverythingAsCodeApplications = {
-  Applications?: Record<string, EaCApplicationAsCode>;
+  Applications?: Record<string, EaCApplicationAsCode | null>;
 
-  Modifiers?: Record<string, EaCModifierAsCode>;
+  Modifiers?: Record<string, EaCModifierAsCode | null>;
 
-  Projects?: Record<string, EaCProjectAsCode>;
+  Projects?: Record<string, EaCProjectAsCode | null>;
 } & EverythingAsCodeDFS;
 
 export function isEverythingAsCodeApplications(
@@ -17,7 +17,6 @@ export function isEverythingAsCodeApplications(
   const sourcesEaC = eac as EverythingAsCodeApplications;
 
   return (
-    sourcesEaC.Applications !== undefined &&
-    sourcesEaC.Projects !== undefined
+    sourcesEaC.Applications !== undefined && sourcesEaC.Projects !== undefined
   );
 }

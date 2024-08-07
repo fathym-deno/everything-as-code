@@ -2,7 +2,7 @@ import { EaCMetadataBase } from "../../EaCMetadataBase.ts";
 import { EaCDistributedFileSystem } from "./EaCDistributedFileSystem.ts";
 
 export type EverythingAsCodeDFS = {
-  DFS?: Record<string, EaCDistributedFileSystem>;
+  DFS?: Record<string, EaCDistributedFileSystem | null>;
 } & EaCMetadataBase;
 
 export function isEverythingAsCodeDFS(
