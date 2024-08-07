@@ -8,6 +8,8 @@ export type EaCDenoKVDistributedFileSystem = {
 
   FileRoot: string;
 
+  SegmentPath?: string;
+
   RootKey: Deno.KvKey;
 } & EaCDistributedFileSystem<"DenoKV">;
 
