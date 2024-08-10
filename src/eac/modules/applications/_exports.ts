@@ -19,6 +19,7 @@ export * from "./EaCPreactAppProcessor.ts";
 export * from "./EaCProcessor.ts";
 export * from "./EaCProjectAsCode.ts";
 export * from "./EaCProjectDetails.ts";
+export * from "./EaCProjectResolverConfiguration.ts";
 export * from "./EaCProxyProcessor.ts";
 export * from "./EaCRedirectProcessor.ts";
 export * from "./EaCResponseProcessor.ts";
