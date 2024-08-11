@@ -6,17 +6,19 @@
     "./azure": "./azure.ts",
     "./deno": "./deno.ts",
     "./oauth": "./oauth.ts",
-    "./octokit": "./octokit.ts"
+    "./octokit": "./octokit.ts",
+    "./utils/library": "./src/utils/library.helpers.ts"
   },
   "tasks": {
-    "build": "deno task build:fmt && deno task build:lint && deno task build:mod",
+    "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
     "build:mod": "deno run -A mod.ts build",
     "build:fmt": "deno fmt",
     "build:lint": "deno lint",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
+    "publish:check": "deno publish --dry-run --allow-dirty",
     "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov",
-    "version": "deno run -A jsr:@fathym/common@0.0.205/version"
+    "version": "deno run -A jsr:@fathym/common@0.0.207/version"
   },
   "imports": {},
   "lint": {
