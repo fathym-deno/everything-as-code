@@ -16,12 +16,15 @@
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
     "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov",
-    "version": "deno run -A jsr:@fathym/common@0.0.203/version"
+    "version": "deno run -A jsr:@fathym/common@0.0.205/version"
   },
   "imports": {},
   "lint": {
     "rules": {
-      "tags": ["fresh", "recommended"],
+      "tags": [
+        "fresh",
+        "recommended"
+      ],
       "exclude": [
         "no-unused-vars",
         "ban-unused-ignore",
@@ -31,8 +34,12 @@
       ]
     }
   },
-  "exclude": ["**/_fresh/*"],
+  "exclude": [
+    "**/_fresh/*"
+  ],
   "nodeModulesDir": false,
-  "unstable": ["kv"],
+  "unstable": [
+    "kv"
+  ],
   "lock": false
 }
