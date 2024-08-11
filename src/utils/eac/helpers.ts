@@ -1,4 +1,4 @@
-import { paramCase } from "../../src.deps.ts";
+import { kebabCase } from "../../src.deps.ts";
 import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 import {
   EaCCloudAzureDetails,
@@ -77,8 +77,8 @@ export async function eacSetSecrets(
   const calls = secrets.map((secret) => {
     return new Promise((resolve, reject) => {
       const secretName = secretRoot
-        ? paramCase(`${secretRoot}-${secret}`)
-        : paramCase(secret);
+        ? kebabCase(`${secretRoot}-${secret}`)
+        : kebabCase(secret);
 
       let toSecret = toSecrets[secret];
 
