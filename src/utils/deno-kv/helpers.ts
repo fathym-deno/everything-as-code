@@ -63,7 +63,7 @@ export async function listenQueueAtomic(
   msg: DenoKVNonce,
   atomicOpHandler: AtomicOperationHandler,
   opKv?: Deno.Kv,
-) {
+): Promise<Deno.KvCommitResult | Deno.KvCommitError> {
   if (!msg.nonce) {
     throw new Error(`The message is required to have a nonce value.`);
   }

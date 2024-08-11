@@ -1,7 +1,7 @@
 import { existsSync } from "../../deno.deps.ts";
 import { path } from "../../src.deps.ts";
 
-export async function initializeDenoKv(denoKvPath?: string) {
+export async function initializeDenoKv(denoKvPath?: string): Promise<Deno.Kv> {
   console.log(`Initializing DenoKV at ${denoKvPath}`);
 
   if (

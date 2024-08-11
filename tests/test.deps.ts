@@ -1,3 +1,3 @@
-import "https://deno.land/std@0.220.1/dotenv/load.ts";
-export * from "https://deno.land/std@0.220.1/assert/mod.ts";
-export { delay } from "https://deno.land/std@0.220.1/async/delay.ts";
+import "jsr:@std/dotenv@^0.225.0/load";
+export { assert, assertEquals } from "jsr:@std/assert@^1.0.2";
+export { delay } from "jsr:@std/async@^1.0.3";

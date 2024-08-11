@@ -1,5 +1,5 @@
 import { paramCase } from "../../src.deps.ts";
-import { SecretClient } from "npm:@azure/keyvault-secrets";
+import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 import {
   EaCCloudAzureDetails,
   isEaCCloudAzureDetails,

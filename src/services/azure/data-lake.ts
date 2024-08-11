@@ -1,5 +1,5 @@
-import { DataLakeServiceClient } from "npm:@azure/storage-file-datalake";
-import { TokenCredential } from "npm:@azure/identity";
+import { DataLakeServiceClient } from "npm:@azure/storage-file-datalake@12.23.0";
+import { TokenCredential } from "npm:@azure/identity@4.4.1";
 import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { loadAzureCloudCredentials } from "../../utils/eac/loadAzureCloudCredentials.ts";
 import { EaCCloudWithResources } from "../../eac/modules/clouds/EaCCloudWithResources.ts";

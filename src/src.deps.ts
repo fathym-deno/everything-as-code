@@ -1,6 +1,6 @@
-export * as djwt from "https://deno.land/x/djwt@v3.0.0/mod.ts";
-export * from "https://deno.land/std@0.220.1/encoding/base64.ts";
-export * as path from "https://deno.land/std@0.220.1/path/mod.ts";
-export { delay } from "https://deno.land/std@0.220.1/async/delay.ts";
-export * from "https://deno.land/x/fathym_common@v0.0.185/mod.ts";
-export * from "https://deno.land/x/case@2.1.1/mod.ts";
+export * as djwt from "jsr:@zaubrik/djwt@3.0.2";
+export * from "jsr:@std/encoding@^1.0.1/base64";
+export * as path from "jsr:@std/path@^1.0.2";
+export { delay } from "jsr:@std/async@^1.0.3/delay";
+export * from "jsr:@fathym/common@0.0.205";
+export * from "jsr:@wok/case@1.0.1";

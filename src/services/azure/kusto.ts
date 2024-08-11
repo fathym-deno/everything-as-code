@@ -1,8 +1,8 @@
 import {
   Client as KustoClient,
   KustoConnectionStringBuilder,
-} from "npm:azure-kusto-data";
-import { TokenCredential } from "npm:@azure/identity";
+} from "npm:azure-kusto-data@6.0.2";
+import { TokenCredential } from "npm:@azure/identity@4.4.1";
 import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
 import { loadAzureCloudCredentials } from "../../utils/eac/loadAzureCloudCredentials.ts";
 import { EaCCloudWithResources } from "../../eac/modules/clouds/EaCCloudWithResources.ts";

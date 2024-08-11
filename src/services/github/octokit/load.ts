@@ -24,7 +24,7 @@ import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
 } from "../../../eac/modules/clouds/EverythingAsCodeClouds.ts";
-import { SecretClient } from "npm:@azure/keyvault-secrets";
+import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 import { EaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
 import { isEaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
 

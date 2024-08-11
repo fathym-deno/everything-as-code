@@ -1,4 +1,13 @@
 {
+  "name": "@fathym/eac",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./azure": "./azure.ts",
+    "./deno": "./deno.ts",
+    "./oauth": "./oauth.ts",
+    "./octokit": "./octokit.ts"
+  },
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task build:mod",
     "build:mod": "deno run -A mod.ts build",
@@ -6,8 +15,10 @@
     "build:lint": "deno lint",
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "deploy": "deno task build && deno task test && ftm git",
-    "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov"
+    "test": "deno test -A --allow-env .env tests/tests.ts --coverage=cov",
+    "version": "deno run -A jsr:@fathym/common@0.0.203/version"
   },
+  "imports": {},
   "lint": {
     "rules": {
       "tags": ["fresh", "recommended"],
@@ -22,6 +33,6 @@
   },
   "exclude": ["**/_fresh/*"],
   "nodeModulesDir": false,
-  "imports": {},
-  "unstable": ["kv"]
+  "unstable": ["kv"],
+  "lock": false
 }

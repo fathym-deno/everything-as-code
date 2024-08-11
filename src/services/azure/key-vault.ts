@@ -1,6 +1,6 @@
-import { KeyClient } from "npm:@azure/keyvault-keys";
-import { SecretClient } from "npm:@azure/keyvault-secrets";
-import { TokenCredential } from "npm:@azure/identity";
+import { KeyClient } from "npm:@azure/keyvault-keys@4.8.0";
+import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
+import { TokenCredential } from "npm:@azure/identity@4.4.1";
 import {
   loadAzureCloudCredentials,
   loadMainAzureCredentials,

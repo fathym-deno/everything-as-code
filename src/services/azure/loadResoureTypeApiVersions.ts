@@ -1,5 +1,5 @@
 import { merge } from "../../src.deps.ts";
-import { ResourceManagementClient } from "npm:@azure/arm-resources";
+import { ResourceManagementClient } from "npm:@azure/arm-resources@5.2.0";
 
 export async function loadResoureTypeApiVersions(
   resClient: ResourceManagementClient,

@@ -2,8 +2,8 @@ import {
   AccessToken,
   ClientSecretCredential,
   TokenCredential,
-} from "npm:@azure/identity";
-import { ConfidentialClientApplication } from "npm:@azure/msal-node";
+} from "npm:@azure/identity@4.4.1";
+import { ConfidentialClientApplication } from "npm:@azure/msal-node@2.12.0";
 import {
   EaCCloudAsCode,
   isEaCCloudAsCode,
