@@ -48,6 +48,14 @@ jobs:
         if: steps.vars.outputs.currentBranch != env.MainBranch
         run: echo 'format=${{ env.MainFormat }}-${{ steps.vars.outputs.currentBranch }}' >> $GITHUB_OUTPUT\
 
+      - name: Deno Setup
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+
+      - name: Deno Build
+        run: deno task build
+
       - name: Set Version
         id: version
         uses: paulhatch/semantic-version@v5.0.2
