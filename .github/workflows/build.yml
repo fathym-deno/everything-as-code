@@ -1,23 +1,14 @@
-name: Build & Package
+name: Build & Publish
 
 permissions:
   contents: write
+  id-token: write
 
-on:
-  push:
-    branches:
-      - integration
-      - feature/**
-      - hotfix/**
-      - main
+on: push
 
 env:
   MainBranch: main
   MainFormat: '${major}.${minor}.${patch}'
-  IMAGE_NAME: everything-as-code:prerelease
-  ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}
-  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-  ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
 
 jobs:
   build:
@@ -88,9 +79,8 @@ jobs:
           git tag v${{ steps.version.outputs.version }} ${{ steps.commit.outputs.commit }}
           git push origin v${{ steps.version.outputs.version }}
 
-      - name: Publish package
+      - name: Versopm package
         run: deno task version -- "${{ steps.version.outputs.version }}"
 
       - name: Publish package
         run: deno publish --allow-dirty
-    
