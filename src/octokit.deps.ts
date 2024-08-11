@@ -1,5 +1,5 @@
 export * from "npm:octokit@4.0.2";
-export * from "npm:@octokit/core@6.1.2/dist-types/types.d.ts";
+export { type OctokitOptions } from "npm:@octokit/core@6.1.2";
 export * from "npm:@octokit/auth-app@6.0.1";
 // export { } from 'https://esm.sh/@octokit/auth-oauth-user@4.0.1';
 export * from "npm:@octokit/auth-token@5.1.1";
