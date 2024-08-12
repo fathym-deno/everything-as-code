@@ -6,7 +6,7 @@ import {
 export type EaCJSRDistributedFileSystem = {
   Package: string;
 
-  Version: string;
+  Version?: string;
 } & EaCDistributedFileSystem<"JSR">;
 
 export function isEaCJSRDistributedFileSystem(
@@ -17,8 +17,6 @@ export function isEaCJSRDistributedFileSystem(
   return (
     isEaCDistributedFileSystem("JSR", x) &&
     x.Package !== undefined &&
-    typeof x.Package === "string" &&
-    x.Version !== undefined &&
-    typeof x.Version === "string"
+    typeof x.Package === "string"
   );
 }
