@@ -3,30 +3,8 @@ import {
   createOAuthUserAuth,
   Octokit,
   OctokitOptions,
-} from "../../../octokit.deps.ts";
-import {
-  EaCSourceConnectionDetails,
-  isEaCSourceConnectionDetails,
-} from "../../../modules/sources/EaCSourceConnectionDetails.ts";
-import {
-  EaCGitHubAppDetails,
-  isEaCGitHubAppDetails,
-} from "../../../modules/github/EaCGitHubAppDetails.ts";
-import {
-  loadMainSecretClient,
-  loadSecretClient,
-} from "../../azure/key-vault.ts";
-import {
-  EaCGitHubAppAsCode,
-  isEaCGitHubAppAsCode,
-} from "../../../modules/github/EaCGitHubAppAsCode.ts";
-import {
-  EverythingAsCodeClouds,
-  isEverythingAsCodeClouds,
-} from "../../../modules/clouds/EverythingAsCodeClouds.ts";
-import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
-import { EaCGitHubAppProviderDetails } from "../../../modules/identity/EaCGitHubAppProviderDetails.ts";
-import { isEaCGitHubAppProviderDetails } from "../../../modules/identity/EaCGitHubAppProviderDetails.ts";
+  SecretClient,
+} from "./.deps.ts";
 
 const EaCOctokit = Octokit; //.plugin(paginateGraphql);
 

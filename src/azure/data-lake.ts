@@ -1,10 +1,10 @@
 import { DataLakeServiceClient } from "npm:@azure/storage-file-datalake@12.23.0";
 import { TokenCredential } from "npm:@azure/identity@4.4.1";
-import { EverythingAsCodeClouds } from "../../modules/clouds/EverythingAsCodeClouds.ts";
-import { loadAzureCloudCredentials } from "../../utils/eac/loadAzureCloudCredentials.ts";
-import { EaCCloudWithResources } from "../../modules/clouds/EaCCloudWithResources.ts";
-import { EaCCloudResourceAsCode } from "../../modules/clouds/EaCCloudResourceAsCode.ts";
-import { EaCCloudResourceFormatDetails } from "../../modules/clouds/EaCCloudResourceFormatDetails.ts";
+import { EverythingAsCodeClouds } from "../modules/clouds/EverythingAsCodeClouds.ts";
+import { loadAzureCloudCredentials } from "../utils/eac/loadAzureCloudCredentials.ts";
+import { EaCCloudWithResources } from "../modules/clouds/EaCCloudWithResources.ts";
+import { EaCCloudResourceAsCode } from "../modules/clouds/EaCCloudResourceAsCode.ts";
+import { EaCCloudResourceFormatDetails } from "../modules/clouds/EaCCloudResourceFormatDetails.ts";
 
 const kustoClientCache: Record<string, DataLakeServiceClient> = {};
 

@@ -4,11 +4,11 @@ import { TokenCredential } from "npm:@azure/identity@4.4.1";
 import {
   loadAzureCloudCredentials,
   loadMainAzureCredentials,
-} from "../../utils/eac/loadAzureCloudCredentials.ts";
+} from "../utils/eac/loadAzureCloudCredentials.ts";
 import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
-} from "../../modules/clouds/EverythingAsCodeClouds.ts";
+} from "../modules/clouds/EverythingAsCodeClouds.ts";
 
 export async function loadKeyClient(
   eac: EverythingAsCodeClouds,

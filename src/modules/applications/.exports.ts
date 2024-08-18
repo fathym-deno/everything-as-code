@@ -1,5 +1,7 @@
-export * from "./models/_exports.ts";
-export * from "./EaCAIChatProcessor.ts";
+/**
+ * The core Everything as Code (EaC) Applications types.
+ * @module
+ */
 export * from "./EaCAPIProcessor.ts";
 export * from "./EaCApplicationAsCode.ts";
 export * from "./EaCApplicationDetails.ts";

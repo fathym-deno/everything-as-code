@@ -1,4 +1,4 @@
-import { components, RestEndpointMethodTypes } from "../../../octokit.deps.ts";
+import { components, RestEndpointMethodTypes } from "./.deps.ts";
 
 export type ShortBranch = components["schemas"]["short-branch"];
 
