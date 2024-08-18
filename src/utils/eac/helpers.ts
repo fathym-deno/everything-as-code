@@ -4,7 +4,7 @@ import {
   EaCCloudAzureDetails,
   isEaCCloudAzureDetails,
 } from "../../modules/clouds/EaCCloudAzureDetails.ts";
-import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
+import { loadMainSecretClient } from "../../azure/key-vault.ts";
 import { EaCCloudDetails } from "../../modules/clouds/EaCCloudDetails.ts";
 
 export async function deconstructCloudDetailsSecrets(
