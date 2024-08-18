@@ -1,4 +1,4 @@
-import { kebabCase } from "../../src.deps.ts";
+import { kebabCase } from "./.deps.ts";
 import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 import {
   EaCCloudAzureDetails,
