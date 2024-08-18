@@ -1,6 +1,12 @@
-import { merge } from "../../src.deps.ts";
-import { ResourceManagementClient } from "npm:@azure/arm-resources@5.2.0";
+import { merge, ResourceManagementClient } from "./.deps.ts";
 
+/**
+ * Load API versions for the specified resource types.
+ *
+ * @param resClient The Azure Resource Management client instance.
+ * @param resourceTypes The resource types to retrieve API versions for.
+ * @returns The API versions for the specified resource types.
+ */
 export async function loadResoureTypeApiVersions(
   resClient: ResourceManagementClient,
   resourceTypes: string[],

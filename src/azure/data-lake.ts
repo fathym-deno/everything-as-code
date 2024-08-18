@@ -1,18 +1,35 @@
-import { DataLakeServiceClient } from "npm:@azure/storage-file-datalake@12.23.0";
-import { TokenCredential } from "npm:@azure/identity@4.4.1";
+import { DataLakeServiceClient, TokenCredential } from "./.deps.ts";
 import { EverythingAsCodeClouds } from "../modules/clouds/EverythingAsCodeClouds.ts";
-import { loadAzureCloudCredentials } from "../utils/eac/loadAzureCloudCredentials.ts";
+import { loadAzureCloudCredentials } from "./loadAzureCloudCredentials.ts";
 import { EaCCloudWithResources } from "../modules/clouds/EaCCloudWithResources.ts";
 import { EaCCloudResourceAsCode } from "../modules/clouds/EaCCloudResourceAsCode.ts";
 import { EaCCloudResourceFormatDetails } from "../modules/clouds/EaCCloudResourceFormatDetails.ts";
 
-const kustoClientCache: Record<string, DataLakeServiceClient> = {};
+const dataLakeClientCache: Record<string, DataLakeServiceClient> = {};
 
+/**
+ * Loads a Data Lake client for the given account and credentials.
+ *
+ * @param account The Data Lake account to connect to.
+ * @param creds The authentication credentials to use for the Data Lake account.
+ * @returns A Promise that resolves to the Data Lake client.
+ */
 export function loadDataLakeClient(
   account: string,
   creds: TokenCredential,
 ): Promise<DataLakeServiceClient>;
 
+/**
+ * Loads a Data Lake client for the given account, credentials, and resource group.
+ *
+ * @param entLookup The enterprise lookup for the Data Lake account.
+ * @param cloudLookup The cloud lookup for the Data Lake account.
+ * @param resGroupLookup The resource group lookup for the Data Lake account.
+ * @param resLookups The resource lookups for the Data Lake account.
+ * @param loadEaC The function to load Everything As Code for the Data Lake account.
+ * @param svcSuffix (optional) The service suffix for the Data Lake account.
+ * @returns A Promise that resolves to the Data Lake client.
+ */
 export function loadDataLakeClient(
   entLookup: string,
   cloudLookup: string,
@@ -22,6 +39,11 @@ export function loadDataLakeClient(
   svcSuffix?: string,
 ): Promise<DataLakeServiceClient>;
 
+/**
+ * Loads a Data Lake client for the given account, credentials, and resource group.
+ *
+ * @returns A Promise that resolves to the Data Lake client.
+ */
 export async function loadDataLakeClient(
   accountEntLookup: string,
   credsCloudLookup: TokenCredential | string,
@@ -45,7 +67,7 @@ export async function loadDataLakeClient(
     svcClientUrl = `https://${account}.dfs.core.windows.net`;
   }
 
-  if (!(svcClientUrl in kustoClientCache)) {
+  if (!(svcClientUrl in dataLakeClientCache)) {
     if (typeof credsCloudLookup === "string") {
       // Received enterprise lookup and cloud lookup to consruct
       const [entLookup, cloudLookup] = [
@@ -80,11 +102,11 @@ export async function loadDataLakeClient(
       svcClientUrl = `https://${account}.dfs.core.windows.net`;
     }
 
-    kustoClientCache[svcClientUrl] = new DataLakeServiceClient(
+    dataLakeClientCache[svcClientUrl] = new DataLakeServiceClient(
       svcClientUrl,
       creds,
     );
   }
 
-  return kustoClientCache[svcClientUrl];
+  return dataLakeClientCache[svcClientUrl];
 }

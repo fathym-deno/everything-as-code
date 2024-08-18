@@ -11,6 +11,17 @@ import { EaCCloudResourceFormatDetails } from "../modules/clouds/EaCCloudResourc
 
 const kustoClientCache: Record<string, KustoClient> = {};
 
+/**
+ * Loads a Kusto client for the given cluster and region.
+ *
+ * @param entLookup The enterprise lookup for the Kusto cluster.
+ * @param cloudLookup The cloud lookup for the Kusto cluster.
+ * @param resGroupLookup The resource group lookup for the Kusto cluster.
+ * @param resLookups The resource lookups for the Kusto cluster.
+ * @param loadEaC The function to load Everything As Code for the Kusto cluster.
+ * @param svcSuffix (optional) The service suffix for the Kusto cluster.
+ * @returns A Promise that resolves to the Kusto client.
+ */
 export function loadKustoClient(
   entLookup: string,
   cloudLookup: string,
@@ -20,12 +31,25 @@ export function loadKustoClient(
   svcSuffix?: string,
 ): Promise<KustoClient>;
 
+/**
+ * Loads a Kusto client for the given cluster and region.
+ *
+ * @param cluster The Kusto cluster.
+ * @param region The Kusto region.
+ * @param creds The authentication credentials to use for the Kusto cluster.
+ * @returns A Promise that resolves to the Kusto client.
+ */
 export function loadKustoClient(
   cluster: string,
   region: string,
   creds: TokenCredential,
 ): Promise<KustoClient>;
 
+/**
+ * Loads a Kusto client for the given cluster and region.
+ *
+ * @returns A Promise that resolves to the Kusto client.
+ */
 export async function loadKustoClient(
   clusterEntLookup: string,
   regionCloudLookup: string,

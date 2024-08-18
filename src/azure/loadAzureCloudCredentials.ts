@@ -10,7 +10,7 @@ import {
 } from "../../modules/clouds/EaCCloudAsCode.ts";
 import { EaCCloudAzureDetails } from "../../modules/clouds/EaCCloudAzureDetails.ts";
 import { EverythingAsCodeClouds } from "../../modules/clouds/EverythingAsCodeClouds.ts";
-import { deconstructCloudDetailsSecrets } from "./helpers.ts";
+import { deconstructCloudDetailsSecrets } from "./deconstructCloudDetailsSecrets.ts";
 import { EaCCloudDetails } from "../../modules/clouds/EaCCloudDetails.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
