@@ -1,11 +1,17 @@
 import {
-  EaCCloudAzureDetails,
+  type EaCCloudAzureDetails,
+  type EaCCloudDetails,
   isEaCCloudAzureDetails,
-} from "../modules/clouds/EaCCloudAzureDetails";
-import { EaCCloudDetails } from "../modules/clouds/EaCCloudDetails";
-import { eacGetSecrets } from "./helpers";
-import { loadMainSecretClient } from "./key-vault";
+} from "./.deps.ts";
+import { eacGetSecrets } from "./eacGetSecrets.ts";
+import { loadMainSecretClient } from "./key-vault.ts";
 
+/**
+ * This function deconstructs the provided cloud details by fetching the secrets from Azure Key Vault.
+ *
+ * @param details The cloud details to deconstruct.
+ * @returns The deconstructed cloud details with secrets.
+ */
 export async function deconstructCloudDetailsSecrets(
   details: EaCCloudDetails | undefined,
 ): Promise<EaCCloudDetails | undefined> {

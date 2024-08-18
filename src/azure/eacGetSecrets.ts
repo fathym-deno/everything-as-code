@@ -1,5 +1,12 @@
-import { SecretClient } from "../../../../../../Users/diana/AppData/Local/deno/npm/registry.npmjs.org/@azure/keyvault-secrets/4.8.0/types/keyvault-secrets";
+import { SecretClient } from "./.deps.ts";
 
+/**
+ * This function retrieves secrets from Azure Key Vault.
+ *
+ * @param secretClient The SecretClient to use for retrieving secrets.
+ * @param toSecrets The secrets to retrieve from Key Vault.
+ * @returns The retrieved secrets.
+ */
 export async function eacGetSecrets(
   secretClient: SecretClient,
   toSecrets: Record<string, string>,

@@ -1,19 +1,23 @@
 import {
   AccessToken,
   ClientSecretCredential,
-  TokenCredential,
-} from "npm:@azure/identity@4.4.1";
-import { ConfidentialClientApplication } from "npm:@azure/msal-node@2.12.0";
-import {
+  ConfidentialClientApplication,
   EaCCloudAsCode,
+  EaCCloudAzureDetails,
+  EaCCloudDetails,
+  EverythingAsCode,
+  EverythingAsCodeClouds,
   isEaCCloudAsCode,
-} from "../../modules/clouds/EaCCloudAsCode.ts";
-import { EaCCloudAzureDetails } from "../../modules/clouds/EaCCloudAzureDetails.ts";
-import { EverythingAsCodeClouds } from "../../modules/clouds/EverythingAsCodeClouds.ts";
+  TokenCredential,
+} from "./.deps.ts";
 import { deconstructCloudDetailsSecrets } from "./deconstructCloudDetailsSecrets.ts";
-import { EaCCloudDetails } from "../../modules/clouds/EaCCloudDetails.ts";
-import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
+/**
+ * Load Azure credentials from the provided token.
+ *
+ * @param token Azure access token.
+ * @returns Azure credentials based on the provided token.
+ */
 export async function loadAzureCredentialsForToken(
   token: string,
 ): Promise<TokenCredential> {
@@ -26,6 +30,16 @@ export async function loadAzureCredentialsForToken(
   };
 }
 
+/**
+ * Load Azure credentials from the provided client secret and tenant ID.
+ *
+ * @param idToken Azure ID token.
+ * @param clientId Azure client ID.
+ * @param clientSecret Azure client secret.
+ * @param scopes Azure scopes.
+ * @param tenantId Azure tenant ID (optional, defaults to "common").
+ * @returns Azure credentials based on the provided ID token.
+ */
 export async function loadAzureCredentialsForIDToken(
   idToken: string,
   clientId: string,
@@ -59,25 +73,57 @@ export async function loadAzureCredentialsForIDToken(
   }
 }
 
+/**
+ * Load Azure credentials from the provided cloud.
+ *
+ * @param entLookup The enterprise lookup.
+ * @param cloudLookup The cloud lookup.
+ * @param loadEac The loadEac function.
+ * @returns Azure credentials for the specified cloud.
+ */
 export async function loadAzureCloudCredentials(
   entLookup: string,
   cloudLookup: string,
   loadEac: (entLookup: string) => Promise<EverythingAsCode>,
 ): Promise<TokenCredential>;
 
+/**
+ * Load Azure credentials from the provided cloud.
+ *
+ * @param eac The EverythingAsCode instance to lookup the cloud from.
+ * @param cloudLookup The cloud lookup.
+ * @returns Azure credentials for the specified cloud.
+ */
 export async function loadAzureCloudCredentials(
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
 ): Promise<TokenCredential>;
 
+/**
+ * Load Azure credentials from the provided cloud.
+ *
+ * @param cloud The EaC cloud to load credentials for.
+ * @returns Azure credentials for the specified cloud.
+ */
 export async function loadAzureCloudCredentials(
   cloud: EaCCloudAsCode,
 ): Promise<TokenCredential>;
 
+/**
+ * Load Azure credentials from the provided cloud details.
+ *
+ * @param cloudDetails The cloud details.
+ * @returns Azure credentials for the specified cloud.
+ */
 export async function loadAzureCloudCredentials(
   cloudDetails: EaCCloudDetails,
 ): Promise<TokenCredential>;
 
+/**
+ * Load Azure credentials from the provided cloud details.
+ *
+ * @returns Azure credentials for the specified cloud.
+ */
 export async function loadAzureCloudCredentials(
   cloudDetailsEaCEntLookup:
     | EverythingAsCodeClouds
@@ -122,6 +168,11 @@ export async function loadAzureCloudCredentials(
   }
 }
 
+/**
+ * Load the main Azure credentials from environment variables.
+ *
+ * @returns Azure credentials for the main Azure tenant.
+ */
 export function loadMainAzureCredentials(): ClientSecretCredential {
   return new ClientSecretCredential(
     Deno.env.get("AZURE_TENANT_ID")!,

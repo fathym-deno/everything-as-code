@@ -1,13 +1,13 @@
 import {
-  Client as KustoClient,
+  EaCCloudResourceAsCode,
+  EaCCloudResourceFormatDetails,
+  EaCCloudWithResources,
+  EverythingAsCodeClouds,
+  KustoClient,
   KustoConnectionStringBuilder,
-} from "npm:azure-kusto-data@6.0.2";
-import { TokenCredential } from "npm:@azure/identity@4.4.1";
-import { EverythingAsCodeClouds } from "../modules/clouds/EverythingAsCodeClouds.ts";
-import { loadAzureCloudCredentials } from "../utils/eac/loadAzureCloudCredentials.ts";
-import { EaCCloudWithResources } from "../modules/clouds/EaCCloudWithResources.ts";
-import { EaCCloudResourceAsCode } from "../modules/clouds/EaCCloudResourceAsCode.ts";
-import { EaCCloudResourceFormatDetails } from "../modules/clouds/EaCCloudResourceFormatDetails.ts";
+  TokenCredential,
+} from "./.deps.ts";
+import { loadAzureCloudCredentials } from "./loadAzureCloudCredentials.ts";
 
 const kustoClientCache: Record<string, KustoClient> = {};
 

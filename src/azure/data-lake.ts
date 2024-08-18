@@ -1,9 +1,12 @@
-import { DataLakeServiceClient, TokenCredential } from "./.deps.ts";
-import { EverythingAsCodeClouds } from "../modules/clouds/EverythingAsCodeClouds.ts";
+import {
+  DataLakeServiceClient,
+  EaCCloudResourceAsCode,
+  EaCCloudResourceFormatDetails,
+  EaCCloudWithResources,
+  EverythingAsCodeClouds,
+  TokenCredential,
+} from "./.deps.ts";
 import { loadAzureCloudCredentials } from "./loadAzureCloudCredentials.ts";
-import { EaCCloudWithResources } from "../modules/clouds/EaCCloudWithResources.ts";
-import { EaCCloudResourceAsCode } from "../modules/clouds/EaCCloudResourceAsCode.ts";
-import { EaCCloudResourceFormatDetails } from "../modules/clouds/EaCCloudResourceFormatDetails.ts";
 
 const dataLakeClientCache: Record<string, DataLakeServiceClient> = {};
 

@@ -1,6 +1,13 @@
-import { SecretClient } from "../../../../../../Users/diana/AppData/Local/deno/npm/registry.npmjs.org/@azure/keyvault-secrets/4.8.0/types/keyvault-secrets";
-import { kebabCase } from "./.deps.ts";
+import { kebabCase, SecretClient } from "./.deps.ts";
 
+/**
+ * Set Azure Key Vault secrets.
+ *
+ * @param secretClient The Azure Key Vault secret client.
+ * @param secretRoot The Azure Key Vault secret root.
+ * @param toSecrets The secrets to be set.
+ * @returns A promise that resolves to the secrets set.
+ */
 export async function eacSetSecrets(
   secretClient: SecretClient,
   secretRoot: string,

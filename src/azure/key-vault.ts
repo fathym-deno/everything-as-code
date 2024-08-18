@@ -1,12 +1,14 @@
-import { KeyClient, SecretClient, TokenCredential } from "./.deps.ts";
-import {
-  loadAzureCloudCredentials,
-  loadMainAzureCredentials,
-} from "../utils/eac/loadAzureCloudCredentials.ts";
 import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
-} from "../modules/clouds/EverythingAsCodeClouds.ts";
+  KeyClient,
+  SecretClient,
+  TokenCredential,
+} from "./.deps.ts";
+import {
+  loadAzureCloudCredentials,
+  loadMainAzureCredentials,
+} from "./loadAzureCloudCredentials.ts";
 
 /**
  * Loads the KeyClient instance.

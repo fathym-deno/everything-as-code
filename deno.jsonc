@@ -12,8 +12,8 @@
     "./iot": "./src/modules/iot/.exports.ts",
     "./licensing": "./src/modules/licensing/.exports.ts",
     "./sources": "./src/modules/sources/.exports.ts",
-    "./states": "./src/modules/states/.exports.ts"
-    // "./azure": "./src/azure/.exports.ts"
+    "./states": "./src/modules/states/.exports.ts",
+    "./utils/azure": "./src/azure/.exports.ts"
     // "./deno": "./deno.ts",
     // "./oauth": "./oauth.ts",
     // "./octokit": "./octokit.ts",
