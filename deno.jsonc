@@ -2,12 +2,13 @@
   "name": "@fathym/eac",
   "version": "0.0.0",
   "exports": {
-    ".": "./mod.ts",
-    "./azure": "./azure.ts",
-    "./deno": "./deno.ts",
-    "./oauth": "./oauth.ts",
-    "./octokit": "./octokit.ts",
-    "./utils/library": "./src/utils/library.helpers.ts"
+    ".": "./src/eac/.exports.ts"
+    // ".": "./mod.ts",
+    // "./azure": "./azure.ts",
+    // "./deno": "./deno.ts",
+    // "./oauth": "./oauth.ts",
+    // "./octokit": "./octokit.ts",
+    // "./utils/library": "./src/utils/library.helpers.ts"
   },
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
@@ -18,7 +19,7 @@
     "deploy": "deno task build && deno task test && ftm git",
     "publish:check": "deno publish --dry-run --allow-dirty",
     "test": "deno test -A tests/tests.ts --coverage=cov",
-    "version": "deno run -A jsr:@fathym/common@0.0.211/version"
+    "version": "deno run -A jsr:@fathym/common@0/build/version"
   },
   "imports": {},
   "lint": {

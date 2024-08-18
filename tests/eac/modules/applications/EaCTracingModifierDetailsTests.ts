@@ -2,7 +2,7 @@ import { assertEquals } from "../../../test.deps.ts";
 import {
   EaCTracingModifierDetails,
   isEaCTracingModifierDetails,
-} from "../../../../src/eac/modules/applications/EaCTracingModifierDetails.ts";
+} from "../../../../src/modules/applications/EaCTracingModifierDetails.ts";
 
 Deno.test("EaCTraciingModifierDetails Tests", async (t) => {
   await t.step("Type Guard Check - True", () => {

@@ -7,11 +7,11 @@ import {
 import {
   EaCSourceConnectionDetails,
   isEaCSourceConnectionDetails,
-} from "../../../eac/modules/sources/EaCSourceConnectionDetails.ts";
+} from "../../../modules/sources/EaCSourceConnectionDetails.ts";
 import {
   EaCGitHubAppDetails,
   isEaCGitHubAppDetails,
-} from "../../../eac/modules/github/EaCGitHubAppDetails.ts";
+} from "../../../modules/github/EaCGitHubAppDetails.ts";
 import {
   loadMainSecretClient,
   loadSecretClient,
@@ -19,14 +19,14 @@ import {
 import {
   EaCGitHubAppAsCode,
   isEaCGitHubAppAsCode,
-} from "../../../eac/modules/github/EaCGitHubAppAsCode.ts";
+} from "../../../modules/github/EaCGitHubAppAsCode.ts";
 import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
-} from "../../../eac/modules/clouds/EverythingAsCodeClouds.ts";
+} from "../../../modules/clouds/EverythingAsCodeClouds.ts";
 import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
-import { EaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
-import { isEaCGitHubAppProviderDetails } from "../../../eac/modules/identity/EaCGitHubAppProviderDetails.ts";
+import { EaCGitHubAppProviderDetails } from "../../../modules/identity/EaCGitHubAppProviderDetails.ts";
+import { isEaCGitHubAppProviderDetails } from "../../../modules/identity/EaCGitHubAppProviderDetails.ts";
 
 const EaCOctokit = Octokit; //.plugin(paginateGraphql);
 

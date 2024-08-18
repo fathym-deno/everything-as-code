@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { delay } from "../../../src.deps.ts";
 import { Octokit } from "../../../octokit.deps.ts";
-import { EaCSourceDetails } from "../../../eac/modules/sources/EaCSourceDetails.ts";
+import { EaCSourceDetails } from "../../../modules/sources/EaCSourceDetails.ts";
 import { Branch, NewRepository, Repository } from "./types.ts";
 
 export async function configureBranchProtection(

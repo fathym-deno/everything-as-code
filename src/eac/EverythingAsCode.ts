@@ -1,29 +1,29 @@
-import { EaCHandlers } from "./EaCHandlers.ts";
+import { EaCModuleHandlers } from "./EaCModuleHandlers.ts";
 import { EaCDetails } from "./EaCDetails.ts";
 import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
-import { EaCSecretAsCode } from "./EaCSecretAsCode.ts";
 
+/**
+ * Everything as Code (EaC) graph.
+ */
 export type EverythingAsCode = {
+  /** The enterprise lookup for the EaC. */
   EnterpriseLookup?: string;
 
-  Handlers?: EaCHandlers;
+  /** The module handlers for the EaC. */
+  Handlers?: EaCModuleHandlers;
 
+  /** The parent enterprise lookup for the EaC. */
   ParentEnterpriseLookup?: string;
-
-  Secrets?: Record<string, EaCSecretAsCode | null>;
 } & EaCDetails<EaCEnterpriseDetails>;
 
+/**
+ * EaC Diff represents the difference between two versions of the Everything as Code graph, omitting the enterprise lookup, parent enterprise lookup and details.
+ */
 export type EaCDiff = Omit<
   EverythingAsCode,
   "EnterpriseLookup" | "ParentEnterpriseLookup" | "Details"
 >;
 
 //   AccessRights?: { [key: string]: EaCAccessRightAsCode };
-//   Applications?: { [key: string]: EaCApplicationAsCode };
-//   DataTokens?: { [key: string]: EaCDataTokenAsCode };
 //   Hosts?: { [key: string]: EaCHostAsCode };
-//   LicenseConfigurations?: { [key: string]: EaCLicenseConfigurationAsCode };
-//   Modifiers?: { [key: string]: EaCDFSModifierAsCode };
 //   PrimaryHost?: string;
-//   Projects?: { [key: string]: EaCProjectAsCode };
-//   Providers?: { [key: string]: EaCProviderAsCode };

@@ -8,7 +8,7 @@ import {
 import {
   EverythingAsCodeClouds,
   isEverythingAsCodeClouds,
-} from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
+} from "../../modules/clouds/EverythingAsCodeClouds.ts";
 
 export async function loadKeyClient(
   eac: EverythingAsCodeClouds,

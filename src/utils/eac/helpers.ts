@@ -3,9 +3,9 @@ import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 import {
   EaCCloudAzureDetails,
   isEaCCloudAzureDetails,
-} from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
+} from "../../modules/clouds/EaCCloudAzureDetails.ts";
 import { loadMainSecretClient } from "../../services/azure/key-vault.ts";
-import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
+import { EaCCloudDetails } from "../../modules/clouds/EaCCloudDetails.ts";
 
 export async function deconstructCloudDetailsSecrets(
   details: EaCCloudDetails | undefined,

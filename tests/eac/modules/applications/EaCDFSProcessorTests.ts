@@ -2,7 +2,7 @@ import { assertEquals } from "../../../test.deps.ts";
 import {
   EaCDFSProcessor,
   isEaCDFSProcessor,
-} from "../../../../src/eac/modules/applications/EaCDFSProcessor.ts";
+} from "../../../../src/modules/applications/EaCDFSProcessor.ts";
 
 Deno.test("EaCDFSProcessor Tests", async (t) => {
   await t.step("Type Guard Check - Local - True", () => {

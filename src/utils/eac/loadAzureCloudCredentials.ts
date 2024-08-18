@@ -7,11 +7,11 @@ import { ConfidentialClientApplication } from "npm:@azure/msal-node@2.12.0";
 import {
   EaCCloudAsCode,
   isEaCCloudAsCode,
-} from "../../eac/modules/clouds/EaCCloudAsCode.ts";
-import { EaCCloudAzureDetails } from "../../eac/modules/clouds/EaCCloudAzureDetails.ts";
-import { EverythingAsCodeClouds } from "../../eac/modules/clouds/EverythingAsCodeClouds.ts";
+} from "../../modules/clouds/EaCCloudAsCode.ts";
+import { EaCCloudAzureDetails } from "../../modules/clouds/EaCCloudAzureDetails.ts";
+import { EverythingAsCodeClouds } from "../../modules/clouds/EverythingAsCodeClouds.ts";
 import { deconstructCloudDetailsSecrets } from "./helpers.ts";
-import { EaCCloudDetails } from "../../eac/modules/clouds/EaCCloudDetails.ts";
+import { EaCCloudDetails } from "../../modules/clouds/EaCCloudDetails.ts";
 import { EverythingAsCode } from "../../eac/EverythingAsCode.ts";
 
 export async function loadAzureCredentialsForToken(
