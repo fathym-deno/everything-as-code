@@ -1,3 +1,7 @@
+/**
+ * The core Everything as Code (EaC) Clouds types.
+ * @module
+ */
 export * from "./EaCCloudAsCode.ts";
 export * from "./EaCCloudAzureDetails.ts";
 export * from "./EaCCloudDetails.ts";

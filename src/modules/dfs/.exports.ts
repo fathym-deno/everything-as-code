@@ -1,4 +1,7 @@
-export * from "./models/.exports.ts";
+/**
+ * The core Everything as Code (EaC) Distributed File System types.
+ * @module
+ */
 export * from "./EaCDenoKVDistributedFileSystem.ts";
 export * from "./EaCDistributedFileSystem.ts";
 export * from "./EaCESMDistributedFileSystem.ts";

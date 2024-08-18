@@ -1,4 +1,7 @@
-export * from "./models/_exports.ts";
+/**
+ * The core Everything as Code (EaC) IoT types.
+ * @module
+ */
 export * from "./EaCDashboardDetails.ts";
 export * from "./EaCDashboardAsCode.ts";
 export * from "./EaCDeviceAsCode.ts";

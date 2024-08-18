@@ -1,4 +1,8 @@
-export * from "./models/_exports.ts";
+/**
+ * The core Everything as Code (EaC) Sources types.
+ * @module
+ */
+export * from "./EaCSourceActionType.ts";
 export * from "./EaCArtifactAsCode.ts";
 export * from "./EaCArtifactDetails.ts";
 export * from "./EaCDevOpsActionAsCode.ts";

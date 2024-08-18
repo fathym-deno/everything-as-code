@@ -1,4 +1,7 @@
-export * from "./models/_exports.ts";
+/**
+ * The core Everything as Code (EaC) Licensing types.
+ * @module
+ */
 export * from "./EaCLicenseAsCode.ts";
 export * from "./EaCLicenseDetails.ts";
 export * from "./EaCLicensePlanAsCode.ts";

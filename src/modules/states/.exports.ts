@@ -1,4 +1,7 @@
-export * from "./models/_exports.ts";
+/**
+ * The core Everything as Code (EaC) States types.
+ * @module
+ */
 export * from "./EaCStateEntityAsCode.ts";
 export * from "./EaCStateEntityDetails.ts";
 export * from "./EaCStateAsCode.ts";
