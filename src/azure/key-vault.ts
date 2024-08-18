@@ -1,6 +1,4 @@
-import { KeyClient } from "npm:@azure/keyvault-keys@4.8.0";
-import { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
-import { TokenCredential } from "npm:@azure/identity@4.4.1";
+import { KeyClient, SecretClient, TokenCredential } from "./.deps.ts";
 import {
   loadAzureCloudCredentials,
   loadMainAzureCredentials,
@@ -10,17 +8,37 @@ import {
   isEverythingAsCodeClouds,
 } from "../modules/clouds/EverythingAsCodeClouds.ts";
 
+/**
+ * Loads the KeyClient instance.
+ *
+ * @param eac The EaC cloud configuration.
+ * @param cloudLookup The cloud lookup to use.
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A KeyClient instance.
+ */
 export async function loadKeyClient(
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
   keyVaultLookup: string,
 ): Promise<KeyClient>;
 
+/**
+ * Loads the KeyClient instance.
+ *
+ * @param creds The credentials to use.
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A KeyClient instance.
+ */
 export async function loadKeyClient(
   creds: TokenCredential,
   keyVaultLookup: string,
 ): Promise<KeyClient>;
 
+/**
+ * Loads the KeyClient instance.
+ *
+ * @returns A KeyClient instance.
+ */
 export async function loadKeyClient(
   credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
@@ -35,6 +53,12 @@ export async function loadKeyClient(
   return new KeyClient(url, creds);
 }
 
+/**
+ * Loads the KeyClient instance for the main Azure account.
+ *
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A KeyClient instance.
+ */
 export async function loadMainKeyClient(
   keyVaultLookup: string,
 ): Promise<KeyClient> {
@@ -43,17 +67,37 @@ export async function loadMainKeyClient(
   return await loadKeyClient(creds, keyVaultLookup);
 }
 
+/**
+ * Loads the SecretClient instance.
+ *
+ * @param eac The EaC cloud configuration.
+ * @param cloudLookup The cloud lookup to use.
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A SecretClient instance.
+ */
 export async function loadSecretClient(
   eac: EverythingAsCodeClouds,
   cloudLookup: string,
   keyVaultLookup: string,
 ): Promise<SecretClient>;
 
+/**
+ * Loads the SecretClient instance.
+ *
+ * @param creds The credentials to use.
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A SecretClient instance.
+ */
 export async function loadSecretClient(
   creds: TokenCredential,
   keyVaultLookup: string,
 ): Promise<SecretClient>;
 
+/**
+ * Loads the SecretClient instance.
+ *
+ * @returns
+ */
 export async function loadSecretClient(
   credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
@@ -68,8 +112,17 @@ export async function loadSecretClient(
   return new SecretClient(url, creds);
 }
 
+/**
+ * Loads the SecretClient instance for the main Azure account.
+ */
 export async function loadMainSecretClient(): Promise<SecretClient>;
 
+/**
+ * Loads the SecretClient instance for the main Azure account.
+ *
+ * @param keyVaultLookup The key vault lookup to use.
+ * @returns A SecretClient instance.
+ */
 export async function loadMainSecretClient(
   keyVaultLookup?: string,
 ): Promise<SecretClient> {
@@ -82,6 +135,11 @@ export async function loadMainSecretClient(
   return await loadSecretClient(creds, keyVaultLookup);
 }
 
+/**
+ * Loads the KeyVault URL and credentials.
+ *
+ * @returns The KeyVault URL and credentials.
+ */
 export async function loadKeyVaultUrlAndCreds(
   credsEaC: TokenCredential | EverythingAsCodeClouds,
   keyVaultCloudLookup: string,
@@ -94,10 +152,7 @@ export async function loadKeyVaultUrlAndCreds(
   let creds: TokenCredential | undefined;
 
   if (isEverythingAsCodeClouds(credsEaC)) {
-    creds = await loadAzureCloudCredentials(
-      credsEaC,
-      keyVaultCloudLookup,
-    );
+    creds = await loadAzureCloudCredentials(credsEaC, keyVaultCloudLookup);
   } else {
     creds = credsEaC;
   }

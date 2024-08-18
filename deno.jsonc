@@ -2,9 +2,9 @@
   "name": "@fathym/eac",
   "version": "0.0.0",
   "exports": {
-    ".": "./src/eac/.exports.ts"
-    // ".": "./mod.ts",
-    // "./azure": "./azure.ts",
+    ".": "./src/eac/.exports.ts",
+    "./applications": "./src/modules/applications/.exports.ts"
+    // "./azure": "./src/azure/.exports.ts"
     // "./deno": "./deno.ts",
     // "./oauth": "./oauth.ts",
     // "./octokit": "./octokit.ts",
