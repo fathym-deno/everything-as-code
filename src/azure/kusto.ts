@@ -3,10 +3,12 @@ import {
   EaCCloudResourceFormatDetails,
   EaCCloudWithResources,
   EverythingAsCodeClouds,
-  KustoClient,
-  KustoConnectionStringBuilder,
   TokenCredential,
 } from "./.deps.ts";
+import {
+  Client as KustoClient,
+  KustoConnectionStringBuilder,
+} from "npm:azure-kusto-data@6.0.2";
 import { loadAzureCloudCredentials } from "./loadAzureCloudCredentials.ts";
 
 const kustoClientCache: Record<string, KustoClient> = {};

@@ -25,9 +25,5 @@ export {
 export { ConfidentialClientApplication } from "npm:@azure/msal-node@2.12.0";
 export { KeyClient } from "npm:@azure/keyvault-keys@4.8.0";
 export { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
-export {
-  Client as KustoClient,
-  KustoConnectionStringBuilder,
-} from "npm:azure-kusto-data@6.0.2";
 export { DataLakeServiceClient } from "npm:@azure/storage-file-datalake@12.23.0";
 export { kebabCase } from "jsr:@luca/cases@1";
