@@ -13,6 +13,12 @@ export * from "./EaCMetadataBase.ts";
 export * from "./EaCVertexDetails.ts";
 export * from "./EverythingAsCode.ts";
 
-export function loadFathymEaCMetaUrl(path: string): string {
+/**
+ * Resolve a path to the Fathym Everything as Code module.
+ *
+ * @param path The path to the file to resolve.
+ * @returns The path to the file.
+ */
+export function resolveFathymEaCMetaUrl(path: string): string {
   return resolvePath(path, import.meta.resolve);
 }
