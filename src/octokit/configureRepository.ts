@@ -5,6 +5,14 @@ import { listBranches } from "./listBranches.ts";
 import { tryGetRepository } from "./tryGetRepository.ts";
 import { Repository } from "./types.ts";
 
+/**
+ * Configure a repository with the specified setup.
+ *
+ * @param octokit The Octokit instance to configure the repository in.
+ * @param repo The repository to configure.
+ * @param sourceDetails The source details.
+ * @returns The configured repository.
+ */
 export async function configureRepository(
   octokit: Octokit,
   repo: Repository,

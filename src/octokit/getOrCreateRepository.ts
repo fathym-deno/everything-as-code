@@ -3,6 +3,13 @@ import { EaCSourceDetails, Octokit } from "./.deps.ts";
 import { tryGetRepository } from "./tryGetRepository.ts";
 import { NewRepository, Repository } from "./types.ts";
 
+/**
+ * Gets the existing repository or creates a new one.
+ *
+ * @param octokit The Octokit instance.
+ * @param details The source details.
+ * @returns The repository.
+ */
 export async function getOrCreateRepository(
   octokit: Octokit,
   details: EaCSourceDetails,

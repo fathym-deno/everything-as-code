@@ -18,21 +18,25 @@ import {
   SecretClient,
 } from "./.deps.ts";
 
-const EaCOctokit = Octokit; //.plugin(paginateGraphql);
+export const EaCOctokit = Octokit; //.plugin(paginateGraphql);
 
+/** Load octokit instance from a token. */
 export async function loadOctokit(token: string): Promise<Octokit>;
 
+/** Load octokit instance from provider and source details. */
 export async function loadOctokit(
   providerDetails: EaCGitHubAppProviderDetails,
   sourceDetails: EaCSourceConnectionDetails,
 ): Promise<Octokit>;
 
+/** Load octokit instance from provider details, GitHub app and source details. */
 export async function loadOctokit(
   providerDetails: EaCGitHubAppProviderDetails,
   gitHubAppDetails: EaCGitHubAppDetails,
   sourceDetails: EaCSourceConnectionDetails,
 ): Promise<Octokit>;
 
+/** Load octokit instance from provider details, EaC, GitHub app and source details. */
 export async function loadOctokit(
   providerDetails: EaCGitHubAppProviderDetails,
   eac: EverythingAsCodeClouds,
@@ -40,6 +44,7 @@ export async function loadOctokit(
   sourceDetails?: EaCSourceConnectionDetails,
 ): Promise<Octokit>;
 
+/** Load octokit instance. */
 export async function loadOctokit(
   tokenProviderDetails: EaCGitHubAppProviderDetails | string,
   detailsEaC?:

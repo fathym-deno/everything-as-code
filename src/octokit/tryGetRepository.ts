@@ -1,14 +1,22 @@
 import { Octokit } from "./.deps.ts";
 import { Repository } from "./types.ts";
 
+/**
+ * Try to find a repository.
+ *
+ * @param octokit The Octokit instance.
+ * @param owner The owner of the repository.
+ * @param repository The repository.
+ * @returns The repository if it exists, otherwise undefined.
+ */
 export async function tryGetRepository(
   octokit: Octokit,
-  organization: string,
+  owner: string,
   repository: string,
 ): Promise<Repository | undefined> {
   try {
     const repo = await octokit.rest.repos.get({
-      owner: organization,
+      owner: owner,
       repo: repository,
     });
 

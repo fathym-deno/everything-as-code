@@ -1,3 +1,7 @@
+/**
+ * Helpers for interacting with and managing GitHub through Octokit.
+ * @module
+ */
 export * from "./configureBranchProtection.ts";
 export * from "./configureRepository.ts";
 export * from "./getBranch.ts";

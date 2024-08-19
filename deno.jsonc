@@ -15,9 +15,6 @@
     "./sources": "./src/modules/sources/.exports.ts",
     "./states": "./src/modules/states/.exports.ts",
     "./utils/azure": "./src/azure/.exports.ts"
-    // "./deno": "./deno.ts",
-    // "./oauth": "./oauth.ts",
-    // "./utils/library": "./src/utils/library.helpers.ts"
   },
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
