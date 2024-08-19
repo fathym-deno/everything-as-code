@@ -1,3 +1,5 @@
+import { resolvePath } from "./.deps.ts";
+
 /**
  * The core Everything as Code (EaC) types.
  * @module
@@ -10,3 +12,7 @@ export * from "./EaCModuleHandlers.ts";
 export * from "./EaCMetadataBase.ts";
 export * from "./EaCVertexDetails.ts";
 export * from "./EverythingAsCode.ts";
+
+export function loadFathymEaCMetaUrl(path: string): string {
+  return resolvePath(path, import.meta.resolve);
+}
