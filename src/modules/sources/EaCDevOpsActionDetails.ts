@@ -1,7 +1,7 @@
 import { EaCVertexDetails } from "../../eac/EaCVertexDetails.ts";
 
 export type EaCDevOpsActionDetails = {
-  Path?: string | null;
+  Path?: string;
 
-  Templates?: string[] | null;
+  Templates?: string[];
 } & EaCVertexDetails;

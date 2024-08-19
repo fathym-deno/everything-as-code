@@ -3,9 +3,9 @@ import { EaCCloudAsCode } from "./EaCCloudAsCode.ts";
 import { EaCSecretAsCode } from "./EaCSecretAsCode.ts";
 
 export type EverythingAsCodeClouds = {
-  Clouds?: Record<string, EaCCloudAsCode> | null;
+  Clouds?: Record<string, EaCCloudAsCode>;
 
-  Secrets?: Record<string, EaCSecretAsCode | null>;
+  Secrets?: Record<string, EaCSecretAsCode>;
 } & EaCMetadataBase;
 
 export function isEverythingAsCodeClouds(

@@ -5,8 +5,8 @@ import { EaCMetadataBase } from "./EaCMetadataBase.ts";
  */
 export type EaCVertexDetails = {
   /** The description of the vertex. */
-  Description?: string | null;
+  Description?: string;
 
   /** The name of the vertex. */
-  Name?: string | null;
+  Name?: string;
 } & EaCMetadataBase;

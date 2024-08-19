@@ -3,8 +3,8 @@
 
 // export type EaCEnvironmentAsCode = EaCDetails<EaCEnvironmentDetails>;
 
-// // Artifacts?: { [key: string]: EaCArtifactAsCode } | null;
-// // DevOpsActions?: { [key: string]: EaCDevOpsActionAsCode } | null;
-// // Secrets?: { [key: string]: EaCSecretAsCode } | null;
-// // Sources?: { [key: string]: EaCSourceControlAsCode } | null;
-// // IoT?: { [key: string]: EaCIoTAsCode } | null;
+// // Artifacts?: { [key: string]: EaCArtifactAsCode };
+// // DevOpsActions?: { [key: string]: EaCDevOpsActionAsCode };
+// // Secrets?: { [key: string]: EaCSecretAsCode };
+// // Sources?: { [key: string]: EaCSourceControlAsCode };
+// // IoT?: { [key: string]: EaCIoTAsCode };

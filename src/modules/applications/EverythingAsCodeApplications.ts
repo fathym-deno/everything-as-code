@@ -8,13 +8,13 @@ import { EaCProjectAsCode } from "./EaCProjectAsCode.ts";
  */
 export type EverythingAsCodeApplications = {
   /** The applications for the EaC. */
-  Applications?: Record<string, EaCApplicationAsCode | null>;
+  Applications?: Record<string, EaCApplicationAsCode>;
 
   /** The modifiers for the EaC. */
-  Modifiers?: Record<string, EaCModifierAsCode | null>;
+  Modifiers?: Record<string, EaCModifierAsCode>;
 
   /** The projects for the EaC. */
-  Projects?: Record<string, EaCProjectAsCode | null>;
+  Projects?: Record<string, EaCProjectAsCode>;
 } & EverythingAsCodeDFS;
 
 /**

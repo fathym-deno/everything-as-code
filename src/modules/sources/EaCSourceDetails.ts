@@ -1,15 +1,15 @@
 import { EaCVertexDetails } from "../../eac/EaCVertexDetails.ts";
 
 export type EaCSourceDetails = {
-  Branches?: string[] | null;
+  Branches?: string[];
 
-  MainBranch?: string | null;
+  MainBranch?: string;
 
-  Organization?: string | null;
+  Organization?: string;
 
-  Repository?: string | null;
+  Repository?: string;
 
   Type: "GITHUB";
 
-  Username?: string | null;
+  Username?: string;
 } & EaCVertexDetails;

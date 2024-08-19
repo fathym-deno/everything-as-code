@@ -5,5 +5,5 @@ import { EaCSourceDetails } from "./EaCSourceDetails.ts";
 export type EaCSourceAsCode = {
   Artifacts?: Record<string, EaCArtifactAsCode>;
 
-  SecretLookups?: Record<string, string> | null;
+  SecretLookups?: Record<string, string>;
 } & EaCDetails<EaCSourceDetails>;
