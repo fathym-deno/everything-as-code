@@ -14,7 +14,8 @@
     "./octokit": "./src/octokit/.exports.ts",
     "./sources": "./src/modules/sources/.exports.ts",
     "./states": "./src/modules/states/.exports.ts",
-    "./utils/azure": "./src/azure/.exports.ts"
+    "./utils/azure": "./src/azure/.exports.ts",
+    "./utils/azure/kusto": "./src/azure/kusto.ts"
   },
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
