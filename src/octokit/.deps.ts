@@ -1,3 +1,26 @@
+export { delay } from "jsr:@std/async@1/delay";
+
+export { loadMainSecretClient, loadSecretClient } from "../azure/.exports.ts";
+export {
+  type EverythingAsCodeClouds,
+  isEverythingAsCodeClouds,
+} from "../modules/clouds/.exports.ts";
+export {
+  type EaCGitHubAppAsCode,
+  type EaCGitHubAppDetails,
+  isEaCGitHubAppAsCode,
+  isEaCGitHubAppDetails,
+} from "../modules/github/.exports.ts";
+export {
+  type EaCGitHubAppProviderDetails,
+  isEaCGitHubAppProviderDetails,
+} from "../modules/identity/.exports.ts";
+export {
+  type EaCSourceConnectionDetails,
+  type EaCSourceDetails,
+  isEaCSourceConnectionDetails,
+} from "../modules/sources/.exports.ts";
+
 export * from "npm:octokit@4.0.2";
 export { type OctokitOptions } from "npm:@octokit/core@6.1.2";
 export * from "npm:@octokit/auth-app@6.0.1";

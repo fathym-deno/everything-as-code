@@ -11,12 +11,12 @@
     "./identity": "./src/modules/identity/.exports.ts",
     "./iot": "./src/modules/iot/.exports.ts",
     "./licensing": "./src/modules/licensing/.exports.ts",
+    "./octokit": "./src/octokit/.exports.ts",
     "./sources": "./src/modules/sources/.exports.ts",
     "./states": "./src/modules/states/.exports.ts",
     "./utils/azure": "./src/azure/.exports.ts"
     // "./deno": "./deno.ts",
     // "./oauth": "./oauth.ts",
-    // "./octokit": "./octokit.ts",
     // "./utils/library": "./src/utils/library.helpers.ts"
   },
   "tasks": {
