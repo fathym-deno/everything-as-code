@@ -1,5 +1,3 @@
-export { delay } from "jsr:@std/async@1/delay";
-
 export { loadMainSecretClient, loadSecretClient } from "../azure/.exports.ts";
 export {
   type EverythingAsCodeClouds,
@@ -20,6 +18,8 @@ export {
   type EaCSourceDetails,
   isEaCSourceConnectionDetails,
 } from "../modules/sources/.exports.ts";
+
+export { delay } from "jsr:@std/async@1.0.3/delay";
 
 export * from "npm:octokit@4.0.2";
 export { type OctokitOptions } from "npm:@octokit/core@6.1.2";

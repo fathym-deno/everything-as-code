@@ -14,7 +14,9 @@ export {
   isEverythingAsCodeClouds,
 } from "../modules/clouds/.exports.ts";
 
-export { merge } from "jsr:@fathym/common@0";
+export { merge } from "jsr:@fathym/common@0.2.22";
+
+export { kebabCase } from "jsr:@luca/cases@1.0.0";
 
 export { ResourceManagementClient } from "npm:@azure/arm-resources@5.2.0";
 export {
@@ -26,4 +28,3 @@ export { ConfidentialClientApplication } from "npm:@azure/msal-node@2.12.0";
 export { KeyClient } from "npm:@azure/keyvault-keys@4.8.0";
 export { SecretClient } from "npm:@azure/keyvault-secrets@4.8.0";
 export { DataLakeServiceClient } from "npm:@azure/storage-file-datalake@12.23.0";
-export { kebabCase } from "jsr:@luca/cases@1";
