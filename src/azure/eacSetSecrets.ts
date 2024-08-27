@@ -1,4 +1,4 @@
-import { kebabCase, SecretClient } from "./.deps.ts";
+import { getPackageLogger, kebabCase, SecretClient } from "./.deps.ts";
 
 /**
  * Set Azure Key Vault secrets.
@@ -13,6 +13,8 @@ export async function eacSetSecrets(
   secretRoot: string,
   toSecrets: Record<string, string | undefined>,
 ): Promise<Record<string, string>> {
+  const logger = await getPackageLogger();
+
   const secreted: Record<string, string> = {};
 
   const secrets = Object.keys(toSecrets || {});
@@ -35,7 +37,7 @@ export async function eacSetSecrets(
               resolve(secreted[secret]);
             });
         } catch (err) {
-          console.error(err);
+          logger.error("There was an issue saving your secrets.", err);
         }
       } else {
         resolve(toSecret);

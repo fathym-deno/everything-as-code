@@ -1,4 +1,4 @@
-import { SecretClient } from "./.deps.ts";
+import { getPackageLogger, SecretClient } from "./.deps.ts";
 
 /**
  * This function retrieves secrets from Azure Key Vault.
@@ -11,6 +11,8 @@ export async function eacGetSecrets(
   secretClient: SecretClient,
   toSecrets: Record<string, string>,
 ): Promise<Record<string, string>> {
+  const logger = await getPackageLogger();
+
   const secreted: Record<string, string> = {};
 
   const secrets = Object.keys(toSecrets || {});
@@ -29,7 +31,7 @@ export async function eacGetSecrets(
             resolve(secreted[secret]);
           });
         } catch (err) {
-          console.error(err);
+          logger.error("There was an issue retireving the secrets", err);
         }
       } else {
         resolve(toSecret);
