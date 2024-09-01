@@ -1,8 +1,8 @@
 import { EaCMetadataBase } from "../../eac/EaCMetadataBase.ts";
-import { EaCDistributedFileSystem } from "./EaCDistributedFileSystem.ts";
+import { EaCDistributedFileSystemAsCode } from "./EaCDistributedFileSystemAsCode.ts";
 
 export type EverythingAsCodeDFS = {
-  DFS?: Record<string, EaCDistributedFileSystem>;
+  DFSs?: Record<string, EaCDistributedFileSystemAsCode>;
 } & EaCMetadataBase;
 
 export function isEverythingAsCodeDFS(

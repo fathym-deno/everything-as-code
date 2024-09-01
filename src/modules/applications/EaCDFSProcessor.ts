@@ -1,7 +1,7 @@
 import {
-  EaCDistributedFileSystem,
-  isEaCDistributedFileSystem,
-} from "../dfs/EaCDistributedFileSystem.ts";
+  EaCDistributedFileSystemDetails,
+  isEaCDistributedFileSystemDetails,
+} from "../dfs/EaCDistributedFileSystemDetails.ts";
 import { EaCProcessor, isEaCProcessor } from "./EaCProcessor.ts";
 
 /**

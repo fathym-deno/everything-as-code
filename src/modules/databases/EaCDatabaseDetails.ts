@@ -7,8 +7,8 @@ export type EaCDatabaseDetails<TType = unknown> = {
 export function isEaCDatabaseDetails<TType = unknown>(
   type: TType,
   details: unknown,
-): details is EaCDatabaseDetails {
-  const dbDetails = details as EaCDatabaseDetails;
+): details is EaCDatabaseDetails<TType> {
+  const x = details as EaCDatabaseDetails<TType>;
 
-  return dbDetails && (!type || dbDetails.Type === type);
+  return x && (!type || x.Type === type);
 }
