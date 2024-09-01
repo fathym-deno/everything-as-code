@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../../eac/EaCVertexDetails.ts";
 
-export type EaCDatabaseDetails<TType = unknown> = {
+export type EaCDatabaseDetails<TType = string> = {
   Type: TType;
 } & EaCVertexDetails;
 

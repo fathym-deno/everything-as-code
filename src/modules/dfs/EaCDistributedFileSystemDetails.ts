@@ -1,6 +1,6 @@
 import { EaCVertexDetails } from "../../eac/EaCVertexDetails.ts";
 
-export type EaCDistributedFileSystemDetails<TType = unknown> = {
+export type EaCDistributedFileSystemDetails<TType = string> = {
   CacheDBLookup?: string;
 
   CacheSeconds?: number;
