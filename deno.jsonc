@@ -14,6 +14,7 @@
     "./octokit": "./src/octokit/.exports.ts",
     "./sources": "./src/modules/sources/.exports.ts",
     "./states": "./src/modules/states/.exports.ts",
+    "./types": "./src/types/.exports.ts",
     "./utils/azure": "./src/azure/.exports.ts",
     "./utils/azure/kusto": "./src/azure/kusto.ts"
   },
