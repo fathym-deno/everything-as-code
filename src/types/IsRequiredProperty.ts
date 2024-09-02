@@ -1,4 +1,5 @@
-import { HasDetailsProperty } from "./HasDetailsProperty";
+import { IsUndefined } from "./.deps.ts";
+import { HasDetailsProperty } from "./HasDetailsProperty.ts";
 
 export type IsRequiredProperty<
   T,
