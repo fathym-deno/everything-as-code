@@ -1,1 +1,1 @@
-export { resolvePath } from "jsr:@fathym/common@0.2.49/build";
+export { resolvePath } from "jsr:@fathym/common@0.2.50/build";
