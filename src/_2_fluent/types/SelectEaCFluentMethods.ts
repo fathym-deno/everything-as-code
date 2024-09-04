@@ -76,13 +76,6 @@ export type SelectEaCFluentMethodsTag<T> = ExtractEaCFluentTag<
 > extends infer FM ? FM
     : never;
 
-export type EaCFluentTagTypes = "FluentMethods";
-export type EaCFluentMethodsTags =
-    | "AsCode"
-    | "Record"
-    | "Details"
-    | "Object"
-    | "Property";
 export type EaCFluentTags<TType extends EaCFluentTagTypes> = TType extends
     "FluentMethods" ? EaCFluentMethodsTags : never;
 
@@ -115,48 +108,7 @@ export type DeepStripEaCFluentTag<
 export type ExtractEaCFluentTag<
     T,
     TType extends EaCFluentTagTypes,
-> = ExtractEaCTag<T, TType>;
-
-type EaCTag<TType extends string, TTag, TValue = never> =
-    & {
-        [K in `@${TType}`]?: TTag;
-    }
-    & { [K in `@${TType}-value`]?: TValue };
-type ExtractEaCTag<T, TType extends string> = T extends EaCTag<
-    TType,
-    infer TTag
-> ? TTag
-    : never;
-type HasEaCTag<T, TTag> = true extends HasTypeCheck<
-    NonNullable<T>,
-    NonNullable<TTag>
-> ? true
-    : false;
-
-/**
- * Utility type to remove EaCFluentTag from a single property
- */
-type StripEaCTag<
-    T,
-    TType extends string,
-    TTag = any,
-> = NonNullable<T> extends EaCTag<NonNullable<TType>, NonNullable<TTag>>
-    ? Omit<NonNullable<T>, keyof EaCTag<NonNullable<TType>, NonNullable<TTag>>>
-    : NonNullable<T>;
-// type StripEaCTag<T> = {
-//   [K in keyof T as T[K] extends EaCTag<infer TType, any> ? never : K]: T[K];
-// };
-
-type DeepStripEaCTag<T, TType extends string, TTag = any> = StripEaCTag<
-    {
-        [K in keyof T]: T[K] extends never ? never
-            : T[K] extends (infer U)[] ? DeepStripEaCTag<U, TType, TTag>[]
-            : T extends object ? DeepStripEaCTag<T[K], TType, TTag>
-            : StripEaCTag<T[K], TType, TTag>;
-    },
-    TType,
-    TTag
->;
+> = $TagExtract<T, TType>;
 
 type shasTag = HasEaCTag<
     EaCGraphCircuitDetails["State"],
