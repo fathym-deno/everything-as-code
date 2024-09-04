@@ -117,8 +117,6 @@ export type ExtractEaCFluentTag<
     TType extends EaCFluentTagTypes,
 > = ExtractEaCTag<T, TType>;
 
-type ExtractExact<T, Tag extends T> = Extract<Tag, T>;
-
 type EaCTag<TType extends string, TTag, TValue = never> =
     & {
         [K in `@${TType}`]?: TTag;
