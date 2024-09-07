@@ -17,5 +17,3 @@ export {
 } from '../../../reference-architecture/src/fluent/.exports.ts';
 
 export * from 'jsr:@fathym/ioc@0.0.12';
-
-export * from 'jsr:@fathym/ioc@0.0.12';
