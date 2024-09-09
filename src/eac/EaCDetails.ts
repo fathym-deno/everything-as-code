@@ -7,4 +7,4 @@ import { EaCVertexDetails } from "./EaCVertexDetails.ts";
 export type EaCDetails<TDetails extends EaCVertexDetails> = {
   /** The Details for the EaC node. */
   Details?: TDetails;
-};
+} & EaCMetadataBase;
