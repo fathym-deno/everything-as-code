@@ -13,7 +13,7 @@ import {
   IsObject,
   ValueType,
 } from "./.deps.ts";
-import { eacFluentBuilder } from "./EaCFluentBuilder.ts";
+import { eacFluentBuilder } from "./_eacFluentBuilder.ts";
 
 export type EverythingAsCodeTags<T> = true extends IsObject<T>
   ? false extends IsNativeType<T> ? EaCObjectTags<T>

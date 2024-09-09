@@ -7,6 +7,7 @@
     "./clouds": "./src/modules/clouds/.exports.ts",
     "./databases": "./src/modules/databases/.exports.ts",
     "./dfs": "./src/modules/dfs/.exports.ts",
+    "./fluent": "./src/fluent/.exports.ts",
     "./github": "./src/modules/github/.exports.ts",
     "./identity": "./src/modules/identity/.exports.ts",
     "./iot": "./src/modules/iot/.exports.ts",
