@@ -61,25 +61,25 @@ type EaCAsCodeTags<T> = [
   }
   : {};
 
-// type z = EaCAsCodeTags<EverythingAsCodeTags<EverythingAsCode>>;
+type z = EaCAsCodeTags<EverythingAsCodeTags<EverythingAsCode>>;
 
-// const bldr = eacFluentBuilder<
-//   EverythingAsCode & EverythingAsCodeDatabases
-// >().Root();
+const bldr = eacFluentBuilder<
+  EverythingAsCode & EverythingAsCodeDatabases
+>().Root();
 
-// type x = EaCVertexDetailsTags<EverythingAsCode["Details"]>;
+type x = EaCVertexDetailsTags<EverythingAsCode["Details"]>;
 
-// bldr.EnterpriseLookup(crypto.randomUUID());
+bldr.EnterpriseLookup(crypto.randomUUID());
 
-// bldr.Details().Name("My Name");
+bldr.Details().Name("My Name");
 
-// bldr._Handlers.$Force(true);
-// const handlers = bldr._Handlers("asdfa");
+bldr._Handlers.$Force(true);
+const handlers = bldr._Handlers("asdfa");
 
-// handlers.APIPath("https://api.com").Order(100);
+handlers.APIPath("https://api.com").Order(100);
 
-// bldr._Databases("thinky").Details()["@Methods"]("Object");
+bldr._Databases("thinky").Details()["@Methods"]("Object");
 
-// bldr.Compile();
+bldr.Compile();
 
-// const eac = bldr.Export();
+const eac = bldr.Export();
