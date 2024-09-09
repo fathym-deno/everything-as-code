@@ -139,7 +139,9 @@ export async function loadAzureCloudCredentials(
     let eac: EverythingAsCodeClouds;
 
     if (typeof cloudDetailsEaCEntLookup === "string") {
-      eac = await loadEaC!(cloudDetailsEaCEntLookup);
+      eac = (await loadEaC!(
+        cloudDetailsEaCEntLookup,
+      )) as EverythingAsCodeClouds;
     } else {
       eac = cloudDetailsEaCEntLookup as EverythingAsCodeClouds;
     }

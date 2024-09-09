@@ -1,5 +1,5 @@
-import { $FluentTag } from '../fluent/.deps.ts';
-import { EaCModuleHandler } from './EaCModuleHandler.ts';
+import { $FluentTag } from "../fluent/.deps.ts";
+import { EaCModuleHandler } from "./EaCModuleHandler.ts";
 
 /**
  * The colleaction of EaC module handlers to use when processing an EaC.

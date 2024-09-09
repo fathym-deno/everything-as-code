@@ -1,4 +1,4 @@
-export type { EaCModuleHandlers, EverythingAsCode } from '../eac/.exports.ts';
+export type { EaCModuleHandlers, EverythingAsCode } from "../eac/.exports.ts";
 
 export type {
   HasTypeCheck,
@@ -8,15 +8,17 @@ export type {
   IsUndefined,
   RemoveIndexSignatures,
   ValueType,
-} from '../../../reference-architecture/src/common/types/.exports.ts';
+} from "jsr:@fathym/common@0.2.136/types";
+// } from '../../../reference-architecture/src/common/types/.exports.ts';
 
 export {
+  type $FluentTag,
   FluentBuilder,
   fluentBuilder,
   type FluentBuilderMethodsHandlers,
   type FluentBuilderRoot,
   type SelectFluentMethods,
-  type $FluentTag,
-} from '../../../reference-architecture/src/fluent/.exports.ts';
+} from "jsr:@fathym/common@0.2.136/fluent";
+// } from '../../../reference-architecture/src/fluent/.exports.ts';
 
-export * from 'jsr:@fathym/ioc@0.0.12';
+export * from "jsr:@fathym/ioc@0.0.12";

@@ -13,5 +13,5 @@ export function isEverythingAsCodeIdentity(
 ): eac is EverythingAsCodeIdentity {
   const idEaC = eac as EverythingAsCodeIdentity;
 
-  return idEaC.Databases !== undefined;
+  return idEaC.Providers !== undefined;
 }

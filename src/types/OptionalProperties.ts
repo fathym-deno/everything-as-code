@@ -8,5 +8,5 @@ export type OptionalProperties<T> = {
       K
     > extends false ? K
       : never
-  ]: NonNullable<T[K]>;
+  ]: K extends keyof T ? NonNullable<T[K]> : never;
 };

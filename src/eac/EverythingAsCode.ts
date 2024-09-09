@@ -1,6 +1,6 @@
-import { EaCModuleHandlers } from './EaCModuleHandlers.ts';
-import { EaCDetails } from './EaCDetails.ts';
-import { EaCEnterpriseDetails } from './EaCEnterpriseDetails.ts';
+import { EaCModuleHandlers } from "./EaCModuleHandlers.ts";
+import { EaCDetails } from "./EaCDetails.ts";
+import { EaCEnterpriseDetails } from "./EaCEnterpriseDetails.ts";
 import { $FluentTag } from "../fluent/.deps.ts";
 
 /**
@@ -22,7 +22,7 @@ export type EverythingAsCode = {
  */
 export type EaCDiff = Omit<
   EverythingAsCode,
-  'EnterpriseLookup' | 'ParentEnterpriseLookup' | 'Details'
+  "EnterpriseLookup" | "ParentEnterpriseLookup" | "Details"
 >;
 
 //   AccessRights?: { [key: string]: EaCAccessRightAsCode };
