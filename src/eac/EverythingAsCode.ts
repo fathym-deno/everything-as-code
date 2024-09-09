@@ -7,6 +7,9 @@ import { $FluentTag } from "../fluent/.deps.ts";
  * Everything as Code (EaC) graph.
  */
 export type EverythingAsCode = {
+  /** The Details for the EaC node. */
+  Details?: EaCEnterpriseDetails;
+
   /** The enterprise lookup for the EaC. */
   EnterpriseLookup?: string;
 
@@ -15,7 +18,7 @@ export type EverythingAsCode = {
 
   /** The parent enterprise lookup for the EaC. */
   ParentEnterpriseLookup?: string;
-} & EaCDetails<EaCEnterpriseDetails>;
+};
 
 /**
  * EaC Diff represents the difference between two versions of the Everything as Code graph, omitting the enterprise lookup, parent enterprise lookup and details.

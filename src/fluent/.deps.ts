@@ -1,4 +1,8 @@
-export type { EaCModuleHandlers, EverythingAsCode } from "../eac/.exports.ts";
+export type {
+  EaCModuleHandlers,
+  EaCVertexDetails,
+  EverythingAsCode,
+} from "../eac/.exports.ts";
 
 export type {
   HasTypeCheck,

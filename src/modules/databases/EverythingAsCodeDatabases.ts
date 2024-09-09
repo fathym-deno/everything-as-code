@@ -1,4 +1,5 @@
 import { EaCMetadataBase } from "../../eac/EaCMetadataBase.ts";
+import { $FluentTag } from "../../fluent/.deps.ts";
 import { EaCDatabaseAsCode } from "./EaCDatabaseAsCode.ts";
 
 export type EverythingAsCodeDatabases = {
