@@ -6,7 +6,7 @@ import { EaCProviderAsCode } from "./EaCProviderAsCode.ts";
  */
 export type EverythingAsCodeIdentity = {
   Providers?: Record<string, EaCProviderAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeIdentity(
   eac: unknown,

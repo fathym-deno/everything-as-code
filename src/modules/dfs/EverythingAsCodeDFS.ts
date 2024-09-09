@@ -3,7 +3,7 @@ import { EaCDistributedFileSystemAsCode } from "./EaCDistributedFileSystemAsCode
 
 export type EverythingAsCodeDFS = {
   DFSs?: Record<string, EaCDistributedFileSystemAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeDFS(
   eac: unknown,

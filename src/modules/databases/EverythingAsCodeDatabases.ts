@@ -3,7 +3,7 @@ import { EaCDatabaseAsCode } from "./EaCDatabaseAsCode.ts";
 
 export type EverythingAsCodeDatabases = {
   Databases?: Record<string, EaCDatabaseAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeDatabases(
   eac: unknown,

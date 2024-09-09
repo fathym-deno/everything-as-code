@@ -9,4 +9,4 @@ export type EaCVertexDetails = {
 
   /** The name of the vertex. */
   Name?: string;
-} & EaCMetadataBase;
+};

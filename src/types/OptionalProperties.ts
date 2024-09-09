@@ -1,10 +1,10 @@
-import { RemoveIndexSignature } from "./.deps.ts";
+import { RemoveIndexSignatures } from "./.deps.ts";
 import { IsRequiredProperty } from "./IsRequiredProperty.ts";
 
 export type OptionalProperties<T> = {
   [
-    K in keyof RemoveIndexSignature<T> as IsRequiredProperty<
-      RemoveIndexSignature<T>,
+    K in keyof RemoveIndexSignatures<T> as IsRequiredProperty<
+      RemoveIndexSignatures<T>,
       K
     > extends false ? K
       : never

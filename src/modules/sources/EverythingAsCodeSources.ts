@@ -9,7 +9,7 @@ export type EverythingAsCodeSources = {
   SourceConnections?: Record<string, EaCSourceConnectionAsCode>;
 
   Sources?: Record<string, EaCSourceAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeSources(
   eac: unknown,

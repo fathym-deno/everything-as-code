@@ -6,7 +6,7 @@ export type EverythingAsCodeClouds = {
   Clouds?: Record<string, EaCCloudAsCode>;
 
   Secrets?: Record<string, EaCSecretAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeClouds(
   eac: unknown,

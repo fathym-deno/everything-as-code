@@ -1,23 +1,17 @@
 import {
   EverythingAsCode,
-  FluentBuilder,
   fluentBuilder,
-  FluentBuilderHandlers,
-  IoCContainer,
-  IsFluentBuildable,
+  FluentBuilder,
+  FluentBuilderMethodsHandlers,
+  FluentBuilderRoot,
   SelectFluentMethods,
 } from './.deps.ts';
+import { EverythingAsCodeTags } from './EverythingAsCodeTags.ts';
 
-export function eacFluentBuilder<
-  TEaC extends EverythingAsCode = EverythingAsCode
->(
-  eac?: IsFluentBuildable<TEaC>,
-  handlers?: FluentBuilderHandlers
-): FluentBuilder<TEaC> & SelectFluentMethods<TEaC, TEaC> {
-  handlers = {
-    ...handlers,
-  };
-
-  return fluentBuilder<TEaC>(eac, handlers) as FluentBuilder<TEaC> &
-    SelectFluentMethods<TEaC, TEaC>;
+export function eacFluentBuilder<TEaC extends EverythingAsCode>(
+  model?: TEaC,
+  handlers?: FluentBuilderMethodsHandlers
+): FluentBuilder<TEaC> &
+  SelectFluentMethods<FluentBuilderRoot<EverythingAsCodeTags<TEaC>>, TEaC> {
+  return fluentBuilder<EverythingAsCodeTags<TEaC>>(model, handlers);
 }

@@ -3,7 +3,7 @@ import { EaCLicenseAsCode } from "./EaCLicenseAsCode.ts";
 
 export type EverythingAsCodeLicensing = {
   Licenses?: Record<string, EaCLicenseAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeLicensing(
   eac: unknown,

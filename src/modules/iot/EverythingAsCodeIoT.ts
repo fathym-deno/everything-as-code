@@ -3,7 +3,7 @@ import { EaCIoTAsCode } from "./EaCIoTAsCode.ts";
 
 export type EverythingAsCodeIoT = {
   IoT?: Record<string, EaCIoTAsCode>;
-} & EaCMetadataBase;
+};
 
 export function isEverythingAsCodeIoT(
   eac: unknown,

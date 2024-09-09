@@ -5,4 +5,4 @@
 //   Environments?: { [key: string]: EaCEnvironmentAsCode };
 
 //   PrimaryEnvironment?: string;
-// } & EaCMetadataBase;
+// };
