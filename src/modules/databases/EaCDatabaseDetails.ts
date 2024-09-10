@@ -4,7 +4,7 @@ export type EaCDatabaseDetails<TType = string> = {
   Type: TType;
 } & EaCVertexDetails;
 
-export function isEaCDatabaseDetails<TType = unknown>(
+export function isEaCDatabaseDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCDatabaseDetails<TType> {

@@ -67,17 +67,19 @@ type EaCStandardTags<T> =
   >;
 
 // Handles conditional logic with union types and nested properties
-type EaCVertexDetailsTags<T> =
-  [HasTypeCheck<NonNullable<T>, EaCVertexDetails>] extends [true] ? {
-      [K in keyof T as K extends "Details" ? K : never]: EverythingAsCodeTags<
-        T[K] & $FluentTag<"Methods", "Object">
-      >;
-    }
-    : {};
+type EaCVertexDetailsTags<T> = [
+  HasTypeCheck<NonNullable<T>, EaCVertexDetails>,
+] extends [true] ? {
+    [K in keyof T as K extends "Details" ? K : never]: EverythingAsCodeTags<
+      T[K] & $FluentTag<"Methods", "Object", "generic", { generic: true }>
+    >;
+  }
+  : {};
 
 // Tag handling for EaCDetails and nested structures
-type EaCAsCodeTags<T> = [HasTypeCheck<NonNullable<T>, EaCDetails<any>>] extends
-  [true] ? {
+type EaCAsCodeTags<T> = [
+  HasTypeCheck<NonNullable<T>, EaCDetails<any>>,
+] extends [true] ? {
     [K in keyof T]: "Details" extends keyof T[K]
       ? EverythingAsCodeTags<T[K] & $FluentTag<"Methods", "Object">>
       : {};

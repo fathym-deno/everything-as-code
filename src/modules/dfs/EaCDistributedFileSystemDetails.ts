@@ -16,7 +16,9 @@ export type EaCDistributedFileSystemDetails<TType = string> = {
   WorkerPath?: string;
 } & EaCVertexDetails;
 
-export function isEaCDistributedFileSystemDetails<TType = unknown>(
+export function isEaCDistributedFileSystemDetails<
+  TType extends string | unknown = unknown,
+>(
   type: TType,
   dfs: unknown,
 ): dfs is EaCDistributedFileSystemDetails<TType> {

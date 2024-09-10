@@ -15,7 +15,7 @@ export type EaCModifierDetails<TType = string> = {
  * @param details The details of the modifier.
  * @returns true if the object is an EaCModifierDetails, false otherwise.
  */
-export function isEaCModifierDetails<TType = unknown>(
+export function isEaCModifierDetails<TType extends string | unknown = unknown>(
   type: TType,
   details: unknown,
 ): details is EaCModifierDetails {
