@@ -1,9 +1,9 @@
 export type {
+  EaCDetails,
   EaCModuleHandlers,
   EaCVertexDetails,
   EverythingAsCode,
 } from "../eac/.exports.ts";
-
 export type {
   HasTypeCheck,
   IsNativeType,
