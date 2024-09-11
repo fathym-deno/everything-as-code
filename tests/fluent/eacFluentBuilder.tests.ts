@@ -1,4 +1,7 @@
+import { $FluentTagStrip } from "../../../reference-architecture/src/fluent/types/tags/$FluentTagStrip.ts";
 import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
+import { $FluentTag, ValueType } from "../../src/fluent/.deps.ts";
+import { $FluentTagDeepStrip } from "../../src/fluent/.deps.ts";
 import { eacFluentBuilder } from "../../src/fluent/eacFluentBuilder.ts";
 import { EverythingAsCodeTags } from "../../src/fluent/EverythingAsCodeTags.ts";
 import { EaCDatabaseDetails } from "../../src/modules/databases/EaCDatabaseDetails.ts";
@@ -8,10 +11,14 @@ import { assert, assertEquals } from "../test.deps.ts";
 
 // Test for the `eacFluentBuilder` function
 Deno.test("Testing eacFluentBuilder functionality", async (t) => {
+  type TaggedEaC =
+    // EverythingAsCodeTags<
+    EverythingAsCode & EverythingAsCodeDatabases;
+  // >;
+  type stripped = $FluentTagDeepStrip<TaggedEaC, "Methods">;
+
   await t.step("EnterpriseLookup method test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Call the EnterpriseLookup method
     const enterpriseId: string = crypto.randomUUID();
@@ -24,9 +31,7 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
   });
 
   await t.step("Details method and Name setting test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Set the name in Details
     bldr.Details().Name("My Name");
@@ -38,9 +43,7 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
   });
 
   await t.step("Handlers method test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Call the Handlers method and set values
     bldr.Handlers.$Force(true);
@@ -57,15 +60,20 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
   });
 
   await t.step("Database Details method test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Set values in Databases Details
     const db = bldr.Databases("thinky", true);
 
+    type t = ValueType<NonNullable<TaggedEaC["Databases"]>>;
+
+    type x = typeof db.Details;
+    type y = $FluentTagDeepStrip<x, "Methods">;
+    type xx = typeof db.Details<EaCDenoKVDatabaseDetails>;
+    type c = { Hello: string } & { World: boolean } & {};
+
     const databaseDetails = db
-      .Details<EverythingAsCodeTags<EaCDenoKVDatabaseDetails>>()
+      .Details<EaCDenoKVDatabaseDetails>()
       .Type("DenoKV")
       .DenoKVPath("ThePath");
 
@@ -82,10 +90,8 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
     );
   });
 
-  await t.step("Compile and Export method test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+  await t.step("Compile test", () => {
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Call the Compile method
     bldr.Compile();
@@ -99,9 +105,7 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
   });
 
   await t.step("Compile and Export method test", () => {
-    const bldr = eacFluentBuilder<
-      EverythingAsCode & EverythingAsCodeDatabases
-    >().Root();
+    const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     bldr.EnterpriseLookup(crypto.randomUUID());
 

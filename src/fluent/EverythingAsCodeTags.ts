@@ -75,7 +75,10 @@ type EaCVertexDetailsTags<T> = [
 type EaCAsCodeTags<T> = [
   HasTypeCheck<NonNullable<T>, EaCDetails<any>>,
 ] extends [true] ? {
-    [K in keyof T]: "Details" extends keyof T[K]
+    [
+      K in keyof T as K extends string ? K
+        : never
+    ]: "Details" extends keyof T[K]
       ? EverythingAsCodeTags<T[K] & $FluentTag<"Methods", "Object">>
       : {};
   }

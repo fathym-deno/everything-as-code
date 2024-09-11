@@ -14,5 +14,5 @@ export function eacFluentBuilder<TEaC extends EverythingAsCode>(
 ):
   & FluentBuilder<TEaC>
   & SelectFluentMethods<FluentBuilderRoot<EverythingAsCodeTags<TEaC>>, TEaC> {
-  return fluentBuilder<EverythingAsCodeTags<TEaC>>(model, handlers);
+  return fluentBuilder<TEaC>(model, handlers);
 }
