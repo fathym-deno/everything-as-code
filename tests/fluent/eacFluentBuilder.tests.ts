@@ -1,5 +1,8 @@
 import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
 import { eacFluentBuilder } from "../../src/fluent/eacFluentBuilder.ts";
+import { EverythingAsCodeTags } from "../../src/fluent/EverythingAsCodeTags.ts";
+import { EaCDatabaseDetails } from "../../src/modules/databases/EaCDatabaseDetails.ts";
+import { EaCDenoKVDatabaseDetails } from "../../src/modules/databases/EaCDenoKVDatabaseDetails.ts";
 import { EverythingAsCodeDatabases } from "../../src/modules/databases/EverythingAsCodeDatabases.ts";
 import { assert, assertEquals } from "../test.deps.ts";
 
@@ -59,13 +62,24 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
     >().Root();
 
     // Set values in Databases Details
-    const databaseDetails = bldr.Databases("thinky", true).Details();
+    const db = bldr.Databases("thinky", true);
+
+    const databaseDetails = db
+      .Details<EverythingAsCodeTags<EaCDenoKVDatabaseDetails>>()
+      .Type("DenoKV")
+      .DenoKVPath("ThePath");
 
     // Verify the exported state
     const exported = bldr.Export();
     assert(exported);
     assert(exported.Databases);
     assert(databaseDetails);
+    assertEquals(exported.Databases!["thinky"].Details!.Type, "DenoKV");
+    assertEquals(
+      (exported.Databases!["thinky"].Details as EaCDenoKVDatabaseDetails)
+        .DenoKVPath,
+      "ThePath",
+    );
   });
 
   await t.step("Compile and Export method test", () => {

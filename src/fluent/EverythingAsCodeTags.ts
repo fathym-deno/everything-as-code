@@ -7,6 +7,7 @@ import {
   IoCContainer,
   IsNativeType,
   IsObject,
+  IsObjectNotNative,
 } from "./.deps.ts";
 
 /**
@@ -32,9 +33,8 @@ import {
  * type Tagged = EverythingAsCodeTags<Example>;
  * ```
  */
-export type EverythingAsCodeTags<T> = true extends IsObject<T>
-  ? false extends IsNativeType<T> ? EaCObjectTags<T>
-  : T
+export type EverythingAsCodeTags<T> = true extends IsObjectNotNative<T>
+  ? EaCObjectTags<T>
   : T;
 
 type EaCObjectTags<T> =

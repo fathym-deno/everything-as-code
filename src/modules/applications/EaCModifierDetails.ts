@@ -3,7 +3,7 @@ import { EaCVertexDetails } from "../../eac/EaCVertexDetails.ts";
 /**
  * The base type for all EaC modifier details.
  */
-export type EaCModifierDetails<TType = string> = {
+export type EaCModifierDetails<TType extends string | undefined = string> = {
   /** The type of the modifier. */
   Type: TType;
 } & EaCVertexDetails;
@@ -15,7 +15,7 @@ export type EaCModifierDetails<TType = string> = {
  * @param details The details of the modifier.
  * @returns true if the object is an EaCModifierDetails, false otherwise.
  */
-export function isEaCModifierDetails<TType extends string | unknown = unknown>(
+export function isEaCModifierDetails<TType extends string | undefined = string>(
   type: TType,
   details: unknown,
 ): details is EaCModifierDetails {
