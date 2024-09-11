@@ -45,19 +45,8 @@ type EaCObjectTags<T> =
 
 // Improved handling of recursive tag types and union types
 type EaCStandardTags<T> = {
-  [K in keyof T as K extends "Details" ? never : K]: EverythingAsCodeTags<
-    T[K]
-  >;
-}; // & $FluentTag<
-//   "Methods",
-//   never,
-//   "handlers",
-//   {
-//     handlers: {
-//       Compile: () => IoCContainer;
-//     };
-//   }
-// >
+  [K in keyof T as K extends "Details" ? never : K]: EverythingAsCodeTags<T[K]>;
+};
 
 // Handles conditional logic with union types and nested properties
 type EaCVertexDetailsTags<T> = [
