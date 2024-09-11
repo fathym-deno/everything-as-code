@@ -1,10 +1,6 @@
-import { $FluentTagStrip } from "../../../reference-architecture/src/fluent/types/tags/$FluentTagStrip.ts";
 import { EverythingAsCode } from "../../src/eac/EverythingAsCode.ts";
-import { $FluentTag, ValueType } from "../../src/fluent/.deps.ts";
 import { $FluentTagDeepStrip } from "../../src/fluent/.deps.ts";
 import { eacFluentBuilder } from "../../src/fluent/eacFluentBuilder.ts";
-import { EverythingAsCodeTags } from "../../src/fluent/EverythingAsCodeTags.ts";
-import { EaCDatabaseDetails } from "../../src/modules/databases/EaCDatabaseDetails.ts";
 import { EaCDenoKVDatabaseDetails } from "../../src/modules/databases/EaCDenoKVDatabaseDetails.ts";
 import { EverythingAsCodeDatabases } from "../../src/modules/databases/EverythingAsCodeDatabases.ts";
 import { assert, assertEquals } from "../test.deps.ts";
@@ -64,13 +60,6 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
 
     // Set values in Databases Details
     const db = bldr.Databases("thinky", true);
-
-    type t = ValueType<NonNullable<TaggedEaC["Databases"]>>;
-
-    type x = typeof db.Details;
-    type y = $FluentTagDeepStrip<x, "Methods">;
-    type xx = typeof db.Details<EaCDenoKVDatabaseDetails>;
-    type c = { Hello: string } & { World: boolean } & {};
 
     const databaseDetails = db
       .Details<EaCDenoKVDatabaseDetails>()
