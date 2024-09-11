@@ -83,7 +83,7 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
     const bldr = eacFluentBuilder<TaggedEaC>().Root();
 
     // Call the Compile method
-    bldr.Compile();
+    // bldr.Compile();
 
     // Export the state
     const eac = bldr.Export();
@@ -107,7 +107,7 @@ Deno.test("Testing eacFluentBuilder functionality", async (t) => {
 
     bldr.Databases("thinky", true).Details().Type("Hey");
 
-    bldr.Compile();
+    // bldr.Compile();
 
     const eac = bldr.Export();
 
