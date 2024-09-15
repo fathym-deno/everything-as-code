@@ -13,8 +13,8 @@ export type {
   IsUndefined,
   RemoveIndexSignatures,
   ValueType,
-} from "jsr:@fathym/common@0.2.147/types";
-// } from '../../../reference-architecture/src/common/types/.exports.ts';
+// } from "jsr:@fathym/common@0.2.147/types";
+} from '../../../reference-architecture/src/common/types/.exports.ts';
 
 export {
   type $FluentTag,
@@ -24,7 +24,7 @@ export {
   type FluentBuilderMethodsHandlers,
   type FluentBuilderRoot,
   type SelectFluentMethods,
-} from "jsr:@fathym/common@0.2.147/fluent";
-// } from '../../../reference-architecture/src/fluent/.exports.ts';
+// } from "jsr:@fathym/common@0.2.147/fluent";
+} from '../../../reference-architecture/src/fluent/.exports.ts';
 
 export * from "jsr:@fathym/ioc@0.0.12";
