@@ -14,8 +14,8 @@ export {
   isEverythingAsCodeClouds,
 } from "../modules/clouds/.exports.ts";
 
-export { merge } from "jsr:@fathym/common@0.2.158";
-export { getPackageLogger } from "jsr:@fathym/common@0.2.158/log";
+export { merge } from "jsr:@fathym/common@0.2.159";
+export { getPackageLogger } from "jsr:@fathym/common@0.2.159/log";
 
 export { kebabCase } from "jsr:@luca/cases@1.0.0";
 
