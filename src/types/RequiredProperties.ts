@@ -1,4 +1,4 @@
-import { RemoveIndexSignature } from "jsr:@fathym/common@0.2.50";
+import { RemoveIndexSignatures } from "jsr:@fathym/common@0.2.153";
 import { EaCDistributedFileSystemDetails } from "../modules/dfs/EaCDistributedFileSystemDetails.ts";
 import { IsRequiredProperty } from "./IsRequiredProperty.ts";
 import { EaCDistributedFileSystemAsCode } from "../modules/dfs/EaCDistributedFileSystemAsCode.ts";
@@ -8,20 +8,20 @@ import { EverythingAsCodeApplications } from "../modules/applications/Everything
 
 export type RequiredProperties<T> = {
   [
-    K in keyof RemoveIndexSignature<T> as IsRequiredProperty<
-      RemoveIndexSignature<T>,
+    K in keyof RemoveIndexSignatures<T> as IsRequiredProperty<
+      RemoveIndexSignatures<T>,
       K
     > extends true ? K
       : never
-  ]: NonNullable<T[K]>;
+  ]: NonNullable<RemoveIndexSignatures<T>[K]>;
 };
 
 type t = RequiredProperties<
-  RemoveIndexSignature<EaCDistributedFileSystemDetails>
+  RemoveIndexSignatures<EaCDistributedFileSystemDetails>
 >;
 type tt = RequiredProperties<
-  RemoveIndexSignature<EaCDistributedFileSystemAsCode>
+  RemoveIndexSignatures<EaCDistributedFileSystemAsCode>
 >;
 type ttt = RequiredProperties<
-  RemoveIndexSignature<EverythingAsCodeApplications>
+  RemoveIndexSignatures<EverythingAsCodeApplications>
 >;

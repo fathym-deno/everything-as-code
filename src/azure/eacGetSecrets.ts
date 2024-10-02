@@ -11,7 +11,7 @@ export async function eacGetSecrets(
   secretClient: SecretClient,
   toSecrets: Record<string, string>,
 ): Promise<Record<string, string>> {
-  const logger = await getPackageLogger();
+  const logger = await getPackageLogger(import.meta);
 
   const secreted: Record<string, string> = {};
 

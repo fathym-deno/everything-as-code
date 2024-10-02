@@ -13,7 +13,7 @@ export async function eacSetSecrets(
   secretRoot: string,
   toSecrets: Record<string, string | undefined>,
 ): Promise<Record<string, string>> {
-  const logger = await getPackageLogger();
+  const logger = await getPackageLogger(import.meta);
 
   const secreted: Record<string, string> = {};
 
