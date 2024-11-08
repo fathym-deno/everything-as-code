@@ -9,6 +9,9 @@ export type EaCPreactAppProcessor = {
 
   // BundleDFSLookup?: string;
 
+  /** Determines if the system will bypass base href logic. */
+  BypassEaCBase?: boolean;
+
   /** The component DFS lookups for resolving Islands. */
   ComponentDFSLookups?: [string, string[]][];
 } & EaCProcessor<"PreactApp">;
