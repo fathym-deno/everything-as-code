@@ -1,23 +1,14 @@
 {
   "name": "@fathym/eac",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "exports": {
     ".": "./src/eac/.exports.ts",
-    "./applications": "./src/modules/applications/.exports.ts",
-    "./clouds": "./src/modules/clouds/.exports.ts",
-    "./databases": "./src/modules/databases/.exports.ts",
-    "./dfs": "./src/modules/dfs/.exports.ts",
+    "./esbuild": "./src/esbuild/.exports.ts",
     "./fluent": "./src/fluent/.exports.ts",
-    "./github": "./src/modules/github/.exports.ts",
-    "./identity": "./src/modules/identity/.exports.ts",
-    "./iot": "./src/modules/iot/.exports.ts",
-    "./licensing": "./src/modules/licensing/.exports.ts",
-    "./octokit": "./src/octokit/.exports.ts",
-    "./sources": "./src/modules/sources/.exports.ts",
-    "./states": "./src/modules/states/.exports.ts",
-    "./types": "./src/types/.exports.ts",
-    "./utils/azure": "./src/azure/.exports.ts",
-    "./utils/azure/kusto": "./src/azure/kusto.ts"
+    "./runtime": "./src/runtime/_/.exports.ts",
+    "./runtime/pipelines": "./src/runtime/pipelines/.exports.ts",
+    "./runtime/server": "./src/runtime/server/.exports.ts",
+    "./types": "./src/types/.exports.ts"
   },
   "tasks": {
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
@@ -42,7 +33,9 @@
       ]
     }
   },
-  "nodeModulesDir": false,
+  "compilerOptions": {
+    "lib": ["deno.ns", "deno.unstable", "dom", "esnext"]
+  },
   "unstable": ["kv"],
   "lock": false
 }

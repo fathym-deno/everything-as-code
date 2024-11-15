@@ -4,6 +4,13 @@ Everything as Code is an API to use to manage an enterprise's products and code
 in a future-proof, cloud and code agnostic way. It allows for managing all
 aspects of DevOps as config with the ability to customize.
 
+## Licensing
+
+This project is licensed under our [MIT (Non-Commercial) License](./LICENSE.md)
+for individual and educational use. For commercial use, please refer to
+[COMMERCIAL_LICENSE.md](./COMMERCIAL_LICENSE.md) and contact us to obtain a
+commercial license.
+
 ## Usage
 
 This API provides a comprehensive solution for managing your enterprise's
